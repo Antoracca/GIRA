@@ -2,6 +2,10 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
+// Serve WASM from CDN — removes the 1.4 MB dotlottie-player.wasm from the build
+const WASM_CDN =
+  "https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web@0.66.2/dist/dotlottie-player.wasm";
+
 interface LottiePlayerProps {
   src: string;
   style?: React.CSSProperties;
@@ -10,7 +14,9 @@ interface LottiePlayerProps {
 
 /**
  * Client-only Lottie wrapper using @lottiefiles/dotlottie-web directly.
- * Guards against StrictMode double-init and suppresses non-fatal load errors.
+ * - WASM loaded from CDN (no local 1.4 MB file)
+ * - IntersectionObserver: animation only initializes when visible in viewport
+ * - Guards against StrictMode double-init and suppresses non-fatal load errors
  */
 export default function LottiePlayer({ src, style, className }: LottiePlayerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -25,6 +31,9 @@ export default function LottiePlayer({ src, style, className }: LottiePlayerProp
     try {
       const { DotLottie } = await import("@lottiefiles/dotlottie-web");
 
+      // Point WASM to CDN — skips the local 1.4 MB file
+      DotLottie.setWasmUrl(WASM_CDN);
+
       if (!canvasRef.current) {
         initRef.current = false;
         return;
@@ -38,7 +47,6 @@ export default function LottiePlayer({ src, style, className }: LottiePlayerProp
       });
 
       instance.addEventListener("ready", () => setReady(true));
-
       dotLottieRef.current = instance;
     } catch {
       // Suppress — prevents error overlay
@@ -48,9 +56,24 @@ export default function LottiePlayer({ src, style, className }: LottiePlayerProp
   }, [src]);
 
   useEffect(() => {
-    initLottie();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Only initialize when the canvas enters the viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          observer.disconnect();
+          initLottie();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(canvas);
 
     return () => {
+      observer.disconnect();
       if (dotLottieRef.current) {
         dotLottieRef.current.destroy();
         dotLottieRef.current = null;
