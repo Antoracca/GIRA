@@ -1,368 +1,517 @@
 import type { Metadata } from "next";
-import { Link } from "@/i18n/navigation";
-import HeroInterne from "@/components/shared/HeroInterne";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Vos droits RGPD — GIRA | Protection & exercice de vos droits",
+  title: "Vos droits RGPD — GIRA",
   description:
-    "Tout ce que vous devez savoir sur vos droits RGPD chez GIRA SAS. Accès, rectification, effacement, portabilité, opposition : exercez vos droits simplement et rapidement.",
+    "Exercez vos droits en matière de protection des données personnelles auprès de GIRA SAS. Accès, rectification, effacement, portabilité, opposition — tout savoir sur vos droits RGPD.",
   alternates: { canonical: "https://www.gira-cf.com/rgpd" },
 };
 
-const G = "#C9A84C";
-const DARK = "#0D0D0D";
-const BODY = "#4A4A4A";
-const FM = "var(--font-montserrat)";
-const FI = "var(--font-inter)";
+/* ──────────────────────────── shared primitives ──────────────────────────── */
+
+function Section({ children }: { children: React.ReactNode }) {
+  return <section className="mb-16 md:mb-20">{children}</section>;
+}
+
+function H2({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="font-montserrat text-[1.75rem] md:text-[2.1rem] font-light tracking-tight text-[#1A1A1A] mb-6 leading-[1.2]">
+      {children}
+    </h2>
+  );
+}
+
+function H3({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="font-montserrat text-lg md:text-xl font-semibold text-[#1A1A1A] mb-4 mt-10 first:mt-0">
+      {children}
+    </h3>
+  );
+}
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="text-sm leading-[1.85] mb-4" style={{ fontFamily: FI, color: BODY }}>{children}</p>;
-}
-
-function Hr() {
-  return <div className="my-10" style={{ height: "1px", background: "rgba(0,0,0,0.07)" }} />;
-}
-
-function Note({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl p-5 my-5" style={{ background: "rgba(201,168,76,0.07)", borderLeft: `3px solid ${G}` }}>
-      <p className="text-sm leading-relaxed" style={{ fontFamily: FI, color: BODY }}>{children}</p>
+    <p className="font-inter text-[15px] md:text-base leading-[1.9] text-[#444] mb-5">
+      {children}
+    </p>
+  );
+}
+
+function Divider() {
+  return <hr className="border-t border-[#E5E5E5] my-14 md:my-20" />;
+}
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="font-inter text-[15px] leading-[1.9] text-[#444] mb-5 list-disc pl-6 space-y-2">
+      {items.map((item, i) => (
+        <li key={i}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:gap-8 py-4 border-b border-[#EBEBEB] last:border-b-0">
+      <span className="font-inter text-sm font-semibold text-[#1A1A1A] sm:min-w-[220px] shrink-0 mb-1 sm:mb-0">
+        {label}
+      </span>
+      <span className="font-inter text-[15px] text-[#555]">{value}</span>
     </div>
   );
 }
 
+/* ──────────────────────────── page ──────────────────────────── */
+
 export default function RGPDPage() {
   return (
     <>
-      <HeroInterne
-        title="Vos droits RGPD"
-        subtitle="Le Règlement Général sur la Protection des Données vous confère des droits forts sur vos données personnelles. GIRA SAS s'engage à les respecter pleinement et à faciliter leur exercice."
-        breadcrumb={[{ label: "Accueil", href: "/" }, { label: "RGPD" }]}
-      />
-
-      {/* Bandeau réglementaire */}
-      <div style={{ backgroundColor: DARK }}>
-        <div className="max-w-4xl mx-auto px-6 md:px-12 py-5">
-          <div className="flex flex-wrap gap-3">
-            {[
-              "Règlement UE 2016/679",
-              "Loi Informatique et Libertés modifiée",
-              "Délibérations CNIL applicables",
-              "Lignes directrices EDPB",
-            ].map((tag) => (
-              <span key={tag} className="text-[10px] font-semibold px-3 py-1.5 rounded-full uppercase tracking-wider"
-                style={{ backgroundColor: "rgba(201,168,76,0.12)", color: G, fontFamily: FM, border: `1px solid rgba(201,168,76,0.2)` }}>
-                {tag}
-              </span>
-            ))}
-          </div>
+      {/* Hero */}
+      <div className="bg-white pt-36 md:pt-44 pb-16 md:pb-20 border-b border-[#EBEBEB]">
+        <div className="max-w-[820px] mx-auto px-6 md:px-8">
+          <h1 className="font-montserrat text-[2.5rem] md:text-[3.5rem] font-light tracking-tight text-[#1A1A1A] leading-[1.1] mb-6">
+            Vos droits RGPD
+          </h1>
+          <p className="font-inter text-base md:text-lg text-[#777] leading-relaxed max-w-[620px]">
+            Le Règlement Général sur la Protection des Données vous confère des
+            droits étendus sur vos données personnelles. GIRA SAS s'engage à
+            les respecter pleinement et à en faciliter l'exercice.
+          </p>
+          <p className="font-inter text-sm text-[#999] mt-6">
+            Dernière mise à jour : mars 2026 · Règlement (UE) 2016/679
+          </p>
         </div>
       </div>
 
-      <section className="py-20 md:py-28" style={{ backgroundColor: "#F5F5F0" }}>
-        <div className="max-w-4xl mx-auto px-6 md:px-12">
+      {/* Content */}
+      <div className="bg-white py-16 md:py-24">
+        <div className="max-w-[820px] mx-auto px-6 md:px-8">
 
-          {/* Intro */}
-          <div className="mb-14">
-            <h2 className="font-black mb-5" style={{ fontFamily: FM, fontSize: "1.6rem", color: DARK, lineHeight: 1.2 }}>
-              Qu'est-ce que le RGPD ?
-            </h2>
+          {/* Qu'est-ce que le RGPD */}
+          <Section>
+            <H2>Qu'est-ce que le RGPD ?</H2>
             <P>
-              Le <strong style={{ color: DARK }}>Règlement Général sur la Protection des Données</strong> (RGPD, ou GDPR
-              en anglais — Règlement UE 2016/679) est le texte de référence européen en matière de protection des
-              données personnelles. Entré en application le <strong style={{ color: DARK }}>25 mai 2018</strong> dans
-              l'ensemble des pays membres de l'Union Européenne, il s'applique à toute organisation — quelle que soit
-              sa localisation — dès lors qu'elle traite des données concernant des résidents européens.
+              Le Règlement Général sur la Protection des Données (RGPD, ou GDPR
+              en anglais — Règlement UE 2016/679) est le cadre juridique
+              européen de référence en matière de protection des données
+              personnelles. Adopté le 27 avril 2016 par le Parlement européen et
+              le Conseil de l'Union Européenne, il est entré en application le
+              25 mai 2018 dans l'ensemble des États membres.
             </P>
             <P>
-              Le RGPD repose sur un ensemble de principes fondamentaux : licéité, loyauté et transparence du
-              traitement ; limitation des finalités ; minimisation des données ; exactitude ; limitation de la
-              conservation ; intégrité et confidentialité ; et responsabilité (accountability).
+              Le RGPD s'applique à toute organisation — publique ou privée, quel
+              que soit son lieu d'établissement — dès lors qu'elle collecte,
+              stocke, utilise ou transmet des données personnelles de résidents
+              de l'Union Européenne. Il a pour objectif de renforcer et d'unifier
+              la protection des données pour toutes les personnes physiques au
+              sein de l'UE et de l'Espace Économique Européen.
             </P>
-            <Note>
-              GIRA SAS, en tant que cabinet opérant depuis Paris (France), est soumis au RGPD et à la loi Informatique
-              et Libertés n° 78-17 du 6 janvier 1978 modifiée. L'autorité de contrôle compétente est la{" "}
-              <strong>CNIL (Commission Nationale de l'Informatique et des Libertés)</strong>.
-            </Note>
-          </div>
-
-          <Hr />
-
-          {/* Les 8 droits */}
-          <div className="mb-14">
-            <h2 className="font-black mb-3" style={{ fontFamily: FM, fontSize: "1.6rem", color: DARK, lineHeight: 1.2 }}>
-              Vos 8 droits fondamentaux
-            </h2>
             <P>
-              Le RGPD vous reconnaît <strong style={{ color: DARK }}>8 droits opposables</strong> à toute organisation
-              traitant vos données personnelles. Voici comment les exercer chez GIRA SAS :
+              Le RGPD repose sur un ensemble de principes fondamentaux que tout
+              responsable de traitement doit respecter :
             </P>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
-              {[
-                {
-                  num: "01",
-                  droit: "Droit d'accès",
-                  ref: "Art. 15 RGPD",
-                  desc: "Vous avez le droit d'obtenir confirmation que GIRA SAS traite ou non des données vous concernant et, si tel est le cas, d'en recevoir une copie. Vous pouvez également obtenir des informations sur les finalités, les catégories de données traitées, les destinataires, la durée de conservation et l'origine des données.",
-                  delai: "30 jours",
-                  format: "Email avec fichier récapitulatif",
-                },
-                {
-                  num: "02",
-                  droit: "Droit de rectification",
-                  ref: "Art. 16 RGPD",
-                  desc: "Si des données vous concernant sont inexactes, incomplètes ou obsolètes, vous pouvez demander leur correction ou leur mise à jour sans délai. Ce droit s'applique notamment à vos coordonnées, fonction, organisation ou pays.",
-                  delai: "30 jours",
-                  format: "Confirmation écrite de rectification",
-                },
-                {
-                  num: "03",
-                  droit: "Droit à l'effacement",
-                  ref: "Art. 17 RGPD",
-                  desc: "Vous pouvez demander la suppression définitive de vos données dans les cas suivants : les données ne sont plus nécessaires à la finalité initiale ; vous retirez votre consentement ; vous vous opposez au traitement ; les données ont été traitées illicitement. Ce droit est limité par certaines obligations légales de conservation.",
-                  delai: "30 jours",
-                  format: "Confirmation de suppression",
-                },
-                {
-                  num: "04",
-                  droit: "Droit à la limitation du traitement",
-                  ref: "Art. 18 RGPD",
-                  desc: "Vous pouvez demander que le traitement de vos données soit suspendu (sans effacement) dans des cas précis : contestation de l'exactitude des données, traitement illicite, données nécessaires pour la constatation de droits en justice, ou opposition en cours d'examen.",
-                  delai: "30 jours",
-                  format: "Notification de mise en attente",
-                },
-                {
-                  num: "05",
-                  droit: "Droit à la portabilité",
-                  ref: "Art. 20 RGPD",
-                  desc: "Pour les données que vous avez fournies et qui font l'objet d'un traitement automatisé fondé sur votre consentement ou un contrat, vous pouvez recevoir ces données dans un format structuré, couramment utilisé et lisible par machine (JSON, CSV), et les transmettre à un autre responsable de traitement.",
-                  delai: "30 jours",
-                  format: "Fichier JSON / CSV exportable",
-                },
-                {
-                  num: "06",
-                  droit: "Droit d'opposition",
-                  ref: "Art. 21 RGPD",
-                  desc: "Vous pouvez vous opposer à tout moment au traitement de vos données fondé sur l'intérêt légitime de GIRA SAS, pour des raisons tenant à votre situation particulière. En matière de prospection commerciale, le droit d'opposition est absolu et sans justification requise.",
-                  delai: "Immédiat pour la prospection",
-                  format: "Confirmation d'arrêt du traitement",
-                },
-                {
-                  num: "07",
-                  droit: "Droit de retrait du consentement",
-                  ref: "Art. 7 RGPD",
-                  desc: "Lorsque le traitement est fondé sur votre consentement, vous pouvez le retirer à tout moment. Le retrait du consentement n'affecte pas la licéité des traitements effectués avant ce retrait. Il doit être aussi simple à exercer que de donner son consentement.",
-                  delai: "Immédiat",
-                  format: "Confirmation par email",
-                },
-                {
-                  num: "08",
-                  droit: "Droit de ne pas faire l'objet d'une décision automatisée",
-                  ref: "Art. 22 RGPD",
-                  desc: "Vous avez le droit de ne pas faire l'objet d'une décision fondée exclusivement sur un traitement automatisé (y compris le profilage) produisant des effets juridiques significatifs vous concernant. GIRA SAS n'a pas recours à ce type de traitement.",
-                  delai: "N/A",
-                  format: "Confirmation de non-recours",
-                },
-              ].map((item) => (
-                <div key={item.num}
-                  className="bg-white rounded-2xl p-6 shadow-sm flex flex-col"
-                  style={{ borderTop: `3px solid ${G}` }}>
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <span style={{ fontFamily: FM, fontWeight: 900, fontSize: "1.8rem", color: G, opacity: 0.2, lineHeight: 1 }}>{item.num}</span>
-                    <span className="text-[10px] font-bold px-2 py-1 rounded-full" style={{ backgroundColor: "rgba(201,168,76,0.1)", color: G, fontFamily: FM }}>
-                      {item.ref}
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-sm mb-3" style={{ fontFamily: FM, color: DARK }}>{item.droit}</h3>
-                  <p className="text-xs leading-relaxed mb-4 flex-1" style={{ fontFamily: FI, color: BODY }}>{item.desc}</p>
-                  <div className="pt-3 flex flex-col gap-1" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-                    <p className="text-[10px]" style={{ fontFamily: FI, color: "#999" }}>
-                      <strong style={{ color: G }}>Délai de réponse :</strong> {item.delai}
-                    </p>
-                    <p className="text-[10px]" style={{ fontFamily: FI, color: "#999" }}>
-                      <strong style={{ color: G }}>Format :</strong> {item.format}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Hr />
-
-          {/* Comment exercer */}
-          <div className="mb-14">
-            <h2 className="font-black mb-5" style={{ fontFamily: FM, fontSize: "1.6rem", color: DARK }}>
-              Comment exercer vos droits ?
-            </h2>
+            <BulletList items={[
+              "Licéité, loyauté et transparence du traitement",
+              "Limitation des finalités — les données ne peuvent être collectées que pour des finalités déterminées, explicites et légitimes",
+              "Minimisation des données — seules les données adéquates, pertinentes et strictement nécessaires sont collectées",
+              "Exactitude — les données doivent être tenues à jour et corrigées sans délai",
+              "Limitation de la conservation — les données ne sont conservées que le temps nécessaire à la réalisation des finalités",
+              "Intégrité et confidentialité — les données doivent être protégées contre tout accès non autorisé, toute perte ou toute destruction",
+              "Responsabilité (accountability) — le responsable du traitement doit être en mesure de démontrer sa conformité au RGPD",
+            ]} />
             <P>
-              Pour exercer l'un de vos droits, envoyez une demande écrite à l'équipe GIRA SAS. Pour faciliter
-              le traitement, précisez dans votre email :
+              GIRA SAS, en tant que société de droit français basée à Paris, est
+              soumise au RGPD ainsi qu'à la loi n°&nbsp;78-17 du 6 janvier 1978
+              relative à l'informatique, aux fichiers et aux libertés, dans sa
+              version modifiée. L'autorité de contrôle compétente est la CNIL
+              (Commission Nationale de l'Informatique et des Libertés).
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Vos droits fondamentaux */}
+          <Section>
+            <H2>Vos droits fondamentaux</H2>
+            <P>
+              Le RGPD vous reconnaît un ensemble de droits opposables à toute
+              organisation traitant vos données personnelles. Voici le détail de
+              chacun de ces droits et les modalités de leur exercice auprès de
+              GIRA SAS.
             </P>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
-              {[
-                { step: "1", titre: "Identifiez-vous", desc: "Indiquez votre nom, prénom et l'adresse email utilisée lors de votre contact avec GIRA." },
-                { step: "2", titre: "Précisez votre droit", desc: "Mentionnez clairement quel droit vous souhaitez exercer (accès, rectification, effacement…)." },
-                { step: "3", titre: "Envoyez votre demande", desc: "Adressez votre email à contact@gira-cf.com. Un justificatif d'identité peut être demandé." },
-              ].map((s) => (
-                <div key={s.step} className="rounded-2xl bg-white shadow-sm p-6 text-center">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-4 text-sm font-black"
-                    style={{ backgroundColor: G, color: DARK, fontFamily: FM }}>
-                    {s.step}
-                  </div>
-                  <h3 className="font-bold text-sm mb-2" style={{ fontFamily: FM, color: DARK }}>{s.titre}</h3>
-                  <p className="text-xs leading-relaxed" style={{ fontFamily: FI, color: BODY }}>{s.desc}</p>
-                </div>
-              ))}
+            <H3>Droit d'accès (article 15 du RGPD)</H3>
+            <P>
+              Vous avez le droit d'obtenir de GIRA SAS la confirmation que des
+              données à caractère personnel vous concernant sont ou ne sont pas
+              traitées. Lorsque c'est le cas, vous avez le droit d'accéder à ces
+              données et d'obtenir les informations suivantes : les finalités du
+              traitement, les catégories de données traitées, les destinataires
+              ou catégories de destinataires, la durée de conservation envisagée,
+              l'existence de vos droits, le droit d'introduire une réclamation
+              auprès de la CNIL, et l'origine des données lorsqu'elles n'ont pas
+              été collectées directement auprès de vous.
+            </P>
+            <P>
+              GIRA SAS fournira une copie gratuite des données personnelles
+              faisant l'objet du traitement. Pour toute copie supplémentaire, un
+              montant raisonnable fondé sur les coûts administratifs pourra être
+              demandé.
+            </P>
+
+            <H3>Droit de rectification (article 16 du RGPD)</H3>
+            <P>
+              Vous avez le droit d'obtenir dans les meilleurs délais la
+              rectification des données à caractère personnel vous concernant
+              qui seraient inexactes. Vous avez également le droit d'obtenir que
+              des données incomplètes soient complétées, y compris en
+              fournissant une déclaration complémentaire. Ce droit s'applique
+              notamment à vos coordonnées professionnelles, votre fonction,
+              votre organisation ou votre pays d'activité.
+            </P>
+
+            <H3>Droit à l'effacement (article 17 du RGPD)</H3>
+            <P>
+              Vous avez le droit d'obtenir l'effacement de vos données
+              personnelles dans les meilleurs délais, dans les cas suivants :
+            </P>
+            <BulletList items={[
+              "Les données ne sont plus nécessaires au regard des finalités pour lesquelles elles ont été collectées ou traitées",
+              "Vous retirez le consentement sur lequel le traitement est fondé et il n'existe pas d'autre fondement juridique au traitement",
+              "Vous exercez votre droit d'opposition et il n'existe pas de motif légitime impérieux pour le traitement",
+              "Les données ont fait l'objet d'un traitement illicite",
+              "Les données doivent être effacées pour respecter une obligation légale",
+            ]} />
+            <P>
+              Ce droit est toutefois limité lorsque le traitement est nécessaire
+              à l'exercice du droit à la liberté d'expression et d'information,
+              au respect d'une obligation légale, à l'exécution d'une mission
+              d'intérêt public, ou à la constatation, l'exercice ou la défense
+              de droits en justice.
+            </P>
+
+            <H3>Droit à la limitation du traitement (article 18 du RGPD)</H3>
+            <P>
+              Vous avez le droit d'obtenir la limitation du traitement de vos
+              données personnelles — c'est-à-dire la suspension temporaire de
+              leur utilisation, sans effacement — dans les situations suivantes :
+            </P>
+            <BulletList items={[
+              "Vous contestez l'exactitude des données, pendant une durée permettant à GIRA SAS de vérifier cette exactitude",
+              "Le traitement est illicite et vous vous opposez à l'effacement des données, demandant à la place la limitation de leur utilisation",
+              "GIRA SAS n'a plus besoin des données aux fins du traitement, mais celles-ci vous sont encore nécessaires pour la constatation, l'exercice ou la défense de droits en justice",
+              "Vous avez exercé votre droit d'opposition, pendant la vérification de la question de savoir si les motifs légitimes poursuivis par GIRA SAS prévalent sur les vôtres",
+            ]} />
+
+            <H3>Droit à la portabilité des données (article 20 du RGPD)</H3>
+            <P>
+              Pour les données que vous avez fournies à GIRA SAS et qui font
+              l'objet d'un traitement automatisé fondé sur votre consentement ou
+              sur l'exécution d'un contrat, vous avez le droit de recevoir ces
+              données dans un format structuré, couramment utilisé et lisible par
+              machine (par exemple JSON ou CSV). Vous avez également le droit de
+              transmettre ces données à un autre responsable de traitement sans
+              que GIRA SAS y fasse obstacle.
+            </P>
+
+            <H3>Droit d'opposition (article 21 du RGPD)</H3>
+            <P>
+              Vous avez le droit de vous opposer à tout moment, pour des raisons
+              tenant à votre situation particulière, au traitement de vos données
+              personnelles fondé sur l'intérêt légitime de GIRA SAS (article
+              6.1.f du RGPD). GIRA SAS cessera alors le traitement, à moins de
+              démontrer l'existence de motifs légitimes et impérieux pour le
+              traitement qui prévalent sur vos intérêts, droits et libertés, ou
+              pour la constatation, l'exercice ou la défense de droits en
+              justice.
+            </P>
+            <P>
+              En matière de prospection commerciale, le droit d'opposition est
+              absolu : vous pouvez vous y opposer à tout moment, sans avoir à
+              justifier de motifs particuliers, et GIRA SAS cessera
+              immédiatement tout envoi de communications à caractère commercial.
+            </P>
+
+            <H3>Droit de retrait du consentement (article 7 du RGPD)</H3>
+            <P>
+              Lorsque le traitement de vos données repose sur votre
+              consentement, vous avez le droit de retirer ce consentement à tout
+              moment. Le retrait du consentement ne compromet pas la licéité du
+              traitement fondé sur le consentement effectué avant ce retrait.
+              L'exercice du droit de retrait doit être aussi simple que
+              l'expression initiale du consentement.
+            </P>
+
+            <H3>Droit relatif aux décisions automatisées (article 22 du RGPD)</H3>
+            <P>
+              Vous avez le droit de ne pas faire l'objet d'une décision fondée
+              exclusivement sur un traitement automatisé, y compris le
+              profilage, produisant des effets juridiques vous concernant ou vous
+              affectant de manière significative. GIRA SAS n'a actuellement pas
+              recours à de tels traitements dans le cadre de l'exploitation du
+              Site.
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Comment exercer vos droits */}
+          <Section>
+            <H2>Comment exercer vos droits</H2>
+            <P>
+              Pour exercer l'un de vos droits en matière de protection des
+              données personnelles, adressez votre demande par courrier
+              électronique à l'adresse suivante :
+            </P>
+            <div className="bg-[#FAFAFA] rounded-lg p-6 md:p-8 mb-6">
+              <InfoRow label="Email" value={
+                <a href="mailto:contact@gira-cf.com" className="text-[#1A1A1A] underline underline-offset-2 hover:text-[#C9A84C] transition-colors">
+                  contact@gira-cf.com
+                </a>
+              } />
+              <InfoRow label="Objet recommandé" value="Exercice de droit RGPD — [Nom du droit]" />
+              <InfoRow label="Courrier postal" value="GIRA SAS — 128, rue de la Boétie — 75008 Paris, France" />
             </div>
+            <P>
+              Afin de traiter votre demande dans les meilleures conditions,
+              veuillez préciser les informations suivantes dans votre message :
+            </P>
+            <BulletList items={[
+              "Votre identité (nom, prénom) et l'adresse email utilisée lors de votre contact avec GIRA",
+              "Le droit que vous souhaitez exercer (accès, rectification, effacement, limitation, portabilité, opposition, retrait du consentement)",
+              "Toute information utile permettant de localiser les données concernées (date de la demande initiale, formulaire utilisé, etc.)",
+            ]} />
+            <P>
+              GIRA SAS peut vous demander de fournir un justificatif d'identité
+              afin de vérifier que la demande émane bien de la personne
+              concernée. Ce justificatif sera traité dans le seul but de
+              répondre à votre demande et sera supprimé immédiatement après
+              vérification.
+            </P>
+          </Section>
 
-            <div className="rounded-2xl p-8 text-center" style={{ backgroundColor: DARK }}>
-              <p className="text-[10px] uppercase tracking-widest mb-3" style={{ fontFamily: FM, color: "rgba(255,255,255,0.3)" }}>
-                Exercer vos droits
-              </p>
-              <p className="font-bold text-white text-xl mb-2" style={{ fontFamily: FM }}>contact@gira-cf.com</p>
-              <p className="text-sm mb-5" style={{ fontFamily: FI, color: "rgba(255,255,255,0.4)" }}>
-                Objet de l'email : <em>"Exercice de droit RGPD — [Nom du droit]"</em>
-              </p>
-              <a href="mailto:contact@gira-cf.com?subject=Exercice%20de%20droit%20RGPD"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold"
-                style={{ backgroundColor: G, color: DARK, fontFamily: FM }}>
-                Envoyer ma demande →
-              </a>
+          <Divider />
+
+          {/* Délais de réponse */}
+          <Section>
+            <H2>Délais de réponse</H2>
+            <P>
+              Conformément à l'article 12 du RGPD, GIRA SAS s'engage à répondre
+              à toute demande d'exercice de droits dans les délais suivants :
+            </P>
+            <div className="overflow-x-auto mb-6">
+              <table className="w-full font-inter text-[15px]">
+                <thead>
+                  <tr className="border-b-2 border-[#1A1A1A]">
+                    <th className="text-left py-3 pr-6 font-semibold text-[#1A1A1A]">Type de demande</th>
+                    <th className="text-left py-3 pr-6 font-semibold text-[#1A1A1A]">Délai standard</th>
+                    <th className="text-left py-3 font-semibold text-[#1A1A1A]">Délai maximum légal</th>
+                  </tr>
+                </thead>
+                <tbody className="text-[#444]">
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Accusé de réception</td>
+                    <td className="py-4 pr-6">24 heures ouvrées</td>
+                    <td className="py-4">Sans délai</td>
+                  </tr>
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Droit d'accès</td>
+                    <td className="py-4 pr-6">15 jours ouvrés</td>
+                    <td className="py-4">30 jours</td>
+                  </tr>
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Rectification ou effacement</td>
+                    <td className="py-4 pr-6">7 jours ouvrés</td>
+                    <td className="py-4">30 jours</td>
+                  </tr>
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Portabilité des données</td>
+                    <td className="py-4 pr-6">15 jours ouvrés</td>
+                    <td className="py-4">30 jours</td>
+                  </tr>
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Opposition au traitement</td>
+                    <td className="py-4 pr-6">48 heures</td>
+                    <td className="py-4">30 jours</td>
+                  </tr>
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Opposition à la prospection</td>
+                    <td className="py-4 pr-6">Immédiat</td>
+                    <td className="py-4">Immédiat</td>
+                  </tr>
+                  <tr>
+                    <td className="py-4 pr-6">Demande complexe ou volumineuse</td>
+                    <td className="py-4 pr-6">30 jours avec notification</td>
+                    <td className="py-4">90 jours (article 12.3 RGPD)</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+            <P>
+              Le traitement de votre demande est gratuit. Toutefois,
+              conformément à l'article 12.5 du RGPD, GIRA SAS se réserve le
+              droit de facturer des frais raisonnables fondés sur les coûts
+              administratifs en cas de demandes manifestement infondées ou
+              excessives, notamment en raison de leur caractère répétitif, ou de
+              refuser de donner suite à de telles demandes.
+            </P>
+          </Section>
 
-            <Note>
-              <strong>Délai légal de réponse :</strong> GIRA SAS s'engage à répondre à toute demande d'exercice de
-              droits dans un délai maximum de <strong>30 jours</strong> à compter de la réception de la demande.
-              Ce délai peut être prolongé de 2 mois supplémentaires en cas de demandes nombreuses ou complexes,
-              avec notification préalable. Conformément à l'article 12 du RGPD.
-            </Note>
-          </div>
-
-          <Hr />
-
-          {/* Délais tableau */}
-          <div className="mb-14">
-            <h2 className="font-black mb-5" style={{ fontFamily: FM, fontSize: "1.6rem", color: DARK }}>
-              Délais de réponse garantis
-            </h2>
-            <div className="rounded-2xl bg-white shadow-sm overflow-hidden">
-              <div className="grid grid-cols-3 px-5 py-3" style={{ backgroundColor: DARK }}>
-                <span className="text-[10px] uppercase tracking-widest font-bold" style={{ fontFamily: FM, color: "rgba(255,255,255,0.4)" }}>Type de demande</span>
-                <span className="text-[10px] uppercase tracking-widest font-bold" style={{ fontFamily: FM, color: "rgba(255,255,255,0.4)" }}>Délai standard</span>
-                <span className="text-[10px] uppercase tracking-widest font-bold" style={{ fontFamily: FM, color: "rgba(255,255,255,0.4)" }}>Délai max légal</span>
-              </div>
-              {[
-                ["Accusé de réception", "24h ouvrées", "Immédiat"],
-                ["Accès aux données", "15 jours ouvrés", "30 jours"],
-                ["Rectification / effacement", "7 jours ouvrés", "30 jours"],
-                ["Portabilité des données", "15 jours ouvrés", "30 jours"],
-                ["Opposition au traitement", "48h (prospection : immédiat)", "30 jours"],
-                ["Demande complexe ou volumineuse", "30 jours avec notification", "90 jours"],
-              ].map(([type, std, max], i) => (
-                <div key={i} className="grid grid-cols-3 px-5 py-3" style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
-                  <span className="text-sm" style={{ fontFamily: FI, color: BODY }}>{type}</span>
-                  <span className="text-sm font-semibold" style={{ fontFamily: FM, color: G }}>{std}</span>
-                  <span className="text-sm" style={{ fontFamily: FI, color: BODY }}>{max}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Hr />
+          <Divider />
 
           {/* Réclamation CNIL */}
-          <div className="mb-14">
-            <h2 className="font-black mb-5" style={{ fontFamily: FM, fontSize: "1.6rem", color: DARK }}>
-              Réclamation auprès de la CNIL
-            </h2>
+          <Section>
+            <H2>Introduction d'une réclamation auprès de la CNIL</H2>
             <P>
-              Si vous estimez, après nous avoir contactés, que vos droits ne sont pas respectés ou que le traitement
-              de vos données n'est pas conforme au RGPD, vous avez le droit d'introduire une réclamation (plainte)
-              auprès de l'autorité de contrôle compétente. En France, il s'agit de la <strong style={{ color: DARK }}>CNIL</strong>.
+              Si, après avoir exercé vos droits auprès de GIRA SAS, vous
+              estimez que le traitement de vos données personnelles n'est pas
+              conforme à la réglementation en vigueur ou que vos droits n'ont
+              pas été respectés, vous avez le droit d'introduire une
+              réclamation auprès de l'autorité de contrôle compétente.
             </P>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="rounded-2xl bg-white shadow-sm p-6">
-                <h3 className="font-bold text-sm mb-3" style={{ fontFamily: FM, color: DARK }}>
-                  CNIL — France (autorité principale)
-                </h3>
-                <div className="space-y-1 text-sm" style={{ fontFamily: FI, color: BODY }}>
-                  <p>3 Place de Fontenoy — TSA 80715</p>
-                  <p>75334 Paris Cedex 07</p>
-                  <p>Tél. : +33 (0)1 53 73 22 22</p>
-                  <p>Du lundi au jeudi : 9h – 18h30 | Vendredi : 9h – 18h</p>
-                  <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener noreferrer"
-                    className="inline-block mt-2 font-semibold" style={{ color: G }}>
-                    Déposer une plainte en ligne →
-                  </a>
-                </div>
-              </div>
-              <div className="rounded-2xl bg-white shadow-sm p-6">
-                <h3 className="font-bold text-sm mb-3" style={{ fontFamily: FM, color: DARK }}>
-                  Procédure recommandée
-                </h3>
-                <ol className="space-y-2">
-                  {[
-                    "Contactez d'abord GIRA SAS (contact@gira-cf.com)",
-                    "Attendez la réponse dans le délai légal (30j)",
-                    "En l'absence de réponse satisfaisante, saisissez la CNIL",
-                    "La CNIL dispose de 3 mois pour traiter la réclamation",
-                  ].map((step, i) => (
-                    <li key={i} className="flex items-start gap-3 text-xs" style={{ fontFamily: FI, color: BODY }}>
-                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5"
-                        style={{ backgroundColor: G, color: DARK, fontFamily: FM }}>{i + 1}</span>
-                      {step}
-                    </li>
-                  ))}
-                </ol>
-              </div>
+            <P>
+              En France, l'autorité compétente est la Commission Nationale de
+              l'Informatique et des Libertés (CNIL). Nous recommandons toutefois
+              de nous contacter préalablement afin de tenter de résoudre le
+              différend à l'amiable.
+            </P>
+            <div className="bg-[#FAFAFA] rounded-lg p-6 md:p-8 mb-6">
+              <InfoRow label="Organisme" value="CNIL — Commission Nationale de l'Informatique et des Libertés" />
+              <InfoRow label="Adresse" value="3 Place de Fontenoy — TSA 80715 — 75334 Paris Cedex 07" />
+              <InfoRow label="Téléphone" value="+33 (0)1 53 73 22 22" />
+              <InfoRow label="Horaires" value="Lundi au jeudi : 9h–18h30 · Vendredi : 9h–18h" />
+              <InfoRow label="Site web" value={
+                <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" className="text-[#1A1A1A] underline underline-offset-2 hover:text-[#C9A84C] transition-colors">
+                  www.cnil.fr
+                </a>
+              } />
+              <InfoRow label="Plainte en ligne" value={
+                <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener noreferrer" className="text-[#1A1A1A] underline underline-offset-2 hover:text-[#C9A84C] transition-colors">
+                  Déposer une plainte sur cnil.fr
+                </a>
+              } />
             </div>
-          </div>
+            <P>
+              La procédure recommandée pour introduire une réclamation est la
+              suivante :
+            </P>
+            <BulletList items={[
+              "Contactez d'abord GIRA SAS à l'adresse contact@gira-cf.com en exposant votre demande",
+              "Attendez la réponse de GIRA SAS dans le délai légal de 30 jours",
+              "En l'absence de réponse satisfaisante, constituez un dossier de réclamation comprenant vos échanges avec GIRA SAS",
+              "Saisissez la CNIL en ligne ou par courrier postal en joignant votre dossier",
+              "La CNIL dispose d'un délai de 3 mois pour traiter votre réclamation et vous informer de ses suites",
+            ]} />
+          </Section>
 
-          <Hr />
+          <Divider />
 
-          {/* Définitions */}
-          <div className="mb-14">
-            <h2 className="font-black mb-5" style={{ fontFamily: FM, fontSize: "1.6rem", color: DARK }}>
-              Glossaire RGPD
-            </h2>
-            <div className="space-y-3">
-              {[
-                { terme: "Donnée personnelle", def: "Toute information se rapportant à une personne physique identifiée ou identifiable (nom, email, téléphone, adresse IP, cookies…)." },
-                { terme: "Traitement", def: "Toute opération appliquée à des données personnelles : collecte, enregistrement, organisation, structuration, stockage, consultation, utilisation, transmission, effacement…" },
-                { terme: "Responsable du traitement", def: "La personne ou l'organisme qui détermine les finalités et les moyens du traitement. Ici : GIRA SAS." },
-                { terme: "Sous-traitant", def: "L'entité qui traite les données pour le compte du responsable (ex : Vercel pour l'hébergement, Resend pour l'envoi d'emails)." },
-                { terme: "Base légale", def: "Le fondement juridique qui autorise le traitement. Les bases légales RGPD sont : consentement, contrat, obligation légale, intérêts vitaux, mission d'intérêt public, intérêts légitimes." },
-                { terme: "Profilage", def: "Toute forme de traitement automatisé de données personnelles consistant à évaluer des aspects personnels concernant une personne physique. GIRA SAS n'y a pas recours." },
-              ].map((g) => (
-                <div key={g.terme} className="bg-white rounded-2xl px-5 py-4 shadow-sm flex flex-col md:flex-row gap-3">
-                  <span className="text-xs font-bold uppercase tracking-wider shrink-0 md:w-48" style={{ fontFamily: FM, color: G }}>{g.terme}</span>
-                  <span className="text-sm leading-relaxed" style={{ fontFamily: FI, color: BODY }}>{g.def}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Glossaire */}
+          <Section>
+            <H2>Glossaire</H2>
+            <P>
+              Pour faciliter la compréhension de la présente page et de la
+              réglementation applicable, voici les définitions des principaux
+              termes utilisés :
+            </P>
 
-          {/* Liens croisés */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-14">
-            {[
-              { label: "Politique de confidentialité", desc: "Détail complet de nos traitements de données", href: "/politique-confidentialite" },
-              { label: "Mentions légales", desc: "Informations sur l'éditeur et l'hébergeur du site", href: "/mentions-legales" },
-              { label: "Nous contacter", desc: "Parler directement à un responsable GIRA", href: "/contact" },
-            ].map((l) => (
-              <Link key={l.href} href={l.href}
-                className="rounded-2xl p-5 transition-all hover:shadow-md"
-                style={{ backgroundColor: DARK, display: "block" }}>
-                <p className="text-sm font-bold mb-1" style={{ fontFamily: FM, color: G }}>{l.label} →</p>
-                <p className="text-xs" style={{ fontFamily: FI, color: "rgba(255,255,255,0.35)" }}>{l.desc}</p>
+            <H3>Donnée personnelle</H3>
+            <P>
+              Toute information se rapportant à une personne physique identifiée
+              ou identifiable, directement ou indirectement. Cela inclut
+              notamment le nom, le prénom, l'adresse email, le numéro de
+              téléphone, l'adresse IP, les cookies, les identifiants en ligne ou
+              tout autre élément spécifique propre à l'identité d'une personne
+              physique.
+            </P>
+
+            <H3>Traitement</H3>
+            <P>
+              Toute opération ou ensemble d'opérations effectuées sur des
+              données personnelles, que ce soit par des moyens automatisés ou
+              non. Cela inclut la collecte, l'enregistrement, l'organisation, la
+              structuration, le stockage, l'adaptation, la modification,
+              l'extraction, la consultation, l'utilisation, la communication par
+              transmission, la diffusion, l'effacement ou la destruction.
+            </P>
+
+            <H3>Responsable du traitement</H3>
+            <P>
+              La personne physique ou morale, l'autorité publique, le service ou
+              tout autre organisme qui, seul ou conjointement avec d'autres,
+              détermine les finalités et les moyens du traitement de données
+              personnelles. Dans le cadre du Site, le responsable du traitement
+              est GIRA SAS.
+            </P>
+
+            <H3>Sous-traitant</H3>
+            <P>
+              La personne physique ou morale qui traite des données personnelles
+              pour le compte du responsable du traitement, selon ses
+              instructions. Les sous-traitants de GIRA SAS incluent notamment
+              Vercel (hébergement), Resend (envoi d'emails) et OpenAI
+              (assistant virtuel).
+            </P>
+
+            <H3>Consentement</H3>
+            <P>
+              Toute manifestation de volonté libre, spécifique, éclairée et
+              univoque par laquelle la personne concernée accepte, par une
+              déclaration ou par un acte positif clair, que des données
+              personnelles la concernant fassent l'objet d'un traitement.
+            </P>
+
+            <H3>Profilage</H3>
+            <P>
+              Toute forme de traitement automatisé de données personnelles
+              consistant à utiliser ces données pour évaluer certains aspects
+              personnels relatifs à une personne physique, notamment pour
+              analyser ou prédire des aspects concernant ses performances
+              professionnelles, sa situation économique, sa santé, ses
+              préférences, ses intérêts, sa fiabilité, son comportement, sa
+              localisation ou ses déplacements. GIRA SAS n'a pas recours au
+              profilage.
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Textes de référence */}
+          <Section>
+            <H2>Textes de référence</H2>
+            <P>
+              La présente page s'inscrit dans le cadre des textes législatifs et
+              réglementaires suivants :
+            </P>
+            <BulletList items={[
+              "Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 (Règlement Général sur la Protection des Données — RGPD)",
+              "Loi n° 78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, modifiée par la loi n° 2018-493 du 20 juin 2018",
+              "Décret n° 2019-536 du 29 mai 2019 pris pour l'application de la loi n° 78-17 du 6 janvier 1978",
+              "Lignes directrices et recommandations du Comité Européen de la Protection des Données (EDPB / CEPD)",
+              "Délibérations et recommandations de la Commission Nationale de l'Informatique et des Libertés (CNIL)",
+              "Décision d'exécution (UE) 2021/914 de la Commission du 4 juin 2021 relative aux clauses contractuelles types",
+            ]} />
+          </Section>
+
+          {/* Footer links */}
+          <div className="border-t border-[#E5E5E5] pt-12 mt-8">
+            <div className="flex flex-wrap gap-x-8 gap-y-3">
+              <Link href="/politique-confidentialite" className="font-inter text-sm text-[#777] hover:text-[#1A1A1A] underline underline-offset-2 transition-colors">
+                Politique de confidentialité
               </Link>
-            ))}
+              <Link href="/mentions-legales" className="font-inter text-sm text-[#777] hover:text-[#1A1A1A] underline underline-offset-2 transition-colors">
+                Mentions légales
+              </Link>
+              <Link href="/contact" className="font-inter text-sm text-[#777] hover:text-[#1A1A1A] underline underline-offset-2 transition-colors">
+                Nous contacter
+              </Link>
+            </div>
           </div>
 
         </div>
-      </section>
+      </div>
     </>
   );
 }

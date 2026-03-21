@@ -59,6 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...entry("/mentions-legales",          0.2, "yearly", "2026-01-01"),
     ...entry("/politique-confidentialite", 0.2, "yearly", "2026-01-01"),
     ...entry("/rgpd",                      0.2, "yearly", "2026-01-01"),
+    ...entry("/plan-du-site",              0.2, "yearly", "2026-03-21"),
   ];
 
   /* ── Articles — générés depuis constants ── */

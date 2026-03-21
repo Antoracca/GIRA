@@ -20,6 +20,7 @@ const legal = [
   { label: "Mentions légales", href: "/mentions-legales" },
   { label: "RGPD", href: "/rgpd" },
   { label: "Confidentialité", href: "/politique-confidentialite" },
+  { label: "Plan du site", href: "/plan-du-site" },
 ];
 
 export default function Footer() {

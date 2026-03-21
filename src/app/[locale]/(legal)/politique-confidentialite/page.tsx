@@ -1,436 +1,627 @@
 import type { Metadata } from "next";
-import { Link } from "@/i18n/navigation";
-import HeroInterne from "@/components/shared/HeroInterne";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Politique de confidentialité — GIRA | Protection de vos données personnelles",
+  title: "Politique de confidentialité — GIRA",
   description:
-    "Politique de confidentialité complète de GIRA SAS. Découvrez comment nous collectons, traitons et protégeons vos données personnelles, conformément au RGPD et à la loi Informatique et Libertés.",
+    "Politique de confidentialité de GIRA SAS. Découvrez comment nous collectons, utilisons, protégeons et conservons vos données personnelles conformément au RGPD.",
   alternates: { canonical: "https://www.gira-cf.com/politique-confidentialite" },
 };
 
-const G = "#C9A84C";
-const DARK = "#0D0D0D";
-const BODY = "#4A4A4A";
-const FM = "var(--font-montserrat)";
-const FI = "var(--font-inter)";
+/* ──────────────────────────── shared primitives ──────────────────────────── */
 
-function H2({ n, children }: { n: string; children: React.ReactNode }) {
+function Section({ children }: { children: React.ReactNode }) {
+  return <section className="mb-16 md:mb-20">{children}</section>;
+}
+
+function H2({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-5 mb-6">
-      <span style={{ fontFamily: FM, fontWeight: 900, fontSize: "3rem", color: G, opacity: 0.15, lineHeight: 1, minWidth: "3rem" }}>{n}</span>
-      <h2 style={{ fontFamily: FM, fontWeight: 800, fontSize: "1.1rem", color: DARK }}>{children}</h2>
-    </div>
+    <h2 className="font-montserrat text-[1.75rem] md:text-[2.1rem] font-light tracking-tight text-[#1A1A1A] mb-6 leading-[1.2]">
+      {children}
+    </h2>
+  );
+}
+
+function H3({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="font-montserrat text-lg md:text-xl font-semibold text-[#1A1A1A] mb-4 mt-10">
+      {children}
+    </h3>
   );
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="text-sm leading-[1.85] mb-4" style={{ fontFamily: FI, color: BODY }}>{children}</p>;
-}
-
-function Hr() {
-  return <div className="my-10" style={{ height: "1px", background: "rgba(0,0,0,0.07)" }} />;
-}
-
-function Note({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl p-5 my-5" style={{ background: "rgba(201,168,76,0.07)", borderLeft: `3px solid ${G}` }}>
-      <p className="text-sm leading-relaxed" style={{ fontFamily: FI, color: BODY }}>{children}</p>
-    </div>
-  );
-}
-
-function Tag({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full mr-2 mb-2"
-      style={{ backgroundColor: "rgba(201,168,76,0.12)", color: G, fontFamily: FM }}>
+    <p className="font-inter text-[15px] md:text-base leading-[1.9] text-[#444] mb-5">
       {children}
-    </span>
+    </p>
   );
 }
 
-function Bullet({ items }: { items: string[] }) {
+function Divider() {
+  return <hr className="border-t border-[#E5E5E5] my-14 md:my-20" />;
+}
+
+function BulletList({ items }: { items: string[] }) {
   return (
-    <ul className="mb-4 space-y-2">
+    <ul className="font-inter text-[15px] leading-[1.9] text-[#444] mb-5 list-disc pl-6 space-y-2">
       {items.map((item, i) => (
-        <li key={i} className="flex items-start gap-3 text-sm leading-relaxed" style={{ fontFamily: FI, color: BODY }}>
-          <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: G }} />
-          {item}
-        </li>
+        <li key={i}>{item}</li>
       ))}
     </ul>
   );
 }
 
+function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:gap-8 py-4 border-b border-[#EBEBEB] last:border-b-0">
+      <span className="font-inter text-sm font-semibold text-[#1A1A1A] sm:min-w-[220px] shrink-0 mb-1 sm:mb-0">
+        {label}
+      </span>
+      <span className="font-inter text-[15px] text-[#555]">{value}</span>
+    </div>
+  );
+}
+
+/* ──────────────────────────── page ──────────────────────────── */
+
 export default function PolitiqueConfidentialitePage() {
   return (
     <>
-      <HeroInterne
-        title="Politique de confidentialité"
-        subtitle="GIRA SAS s'engage à protéger vos données personnelles avec la plus haute rigueur. Cette politique vous informe de manière transparente sur nos pratiques de collecte, traitement et conservation de vos données."
-        breadcrumb={[{ label: "Accueil", href: "/" }, { label: "Confidentialité" }]}
-      />
-
-      <div style={{ backgroundColor: DARK }}>
-        <div className="max-w-4xl mx-auto px-6 md:px-12 py-4 flex flex-wrap items-center justify-between gap-3">
-          <span className="text-[10px] uppercase tracking-widest" style={{ fontFamily: FM, color: "rgba(255,255,255,0.3)" }}>Dernière mise à jour</span>
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-semibold" style={{ fontFamily: FI, color: G }}>Mars 2026</span>
-            <span className="text-[10px] px-3 py-1 rounded-full" style={{ backgroundColor: "rgba(201,168,76,0.15)", color: G, fontFamily: FM }}>
-              Conforme RGPD UE 2016/679
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Résumé visuel */}
-      <div style={{ backgroundColor: DARK }}>
-        <div className="max-w-4xl mx-auto px-6 md:px-12 pb-14 pt-10">
-          <p className="text-xs uppercase tracking-widest mb-6" style={{ fontFamily: FM, color: "rgba(255,255,255,0.3)" }}>
-            En résumé — notre engagement
+      {/* Hero */}
+      <div className="bg-white pt-36 md:pt-44 pb-16 md:pb-20 border-b border-[#EBEBEB]">
+        <div className="max-w-[820px] mx-auto px-6 md:px-8">
+          <h1 className="font-montserrat text-[2.5rem] md:text-[3.5rem] font-light tracking-tight text-[#1A1A1A] leading-[1.1] mb-6">
+            Politique de confidentialité
+          </h1>
+          <p className="font-inter text-base md:text-lg text-[#777] leading-relaxed max-w-[600px]">
+            GIRA SAS s'engage à protéger la vie privée de ses utilisateurs.
+            Cette politique décrit de manière transparente les pratiques de
+            collecte, de traitement et de conservation de vos données
+            personnelles.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { icon: "🔒", titre: "Zéro revente", texte: "Vos données ne sont jamais vendues à des tiers" },
-              { icon: "🎯", titre: "Usage limité", texte: "Utilisées uniquement pour répondre à vos demandes" },
-              { icon: "⏱", titre: "3 ans max", texte: "Conservation limitée à 3 ans après dernier contact" },
-              { icon: "✉️", titre: "Droits garantis", texte: "Accès, rectification et suppression à tout moment" },
-            ].map((item) => (
-              <div key={item.titre} className="rounded-2xl p-5" style={{ backgroundColor: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                <div className="text-2xl mb-3">{item.icon}</div>
-                <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ fontFamily: FM, color: G }}>{item.titre}</p>
-                <p className="text-xs leading-relaxed" style={{ fontFamily: FI, color: "rgba(255,255,255,0.45)" }}>{item.texte}</p>
-              </div>
-            ))}
-          </div>
+          <p className="font-inter text-sm text-[#999] mt-6">
+            Dernière mise à jour : mars 2026 · Conforme au Règlement (UE) 2016/679 (RGPD)
+          </p>
         </div>
       </div>
 
-      <section className="py-20 md:py-28" style={{ backgroundColor: "#F5F5F0" }}>
-        <div className="max-w-3xl mx-auto px-6 md:px-12">
+      {/* Content */}
+      <div className="bg-white py-16 md:py-24">
+        <div className="max-w-[820px] mx-auto px-6 md:px-8">
 
-          {/* 01 */}
-          <div className="mb-12">
-            <H2 n="01">Responsable du traitement</H2>
+          {/* Introduction */}
+          <Section>
+            <H2>Introduction</H2>
             <P>
-              Le responsable du traitement de vos données personnelles collectées via le site{" "}
-              <strong style={{ color: DARK }}>gira-cf.com</strong> est :
+              La présente politique de confidentialité (ci-après la «&nbsp;Politique&nbsp;»)
+              s'applique au site internet accessible à l'adresse{" "}
+              <strong className="text-[#1A1A1A]">https://www.gira-cf.com</strong>{" "}
+              (ci-après le «&nbsp;Site&nbsp;»), édité par GIRA SAS, cabinet
+              d'exécution des projets structurants basé à Paris. Elle a pour
+              objet d'informer les utilisateurs du Site sur les modalités de
+              collecte, de traitement, d'utilisation et de protection de leurs
+              données personnelles.
             </P>
-            <div className="rounded-2xl bg-white shadow-sm overflow-hidden mb-4">
-              {[
-                ["Raison sociale", "GIRA SAS"],
-                ["Siège social", "128, rue de la Boétie — 75008 Paris, France"],
-                ["Email DPO / Contact données", "contact@gira-cf.com"],
-                ["Téléphone", "Disponible sur demande écrite"],
-                ["Autorité de contrôle", "CNIL — Commission Nationale de l'Informatique et des Libertés"],
-              ].map(([k, v]) => (
-                <div key={k} className="flex flex-col sm:flex-row gap-1 sm:gap-6 py-3 px-5" style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
-                  <span className="text-[10px] uppercase tracking-widest font-bold shrink-0" style={{ fontFamily: FM, color: G, minWidth: "230px" }}>{k}</span>
-                  <span className="text-sm" style={{ fontFamily: FI, color: BODY }}>{v}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Hr />
-
-          {/* 02 */}
-          <div className="mb-12">
-            <H2 n="02">Données collectées et traitées</H2>
             <P>
-              GIRA SAS collecte uniquement les données strictement nécessaires à l'exercice de ses activités.
-              Nous n'collectons jamais de données sensibles (origine ethnique, opinions politiques, santé,
-              croyances religieuses, orientation sexuelle).
+              GIRA SAS accorde la plus haute importance à la protection de la vie
+              privée et des données personnelles de ses utilisateurs,
+              partenaires, candidats et visiteurs. La présente Politique a été
+              rédigée conformément au Règlement (UE) 2016/679 du Parlement
+              européen et du Conseil du 27 avril 2016 relatif à la protection
+              des personnes physiques à l'égard du traitement des données à
+              caractère personnel (RGPD), ainsi qu'à la loi n°&nbsp;78-17 du
+              6 janvier 1978 relative à l'informatique, aux fichiers et aux
+              libertés, dans sa version modifiée.
+            </P>
+            <P>
+              En accédant au Site et en utilisant ses services, vous reconnaissez
+              avoir pris connaissance de la présente Politique. Si vous
+              n'acceptez pas les termes de cette Politique, nous vous invitons à
+              ne pas communiquer de données personnelles via le Site.
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Responsable du traitement */}
+          <Section>
+            <H2>Responsable du traitement</H2>
+            <P>
+              Le responsable du traitement de vos données personnelles collectées
+              via le Site est :
+            </P>
+            <div className="bg-[#FAFAFA] rounded-lg p-6 md:p-8 mb-6">
+              <InfoRow label="Raison sociale" value="GIRA SAS" />
+              <InfoRow label="Siège social" value="128, rue de la Boétie — 75008 Paris, France" />
+              <InfoRow label="Contact DPO" value={
+                <a href="mailto:contact@gira-cf.com" className="text-[#1A1A1A] underline underline-offset-2 hover:text-[#C9A84C] transition-colors">
+                  contact@gira-cf.com
+                </a>
+              } />
+              <InfoRow label="Autorité de contrôle" value="CNIL — Commission Nationale de l'Informatique et des Libertés" />
+            </div>
+            <P>
+              Pour toute question relative au traitement de vos données
+              personnelles ou pour exercer vos droits, vous pouvez contacter
+              notre équipe à l'adresse{" "}
+              <a href="mailto:contact@gira-cf.com" className="text-[#1A1A1A] underline underline-offset-2 hover:text-[#C9A84C] transition-colors">
+                contact@gira-cf.com
+              </a>
+              .
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Modifications */}
+          <Section>
+            <H2>Modifications de la présente Politique</H2>
+            <P>
+              GIRA SAS se réserve le droit de modifier, de compléter ou de
+              mettre à jour la présente Politique à tout moment, afin notamment
+              de se conformer à toute évolution législative, réglementaire,
+              jurisprudentielle ou technologique. La date de la dernière mise à
+              jour est indiquée en haut du présent document.
+            </P>
+            <P>
+              Il est recommandé aux utilisateurs de consulter régulièrement cette
+              page afin de prendre connaissance des éventuelles modifications. En
+              cas de modification substantielle affectant les droits des
+              utilisateurs, GIRA SAS s'engage à en informer les personnes
+              concernées par courrier électronique (si une adresse a été
+              communiquée) ou par un bandeau d'information visible sur le Site,
+              dans un délai raisonnable précédant l'entrée en vigueur des
+              modifications.
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Données collectées */}
+          <Section>
+            <H2>Données personnelles collectées</H2>
+            <P>
+              GIRA SAS collecte uniquement les données personnelles strictement
+              nécessaires aux finalités décrites ci-après. Nous ne collectons
+              jamais de données dites «&nbsp;sensibles&nbsp;» au sens de
+              l'article 9 du RGPD (données révélant l'origine raciale ou
+              ethnique, les opinions politiques, les convictions religieuses, les
+              données de santé, l'orientation sexuelle, etc.).
             </P>
 
-            <div className="space-y-4 mt-6">
-              {[
-                {
-                  contexte: "Formulaire de contact",
-                  tags: ["Obligatoire"],
-                  donnees: ["Nom et prénom", "Adresse email professionnelle", "Organisation et fonction", "Pays d'activité", "Numéro de téléphone (optionnel)", "Type de demande", "Contenu du message"],
-                  base: "Intérêt légitime / Exécution d'un contrat (Art. 6.1.b et 6.1.f RGPD)",
-                },
-                {
-                  contexte: "Candidature (formulaire Carrières)",
-                  tags: ["Obligatoire"],
-                  donnees: ["Nom, prénom, email, téléphone", "Poste visé et lettre de motivation", "CV (fichier PDF)"],
-                  base: "Consentement explicite du candidat (Art. 6.1.a RGPD)",
-                },
-                {
-                  contexte: "Réseau & Diaspora",
-                  tags: ["Optionnel"],
-                  donnees: ["Nom, prénom, email", "Domaine d'expertise", "Pays de résidence"],
-                  base: "Consentement explicite (Art. 6.1.a RGPD)",
-                },
-                {
-                  contexte: "Analytics (Vercel)",
-                  tags: ["Anonymisé"],
-                  donnees: ["Pages visitées (agrégées)", "Temps de session (anonymisé)", "Type d'appareil et navigateur (agrégé)"],
-                  base: "Intérêt légitime — mesure d'audience anonymisée (Art. 6.1.f RGPD)",
-                },
-              ].map((item) => (
-                <div key={item.contexte} className="rounded-2xl bg-white shadow-sm p-5">
-                  <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-                    <h3 className="font-bold text-sm" style={{ fontFamily: FM, color: DARK }}>{item.contexte}</h3>
-                    <div>{item.tags.map(t => <Tag key={t}>{t}</Tag>)}</div>
-                  </div>
-                  <Bullet items={item.donnees} />
-                  <p className="text-[11px] mt-3 pt-3" style={{ fontFamily: FI, color: "#888", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-                    <strong style={{ color: G }}>Base légale :</strong> {item.base}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Hr />
-
-          {/* 03 */}
-          <div className="mb-12">
-            <H2 n="03">Finalités du traitement</H2>
-            <P>Vos données sont collectées et traitées exclusivement pour les finalités suivantes :</P>
-            <Bullet items={[
-              "Répondre à vos demandes de contact, de renseignements ou de devis",
-              "Qualifier et traiter les demandes de partenariat, de collaboration ou d'investissement",
-              "Adresser des propositions commerciales adaptées à votre demande initiale",
-              "Traiter les candidatures professionnelles reçues via le formulaire Carrières",
-              "Intégrer les profils au réseau d'experts de la diaspora africaine (sur demande explicite)",
-              "Améliorer les performances et l'accessibilité du site (analytics anonymisé)",
-              "Respecter nos obligations légales et réglementaires",
+            <H3>Formulaire de contact</H3>
+            <P>
+              Lorsque vous utilisez le formulaire de contact disponible sur le
+              Site, les données suivantes sont collectées :
+            </P>
+            <BulletList items={[
+              "Nom et prénom",
+              "Adresse email professionnelle",
+              "Organisation et fonction",
+              "Pays d'activité",
+              "Numéro de téléphone (optionnel)",
+              "Type de demande (gouvernement, investisseur, institution, entreprise, ONG, autre)",
+              "Contenu du message",
             ]} />
-            <Note>
-              <strong>Principe de minimisation :</strong> GIRA SAS s'engage à ne collecter que les données strictement
-              nécessaires à la finalité déclarée et à ne pas utiliser vos données à des fins incompatibles avec
-              celles pour lesquelles elles ont été collectées.
-            </Note>
-          </div>
-
-          <Hr />
-
-          {/* 04 */}
-          <div className="mb-12">
-            <H2 n="04">Durée de conservation</H2>
             <P>
-              GIRA SAS applique des durées de conservation strictement proportionnées à la finalité du traitement,
-              conformément au principe de limitation de la conservation (Art. 5.1.e RGPD) :
+              <strong className="text-[#1A1A1A]">Base légale :</strong>{" "}
+              Exécution de mesures précontractuelles et intérêt légitime de GIRA
+              SAS à répondre aux sollicitations de ses prospects et partenaires
+              (articles 6.1.b et 6.1.f du RGPD).
             </P>
-            <div className="rounded-2xl bg-white shadow-sm overflow-hidden">
-              {[
-                { type: "Demandes de contact / devis", durée: "3 ans à compter du dernier échange", motif: "Délai de prescription commerciale" },
-                { type: "Candidatures non retenues", durée: "2 ans à compter de la réception du CV", motif: "Recommandation CNIL pour le recrutement" },
-                { type: "Profils réseau diaspora", durée: "Durée du partenariat + 1 an", motif: "Gestion des contacts actifs" },
-                { type: "Données analytics", durée: "13 mois maximum", motif: "Recommandation CNIL pour les outils analytics" },
-                { type: "Données de facturation", durée: "10 ans", motif: "Obligation légale comptable (Code de commerce)" },
-              ].map((r, i) => (
-                <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-2 px-5 py-4" style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
-                  <span className="text-sm font-semibold" style={{ fontFamily: FM, color: DARK }}>{r.type}</span>
-                  <span className="text-sm font-bold" style={{ fontFamily: FI, color: G }}>{r.durée}</span>
-                  <span className="text-xs" style={{ fontFamily: FI, color: "#888" }}>{r.motif}</span>
-                </div>
-              ))}
-            </div>
+
+            <H3>Formulaire de candidature</H3>
             <P>
-              À l'expiration de ces délais, les données sont supprimées définitivement ou anonymisées de manière
-              irréversible.
+              Lorsque vous postulez via la section Carrières du Site, les données
+              suivantes sont collectées :
             </P>
-          </div>
-
-          <Hr />
-
-          {/* 05 */}
-          <div className="mb-12">
-            <H2 n="05">Destinataires des données</H2>
-            <P>
-              Vos données sont traitées par les seuls membres habilités de l'équipe GIRA SAS ayant besoin d'y accéder
-              dans le cadre de leur mission. Elles ne sont jamais vendues, louées ou cédées à des tiers à des fins
-              commerciales.
-            </P>
-            <P>GIRA SAS peut partager certaines données avec les sous-traitants techniques suivants :</P>
-            <div className="space-y-3 mt-4">
-              {[
-                { nom: "Vercel Inc.", role: "Hébergement et infrastructure web", pays: "États-Unis (UE disponible)", garantie: "Clauses contractuelles types UE — DPA disponible" },
-                { nom: "Resend Inc.", role: "Envoi transactionnel des emails (confirmations, accusés de réception)", pays: "États-Unis", garantie: "Clauses contractuelles types UE — conformité RGPD" },
-                { nom: "OpenAI / Google AI", role: "Moteur IA du chat assistant GIRA (traitement à la volée, non stocké)", pays: "États-Unis", garantie: "DPA — données non utilisées pour l'entraînement" },
-              ].map((s) => (
-                <div key={s.nom} className="rounded-2xl bg-white shadow-sm p-5">
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <strong className="text-sm" style={{ fontFamily: FM, color: DARK }}>{s.nom}</strong>
-                    <span className="text-[10px] px-2 py-1 rounded-full shrink-0" style={{ backgroundColor: "rgba(201,168,76,0.1)", color: G, fontFamily: FM }}>Sous-traitant</span>
-                  </div>
-                  <p className="text-xs mb-1" style={{ fontFamily: FI, color: BODY }}><strong>Rôle :</strong> {s.role}</p>
-                  <p className="text-xs mb-1" style={{ fontFamily: FI, color: BODY }}><strong>Pays :</strong> {s.pays}</p>
-                  <p className="text-xs" style={{ fontFamily: FI, color: "#888" }}><strong>Garanties :</strong> {s.garantie}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Hr />
-
-          {/* 06 */}
-          <div className="mb-12">
-            <H2 n="06">Transferts hors Union Européenne</H2>
-            <P>
-              Certains de nos sous-traitants sont établis en dehors de l'Union Européenne (notamment aux États-Unis).
-              GIRA SAS s'assure que ces transferts sont encadrés par des garanties appropriées conformément au
-              Chapitre V du RGPD, notamment :
-            </P>
-            <Bullet items={[
-              "Clauses contractuelles types (CCT) approuvées par la Commission Européenne (Décision 2021/914)",
-              "Adhésion au Data Privacy Framework UE-États-Unis (pour les entités certifiées)",
-              "Accords de traitement des données (DPA) avec garanties de niveau équivalent au RGPD",
+            <BulletList items={[
+              "Nom, prénom, adresse email et numéro de téléphone",
+              "Poste visé",
+              "Lettre de motivation et message d'accompagnement",
+              "Curriculum Vitae (fichier PDF, 5 Mo maximum)",
             ]} />
-          </div>
-
-          <Hr />
-
-          {/* 07 */}
-          <div className="mb-12">
-            <H2 n="07">Cookies et traceurs</H2>
             <P>
-              Le site gira-cf.com utilise un nombre strictement limité de traceurs, tous à des fins techniques
-              ou de mesure d'audience anonymisée. Aucun cookie publicitaire ni outil de tracking comportemental
-              inter-sites n'est utilisé.
+              <strong className="text-[#1A1A1A]">Base légale :</strong>{" "}
+              Consentement explicite du candidat au moment de la soumission du
+              formulaire (article 6.1.a du RGPD).
             </P>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              {[
-                { nom: "Vercel Analytics", type: "Mesure d'audience", finalite: "Statistiques agrégées et anonymisées (pages vues, sessions). Aucune donnée personnelle identifiable.", consent: true },
-                { nom: "Cookie de consentement", type: "Technique essentiel", finalite: "Mémorisation de votre choix sur le bandeau cookie (localStorage). Durée : 12 mois.", consent: false },
-              ].map((c) => (
-                <div key={c.nom} className="bg-white rounded-2xl p-5 shadow-sm">
-                  <div className="flex items-center justify-between mb-3">
-                    <strong className="text-sm" style={{ fontFamily: FM, color: DARK }}>{c.nom}</strong>
-                    <span className="text-[10px] font-bold px-2 py-1 rounded-full" style={{ backgroundColor: c.consent ? "rgba(201,168,76,0.12)" : "rgba(0,0,0,0.05)", color: c.consent ? G : "#888", fontFamily: FM }}>
-                      {c.consent ? "Soumis au consentement" : "Exempt de consentement"}
-                    </span>
-                  </div>
-                  <Tag>{c.type}</Tag>
-                  <p className="text-xs leading-relaxed mt-2" style={{ fontFamily: FI, color: BODY }}>{c.finalite}</p>
-                </div>
-              ))}
-            </div>
-            <P>
-              Vous pouvez à tout moment modifier vos préférences via le bandeau de consentement ou en
-              supprimant les cookies de votre navigateur.
-            </P>
-          </div>
 
-          <Hr />
-
-          {/* 08 */}
-          <div className="mb-12">
-            <H2 n="08">Sécurité des données</H2>
+            <H3>Réseau et Diaspora</H3>
             <P>
-              GIRA SAS met en œuvre toutes les mesures techniques et organisationnelles appropriées pour garantir
-              la sécurité, la confidentialité et l'intégrité de vos données personnelles, conformément à l'article
-              32 du RGPD :
+              Si vous choisissez de rejoindre le réseau d'experts de la diaspora
+              africaine de GIRA, les données suivantes sont collectées :
             </P>
-            <Bullet items={[
-              "Chiffrement SSL/TLS (HTTPS) sur l'ensemble du site et des échanges de données",
-              "Hébergement sur infrastructure certifiée SOC 2 Type II (Vercel)",
-              "Accès aux données limité aux seuls collaborateurs habilités (principe du moindre privilège)",
-              "Limitation du débit des API (rate limiting) pour prévenir les abus",
-              "Champ honeypot anti-spam sur les formulaires de contact",
-              "Revue régulière des accès et des permissions",
-              "Procédure de notification en cas de violation de données (72h — Art. 33 RGPD)",
+            <BulletList items={[
+              "Nom et prénom",
+              "Adresse email",
+              "Domaine d'expertise",
+              "Pays de résidence",
             ]} />
-          </div>
-
-          <Hr />
-
-          {/* 09 */}
-          <div className="mb-12">
-            <H2 n="09">Vos droits</H2>
             <P>
-              Conformément au RGPD (Articles 15 à 22), vous disposez des droits suivants sur vos données personnelles
-              traitées par GIRA SAS :
+              <strong className="text-[#1A1A1A]">Base légale :</strong>{" "}
+              Consentement explicite de l'utilisateur (article 6.1.a du RGPD).
             </P>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              {[
-                { droit: "Droit d'accès", desc: "Obtenir confirmation que des données vous concernant sont traitées et en recevoir une copie.", ref: "Art. 15" },
-                { droit: "Droit de rectification", desc: "Faire corriger des données inexactes ou incomplètes vous concernant.", ref: "Art. 16" },
-                { droit: "Droit à l'effacement", desc: "Obtenir la suppression de vos données dans les cas prévus par la réglementation.", ref: "Art. 17" },
-                { droit: "Droit à la portabilité", desc: "Recevoir vos données dans un format structuré, lisible et interopérable.", ref: "Art. 20" },
-                { droit: "Droit d'opposition", desc: "Vous opposer à tout moment au traitement de vos données pour des raisons tenant à votre situation.", ref: "Art. 21" },
-                { droit: "Droit à la limitation", desc: "Demander la suspension du traitement de vos données dans certains cas.", ref: "Art. 18" },
-              ].map((d) => (
-                <div key={d.droit} className="bg-white rounded-2xl p-5 shadow-sm border-l-4" style={{ borderLeftColor: G }}>
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-bold" style={{ fontFamily: FM, color: DARK }}>{d.droit}</h3>
-                    <span className="text-[10px] font-semibold" style={{ fontFamily: FM, color: G }}>{d.ref}</span>
-                  </div>
-                  <p className="text-xs leading-relaxed" style={{ fontFamily: FI, color: BODY }}>{d.desc}</p>
-                </div>
-              ))}
+
+            <H3>Données de navigation et analytics</H3>
+            <P>
+              Le Site utilise Vercel Analytics, un service de mesure d'audience
+              qui collecte des données agrégées et anonymisées. Les données
+              traitées incluent :
+            </P>
+            <BulletList items={[
+              "Pages consultées (données agrégées)",
+              "Durée des sessions (anonymisée)",
+              "Type d'appareil et navigateur (données agrégées)",
+              "Pays d'origine de la visite (niveau pays uniquement, pas d'adresse IP individuelle)",
+            ]} />
+            <P>
+              <strong className="text-[#1A1A1A]">Base légale :</strong>{" "}
+              Intérêt légitime de GIRA SAS à mesurer l'audience de son Site et à
+              en améliorer les performances (article 6.1.f du RGPD).
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Finalités */}
+          <Section>
+            <H2>Finalités du traitement</H2>
+            <P>
+              Vos données personnelles sont collectées et traitées
+              exclusivement pour les finalités suivantes :
+            </P>
+            <BulletList items={[
+              "Répondre à vos demandes de contact, de renseignements ou de devis transmises via le formulaire de contact du Site",
+              "Qualifier et traiter les demandes de partenariat, de collaboration ou d'investissement reçues de la part de gouvernements, institutions internationales, entreprises ou investisseurs",
+              "Adresser des propositions commerciales adaptées à votre demande initiale, dans le respect du cadre légal applicable",
+              "Traiter les candidatures professionnelles reçues via le formulaire de la section Carrières du Site",
+              "Intégrer les profils d'experts au réseau de la diaspora africaine de GIRA, sur la base du consentement explicite de chaque participant",
+              "Améliorer les performances, l'ergonomie et l'accessibilité du Site grâce à l'analyse de données de navigation anonymisées",
+              "Assurer la sécurité du Site et prévenir les abus (rate limiting, honeypot anti-spam)",
+              "Respecter les obligations légales et réglementaires applicables à GIRA SAS",
+            ]} />
+            <P>
+              Conformément au principe de minimisation des données (article 5.1.c
+              du RGPD), GIRA SAS s'engage à ne collecter que les données
+              strictement nécessaires à chaque finalité déclarée et à ne jamais
+              utiliser vos données à des fins incompatibles avec celles pour
+              lesquelles elles ont été initialement collectées.
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Durées de conservation */}
+          <Section>
+            <H2>Durées de conservation</H2>
+            <P>
+              GIRA SAS conserve vos données personnelles pendant une durée
+              strictement proportionnée à la finalité du traitement, conformément
+              au principe de limitation de la conservation énoncé à l'article
+              5.1.e du RGPD. Les durées de conservation appliquées sont les
+              suivantes :
+            </P>
+            <div className="overflow-x-auto mb-6">
+              <table className="w-full font-inter text-[15px]">
+                <thead>
+                  <tr className="border-b-2 border-[#1A1A1A]">
+                    <th className="text-left py-3 pr-6 font-semibold text-[#1A1A1A]">Catégorie de données</th>
+                    <th className="text-left py-3 pr-6 font-semibold text-[#1A1A1A]">Durée de conservation</th>
+                    <th className="text-left py-3 font-semibold text-[#1A1A1A]">Fondement</th>
+                  </tr>
+                </thead>
+                <tbody className="text-[#444]">
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Demandes de contact et devis</td>
+                    <td className="py-4 pr-6">3 ans à compter du dernier échange</td>
+                    <td className="py-4">Prescription commerciale</td>
+                  </tr>
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Candidatures non retenues</td>
+                    <td className="py-4 pr-6">2 ans à compter de la réception</td>
+                    <td className="py-4">Recommandation CNIL</td>
+                  </tr>
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Profils réseau diaspora</td>
+                    <td className="py-4 pr-6">Durée du partenariat + 1 an</td>
+                    <td className="py-4">Gestion des contacts actifs</td>
+                  </tr>
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Données analytics</td>
+                    <td className="py-4 pr-6">13 mois maximum</td>
+                    <td className="py-4">Recommandation CNIL</td>
+                  </tr>
+                  <tr>
+                    <td className="py-4 pr-6">Données de facturation</td>
+                    <td className="py-4 pr-6">10 ans</td>
+                    <td className="py-4">Obligation légale (Code de commerce)</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div className="mt-6">
-              <Link href="/rgpd"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold"
-                style={{ backgroundColor: G, color: DARK, fontFamily: FM }}>
-                Comment exercer vos droits →
+            <P>
+              À l'expiration des délais de conservation indiqués ci-dessus, les
+              données personnelles concernées sont supprimées de manière
+              définitive ou anonymisées de façon irréversible, de sorte qu'elles
+              ne permettent plus l'identification directe ou indirecte des
+              personnes concernées.
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Destinataires */}
+          <Section>
+            <H2>Destinataires et sous-traitants</H2>
+            <P>
+              Vos données personnelles sont traitées exclusivement par les
+              membres habilités de l'équipe GIRA SAS ayant besoin d'y accéder
+              dans le cadre de leurs fonctions. Elles ne sont en aucun cas
+              vendues, louées, échangées ou cédées à des tiers à des fins
+              commerciales, publicitaires ou de prospection.
+            </P>
+            <P>
+              Dans le cadre de l'exploitation du Site et de la fourniture de ses
+              services, GIRA SAS fait appel aux sous-traitants techniques
+              suivants :
+            </P>
+            <div className="space-y-6 mb-6">
+              <div className="bg-[#FAFAFA] rounded-lg p-6">
+                <h4 className="font-montserrat font-semibold text-[#1A1A1A] mb-3">Vercel Inc.</h4>
+                <P>
+                  Hébergement et infrastructure web du Site. Vercel assure le
+                  déploiement, la diffusion via CDN (Content Delivery Network) et
+                  la disponibilité du Site. Les données transitant par les
+                  serveurs de Vercel sont protégées par des mesures de sécurité
+                  conformes aux standards SOC 2 Type II et ISO 27001.
+                </P>
+                <p className="font-inter text-sm text-[#777]">
+                  Siège : San Francisco, États-Unis · Garanties : Clauses contractuelles types UE · DPA disponible
+                </p>
+              </div>
+
+              <div className="bg-[#FAFAFA] rounded-lg p-6">
+                <h4 className="font-montserrat font-semibold text-[#1A1A1A] mb-3">Resend Inc.</h4>
+                <P>
+                  Service d'envoi transactionnel d'emails. Resend est utilisé
+                  pour l'envoi des confirmations de réception des formulaires de
+                  contact et de candidature, ainsi que pour la transmission des
+                  demandes à l'équipe GIRA.
+                </P>
+                <p className="font-inter text-sm text-[#777]">
+                  Siège : États-Unis · Garanties : Clauses contractuelles types UE · Conformité RGPD
+                </p>
+              </div>
+
+              <div className="bg-[#FAFAFA] rounded-lg p-6">
+                <h4 className="font-montserrat font-semibold text-[#1A1A1A] mb-3">OpenAI, Inc.</h4>
+                <P>
+                  Moteur d'intelligence artificielle alimentant l'assistant
+                  virtuel du Site (chatbot). Les échanges sont traités à la volée
+                  et ne sont pas stockés de manière permanente par le
+                  sous-traitant. Les données conversationnelles ne sont pas
+                  utilisées pour l'entraînement des modèles.
+                </P>
+                <p className="font-inter text-sm text-[#777]">
+                  Siège : San Francisco, États-Unis · Garanties : Data Processing Agreement · Données non utilisées pour l'entraînement
+                </p>
+              </div>
+            </div>
+          </Section>
+
+          <Divider />
+
+          {/* Transferts hors UE */}
+          <Section>
+            <H2>Transferts de données hors de l'Union Européenne</H2>
+            <P>
+              Certains des sous-traitants de GIRA SAS sont établis en dehors de
+              l'Espace Économique Européen, notamment aux États-Unis. GIRA SAS
+              s'assure que ces transferts internationaux de données sont
+              encadrés par des garanties appropriées conformément au Chapitre V
+              du RGPD, incluant notamment :
+            </P>
+            <BulletList items={[
+              "Des clauses contractuelles types (CCT) adoptées par la Commission Européenne (Décision d'exécution 2021/914 du 4 juin 2021)",
+              "L'adhésion des entités destinataires au Data Privacy Framework UE-États-Unis, lorsque ces entités y sont certifiées",
+              "Des accords de traitement des données (Data Processing Agreements) comportant des engagements de confidentialité et de sécurité de niveau au moins équivalent aux exigences du RGPD",
+            ]} />
+            <P>
+              En tout état de cause, GIRA SAS ne transfère des données
+              personnelles en dehors de l'Union Européenne que lorsque cela est
+              strictement nécessaire à l'exécution des services proposés sur le
+              Site, et uniquement dans les conditions prévues par la
+              réglementation européenne applicable.
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Cookies */}
+          <Section>
+            <H2>Cookies et technologies de suivi</H2>
+            <P>
+              Le Site utilise un nombre strictement limité de cookies et de
+              technologies de suivi. GIRA SAS ne déploie aucun cookie
+              publicitaire, aucun pixel de suivi tiers et aucun outil de tracking
+              comportemental inter-sites.
+            </P>
+
+            <H3>Cookies utilisés</H3>
+            <div className="overflow-x-auto mb-6">
+              <table className="w-full font-inter text-[15px]">
+                <thead>
+                  <tr className="border-b-2 border-[#1A1A1A]">
+                    <th className="text-left py-3 pr-6 font-semibold text-[#1A1A1A]">Nom / Service</th>
+                    <th className="text-left py-3 pr-6 font-semibold text-[#1A1A1A]">Type</th>
+                    <th className="text-left py-3 pr-6 font-semibold text-[#1A1A1A]">Finalité</th>
+                    <th className="text-left py-3 font-semibold text-[#1A1A1A]">Consentement</th>
+                  </tr>
+                </thead>
+                <tbody className="text-[#444]">
+                  <tr className="border-b border-[#EBEBEB]">
+                    <td className="py-4 pr-6">Vercel Analytics</td>
+                    <td className="py-4 pr-6">Mesure d'audience</td>
+                    <td className="py-4 pr-6">Statistiques agrégées et anonymisées (pages vues, sessions, type d'appareil)</td>
+                    <td className="py-4">Requis</td>
+                  </tr>
+                  <tr>
+                    <td className="py-4 pr-6">Cookie de consentement</td>
+                    <td className="py-4 pr-6">Technique essentiel</td>
+                    <td className="py-4 pr-6">Mémorisation du choix de l'utilisateur (localStorage, 12 mois)</td>
+                    <td className="py-4">Exempt</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <P>
+              Vous pouvez à tout moment modifier vos préférences en matière de
+              cookies via le bandeau de consentement accessible depuis le pied de
+              page du Site, ou en supprimant les cookies directement depuis les
+              paramètres de votre navigateur. La suppression ou le refus de
+              certains cookies peut affecter votre expérience de navigation sur
+              le Site, sans toutefois en empêcher l'accès.
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Sécurité */}
+          <Section>
+            <H2>Sécurité des données</H2>
+            <P>
+              GIRA SAS met en œuvre l'ensemble des mesures techniques et
+              organisationnelles appropriées pour garantir un niveau de sécurité
+              adapté au risque, conformément à l'article 32 du RGPD. Ces mesures
+              incluent notamment :
+            </P>
+            <BulletList items={[
+              "Chiffrement des communications via les protocoles SSL/TLS (HTTPS) sur l'intégralité du Site et des échanges de données",
+              "Hébergement sur une infrastructure certifiée SOC 2 Type II et ISO 27001 (Vercel Inc.)",
+              "Restriction de l'accès aux données personnelles aux seuls collaborateurs habilités, selon le principe du moindre privilège",
+              "Mise en place de mécanismes de limitation du débit (rate limiting) sur les interfaces de programmation (API) pour prévenir les abus et les attaques automatisées",
+              "Déploiement d'un champ honeypot anti-spam invisible sur les formulaires de contact pour filtrer les soumissions automatisées",
+              "Revue périodique des accès, des permissions et des configurations de sécurité",
+              "Mise en œuvre d'une procédure de notification en cas de violation de données personnelles, conformément à l'article 33 du RGPD (notification à la CNIL sous 72 heures) et à l'article 34 (notification aux personnes concernées en cas de risque élevé)",
+            ]} />
+          </Section>
+
+          <Divider />
+
+          {/* Vos droits */}
+          <Section>
+            <H2>Vos droits</H2>
+            <P>
+              Conformément aux articles 15 à 22 du RGPD et à la loi Informatique
+              et Libertés, vous disposez des droits suivants concernant vos
+              données personnelles :
+            </P>
+            <BulletList items={[
+              "Droit d'accès (article 15) — Vous pouvez obtenir confirmation que GIRA SAS traite ou non des données vous concernant et, le cas échéant, en recevoir une copie complète",
+              "Droit de rectification (article 16) — Vous pouvez demander la correction de données inexactes, incomplètes ou obsolètes vous concernant",
+              "Droit à l'effacement (article 17) — Vous pouvez demander la suppression de vos données personnelles dans les cas prévus par la réglementation applicable",
+              "Droit à la limitation du traitement (article 18) — Vous pouvez demander la suspension du traitement de vos données dans certaines circonstances",
+              "Droit à la portabilité (article 20) — Vous pouvez recevoir les données que vous avez fournies dans un format structuré, couramment utilisé et lisible par machine",
+              "Droit d'opposition (article 21) — Vous pouvez vous opposer à tout moment au traitement de vos données fondé sur l'intérêt légitime, pour des raisons tenant à votre situation particulière",
+              "Droit de retrait du consentement (article 7) — Lorsque le traitement est fondé sur votre consentement, vous pouvez le retirer à tout moment sans que cela n'affecte la licéité du traitement antérieur",
+              "Droit de ne pas faire l'objet d'une décision automatisée (article 22) — Vous avez le droit de ne pas faire l'objet d'une décision fondée exclusivement sur un traitement automatisé produisant des effets juridiques vous concernant",
+            ]} />
+            <P>
+              Pour exercer l'un de ces droits, adressez votre demande par
+              courrier électronique à{" "}
+              <a href="mailto:contact@gira-cf.com" className="text-[#1A1A1A] underline underline-offset-2 hover:text-[#C9A84C] transition-colors">
+                contact@gira-cf.com
+              </a>{" "}
+              en précisant votre identité et le droit que vous souhaitez exercer.
+              GIRA SAS s'engage à répondre à votre demande dans un délai maximum
+              de 30 jours à compter de sa réception. Ce délai peut être prolongé
+              de deux mois supplémentaires en cas de demandes nombreuses ou
+              complexes, avec notification préalable.
+            </P>
+            <P>
+              Pour plus de détails sur les modalités d'exercice de vos droits,
+              consultez notre page dédiée :{" "}
+              <Link href="/rgpd" className="text-[#1A1A1A] underline underline-offset-2 hover:text-[#C9A84C] transition-colors">
+                Vos droits RGPD
               </Link>
+              .
+            </P>
+          </Section>
+
+          <Divider />
+
+          {/* Réclamation CNIL */}
+          <Section>
+            <H2>Réclamation auprès de la CNIL</H2>
+            <P>
+              Si vous estimez, après avoir contacté GIRA SAS, que vos droits en
+              matière de protection des données ne sont pas respectés, ou que le
+              traitement de vos données personnelles constitue une violation du
+              RGPD, vous avez le droit d'introduire une réclamation auprès de
+              l'autorité de contrôle compétente.
+            </P>
+            <P>
+              En France, l'autorité de contrôle est la Commission Nationale de
+              l'Informatique et des Libertés (CNIL), que vous pouvez contacter
+              aux coordonnées suivantes :
+            </P>
+            <div className="bg-[#FAFAFA] rounded-lg p-6 md:p-8 mb-6">
+              <InfoRow label="Organisme" value="CNIL — Commission Nationale de l'Informatique et des Libertés" />
+              <InfoRow label="Adresse" value="3 Place de Fontenoy — TSA 80715 — 75334 Paris Cedex 07" />
+              <InfoRow label="Téléphone" value="+33 (0)1 53 73 22 22" />
+              <InfoRow label="Site web" value={
+                <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" className="text-[#1A1A1A] underline underline-offset-2 hover:text-[#C9A84C] transition-colors">
+                  www.cnil.fr
+                </a>
+              } />
+              <InfoRow label="Plainte en ligne" value={
+                <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener noreferrer" className="text-[#1A1A1A] underline underline-offset-2 hover:text-[#C9A84C] transition-colors">
+                  cnil.fr/fr/plaintes
+                </a>
+              } />
             </div>
-          </div>
+          </Section>
 
-          <Hr />
+          <Divider />
 
-          {/* 10 */}
-          <div className="mb-12">
-            <H2 n="10">Réclamation auprès de la CNIL</H2>
+          {/* Contact */}
+          <Section>
+            <H2>Nous contacter</H2>
             <P>
-              Si vous estimez que vos droits ne sont pas respectés ou que le traitement de vos données n'est pas
-              conforme au RGPD, vous avez le droit d'introduire une réclamation auprès de l'autorité de contrôle
-              compétente :
+              Pour toute question, demande d'information ou réclamation relative
+              à la présente Politique de confidentialité ou au traitement de vos
+              données personnelles par GIRA SAS, vous pouvez nous contacter :
             </P>
-            <div className="rounded-2xl bg-white shadow-sm p-6">
-              <p className="font-bold text-sm mb-2" style={{ fontFamily: FM, color: DARK }}>
-                Commission Nationale de l'Informatique et des Libertés (CNIL)
-              </p>
-              <p className="text-sm mb-1" style={{ fontFamily: FI, color: BODY }}>3 Place de Fontenoy — 75007 Paris</p>
-              <p className="text-sm mb-1" style={{ fontFamily: FI, color: BODY }}>Tél. : +33 (0)1 53 73 22 22</p>
-              <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" style={{ color: G, fontFamily: FI, fontSize: "0.875rem" }}>
-                www.cnil.fr →
-              </a>
-            </div>
-          </div>
-
-          <Hr />
-
-          {/* 11 */}
-          <div className="mb-12">
-            <H2 n="11">Modifications de la politique</H2>
+            <BulletList items={[
+              "Par email : contact@gira-cf.com",
+              "Par courrier : GIRA SAS — 128, rue de la Boétie — 75008 Paris, France",
+            ]} />
             <P>
-              GIRA SAS se réserve le droit de modifier la présente politique de confidentialité à tout moment pour
-              refléter les évolutions légales, réglementaires ou opérationnelles. La date de dernière mise à jour
-              est indiquée en haut de ce document.
+              Nous nous engageons à traiter votre demande dans les meilleurs
+              délais et, en tout état de cause, dans le respect des délais légaux
+              applicables.
             </P>
-            <P>
-              En cas de modification substantielle affectant vos droits, GIRA SAS s'engage à vous en informer
-              par email (si vous nous avez fourni votre adresse) ou via un bandeau visible sur le site, au moins
-              15 jours avant l'entrée en vigueur des modifications.
-            </P>
-          </div>
+          </Section>
 
-          {/* CTA */}
-          <div className="rounded-2xl p-8 mt-14 text-center" style={{ backgroundColor: DARK }}>
-            <p className="text-[10px] uppercase tracking-[0.3em] mb-3" style={{ fontFamily: FM, color: "rgba(255,255,255,0.3)" }}>Vos droits sont une priorité</p>
-            <p className="text-white font-bold text-lg mb-1" style={{ fontFamily: FM }}>Une question sur vos données ?</p>
-            <p className="text-sm mb-5" style={{ fontFamily: FI, color: "rgba(255,255,255,0.45)" }}>
-              Réponse assurée sous 30 jours (délai légal RGPD)
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="mailto:contact@gira-cf.com" className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: G, fontFamily: FM }}>
-                contact@gira-cf.com →
-              </a>
-              <Link href="/rgpd" className="text-sm" style={{ fontFamily: FI, color: "rgba(255,255,255,0.4)" }}>
-                Voir tous vos droits →
+          {/* Footer links */}
+          <div className="border-t border-[#E5E5E5] pt-12 mt-8">
+            <div className="flex flex-wrap gap-x-8 gap-y-3">
+              <Link href="/mentions-legales" className="font-inter text-sm text-[#777] hover:text-[#1A1A1A] underline underline-offset-2 transition-colors">
+                Mentions légales
+              </Link>
+              <Link href="/rgpd" className="font-inter text-sm text-[#777] hover:text-[#1A1A1A] underline underline-offset-2 transition-colors">
+                Vos droits RGPD
+              </Link>
+              <Link href="/contact" className="font-inter text-sm text-[#777] hover:text-[#1A1A1A] underline underline-offset-2 transition-colors">
+                Nous contacter
               </Link>
             </div>
           </div>
 
         </div>
-      </section>
+      </div>
     </>
   );
 }
