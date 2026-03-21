@@ -1,0 +1,212 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "sectors": "Sectors",
+    "pnd": "NDP & IRT",
+    "network": "Network",
+    "careers": "Careers",
+    "news": "News",
+    "cta": "Talk to an expert",
+    "lang": "FR"
+  },
+  "footer": {
+    "tagline": "Project execution firm for structural initiatives. We turn intentions into concrete results.",
+    "services": "Services",
+    "serviceLinks": {
+      "structuring": "Project Structuring",
+      "moa": "Delegated Project Management",
+      "financing": "Financing Mobilization",
+      "capacity": "Capacity Building"
+    },
+    "presence": "Locations",
+    "contact": "Contact",
+    "legal": "Legal Notice",
+    "privacy": "Privacy Policy",
+    "gdpr": "GDPR",
+    "copyright": "© 2026 GIRA — All rights reserved",
+    "addressLabel": "128, rue de la Boétie\n75008 Paris — France",
+    "followUs": "Follow us",
+    "contactUs": "Contact us"
+  },
+  "home": {
+    "hero": {
+      "badge": "NDP RCA 2024-2028 Partner",
+      "title": "Project Execution Firm\nfor Structural Initiatives",
+      "subtitle": "We structure, finance and execute projects that sustainably transform Africa.",
+      "cta1": "Talk to an expert",
+      "cta2": "Discover our services",
+      "scroll": "Scroll"
+    },
+    "clients": {
+      "title": "We support key players in Africa's transformation",
+      "items": {
+        "gov": { "title": "Governments & Ministries", "desc": "Supporting the design, structuring and execution of public policies and sovereign projects." },
+        "institutions": { "title": "Institutions & Donors", "desc": "Partnering with international organizations for the assessment and monitoring of financed projects." },
+        "private": { "title": "Companies & Private Groups", "desc": "Accompanying private investors in their establishment and expansion across the continent." },
+        "ngo": { "title": "NGOs & International Organizations", "desc": "Structuring development aid programs to maximize on-the-ground impact." },
+        "funds": { "title": "Funds & Investors", "desc": "Mobilizing and structuring financing for projects with high social and economic returns." },
+        "startups": { "title": "Startups & Innovation", "desc": "Accompanying African entrepreneurs in their scale-up and institutional fundraising." }
+      }
+    },
+    "pillars": {
+      "title": "We change the narrative\nby moving to execution",
+      "subtitle": "GIRA doesn't just advise. We execute.",
+      "items": {
+        "1": { "num": "01", "title": "Change the narrative and paradigm", "desc": "From aid to investment. From discourse to action. GIRA carries a radically different vision of African development." },
+        "2": { "num": "02", "title": "Rethink project governance", "desc": "Robust governance structures, effective steering committees and rigorous accountability." },
+        "3": { "num": "03", "title": "Redefine management & leadership", "desc": "Training and positioning African talent at the heart of strategic and operational decisions." },
+        "4": { "num": "04", "title": "Drive long-term transformation", "desc": "A long-term commitment. Measurable results. Continuous field presence to guarantee impact." }
+      }
+    },
+    "sectors": {
+      "title": "Targeted expertise,\nin service of concrete projects",
+      "subtitle": "Each sector requires deep knowledge. Our sector experts intervene with precision.",
+      "tabs": {
+        "water": "Water",
+        "health": "Health",
+        "energy": "Energy",
+        "agri": "Agriculture",
+        "mining": "Mining",
+        "construction": "Construction",
+        "tech": "Technology",
+        "transport": "Transport"
+      }
+    },
+    "stats": {
+      "experts": { "value": "45+", "label": "Mobilizable experts" },
+      "countries": { "value": "3", "label": "Countries of operation" },
+      "sectors": { "value": "8", "label": "Intervention sectors" },
+      "pnd": { "value": "1", "label": "National NDP supported" }
+    },
+    "pnd": {
+      "badge": "Official NDP RCA 2024-2028 Partner",
+      "title": "GIRA at the heart of the National Development Plan",
+      "desc": "Strategic partner of the Central African Republic, GIRA accompanies the implementation of the NDP 2024-2028 and the preparation of the Casablanca Investor Roundtable.",
+      "cta": "Discover our involvement"
+    },
+    "cta": {
+      "title": "Do you have a strategic project to bring to life?",
+      "subtitle": "Let's talk. GIRA places a team of experts at your disposal, ready to transform your vision into reality.",
+      "button": "Contact us"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "About GIRA",
+      "subtitle": "A project execution firm focused on lasting impact in Africa"
+    },
+    "mission": {
+      "title": "Our mission",
+      "subtitle": "GIRA was born from a simple observation: Africa doesn't lack projects or funding, but execution.",
+      "points": [
+        "Structure projects to make them financeable and executable",
+        "Mobilize international and private financing",
+        "Ensure delegated project management through to delivery",
+        "Transfer skills to sustain achievements"
+      ]
+    },
+    "values": {
+      "title": "Our values",
+      "items": {
+        "innovation": { "title": "Innovation", "desc": "Creative solutions adapted to African realities" },
+        "excellence": { "title": "Excellence", "desc": "International standards in every commitment" },
+        "transparency": { "title": "Transparency", "desc": "Rigorous accountability at every stage" },
+        "impact": { "title": "Impact", "desc": "Measurable results, not just reports" }
+      }
+    }
+  },
+  "services": {
+    "hero": {
+      "title": "Our offer & services",
+      "subtitle": "Four integrated service lines to cover the entire project lifecycle"
+    },
+    "cta": "Request a quote",
+    "learnMore": "Learn more"
+  },
+  "contact": {
+    "hero": {
+      "title": "Contact us",
+      "subtitle": "Our team responds within 24 business hours"
+    },
+    "form": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "organization": "Organization",
+      "function": "Position",
+      "country": "Country",
+      "email": "Professional email",
+      "phone": "Phone (optional)",
+      "type": "Request type",
+      "message": "Your message",
+      "rgpd": "I agree that my data will be processed to respond to my request.",
+      "submit": "Send message",
+      "sending": "Sending...",
+      "success": "Message sent! We will reply within 24 hours.",
+      "error": "Sending error. Please retry or contact us directly.",
+      "types": {
+        "gov": "Government / Public institution",
+        "investor": "Investor / Fund",
+        "institution": "International institution / Donor",
+        "company": "Private company",
+        "ngo": "NGO / International organization",
+        "other": "Other"
+      }
+    },
+    "info": {
+      "address": "Address",
+      "email": "Email",
+      "response": "Response time",
+      "responseValue": "Within 24 business hours",
+      "languages": "Languages",
+      "languagesValue": "French & English"
+    }
+  },
+  "careers": {
+    "hero": {
+      "title": "Join GIRA",
+      "subtitle": "Build your career in service of Africa"
+    },
+    "form": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phone": "Phone",
+      "position": "Desired position",
+      "message": "Cover letter",
+      "cv": "Curriculum Vitae (PDF, max 5MB)",
+      "submit": "Submit my application",
+      "success": "Application sent! We will get back to you.",
+      "error": "Sending error. Please retry."
+    }
+  },
+  "common": {
+    "readMore": "Read more",
+    "backToHome": "Back to home",
+    "backToNews": "Back to news",
+    "contactUs": "Contact us",
+    "discover": "Discover",
+    "learnMore": "Learn more",
+    "seeAll": "See all",
+    "loading": "Loading...",
+    "notFound": {
+      "title": "Page not found",
+      "desc": "The page you are looking for does not exist or has been moved.",
+      "button": "Back to home"
+    }
+  },
+  "chat": {
+    "title": "Talk to a GIRA expert",
+    "subtitle": "Immediate response · 24/7",
+    "placeholder": "Describe your project...",
+    "welcome": "Hello! I am the GIRA assistant. How can I help you today? You can tell me about your project, request an indicative quote, or learn more about our services.",
+    "send": "Send"
+  },
+  "cookie": {
+    "text": "GIRA uses Vercel Analytics to measure audience. No advertising cookies. No data reselling.",
+    "accept": "Accept",
+    "refuse": "Decline",
+    "learnMore": "Learn more"
+  }
+}

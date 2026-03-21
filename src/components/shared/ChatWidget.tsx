@@ -4,7 +4,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Loader2, ChevronRight, ArrowRight, UserCheck, Phone } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import type { ChatMessage } from "@/lib/types";
 
 const G = "#C9A84C"; // gold GIRA
@@ -102,6 +103,8 @@ function ChatIcon({ size = 24 }: { size?: number }) {
    COMPOSANT PRINCIPAL
 ══════════════════════════════════════════════════════════ */
 export default function ChatWidget() {
+  const t = useTranslations("chat");
+
   const [isOpen, setIsOpen]         = useState(false);
   const [messages, setMessages]     = useState<ChatMessage[]>([WELCOME]);
   const [input, setInput]           = useState("");
@@ -255,13 +258,13 @@ export default function ChatWidget() {
                   <div>
                     <p className="text-[11px] font-semibold text-white leading-tight"
                       style={{ fontFamily: "var(--font-montserrat)", letterSpacing: "0.04em" }}>
-                      Assistant IA
+                      {t("title")}
                     </p>
                     <div className="flex items-center gap-1.5 mt-0.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                       <p className="text-[10px]"
                         style={{ color: "rgba(255,255,255,0.45)", fontFamily: "var(--font-inter)" }}>
-                        Disponible · 24h/24
+                        {t("subtitle")}
                       </p>
                     </div>
                   </div>
@@ -437,7 +440,7 @@ export default function ChatWidget() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onKeyDown}
-                  placeholder="Décrivez votre projet ou posez une question..."
+                  placeholder={t("placeholder")}
                   rows={1}
                   disabled={isLoading}
                   className="flex-1 resize-none text-sm px-3 py-2.5 rounded-xl border focus:outline-none focus:ring-2 bg-gray-50"

@@ -1,0 +1,212 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "sectors": "Secteurs",
+    "pnd": "PND & TRI",
+    "network": "Réseau",
+    "careers": "Carrières",
+    "news": "Actualités",
+    "cta": "Parler à un expert",
+    "lang": "EN"
+  },
+  "footer": {
+    "tagline": "Cabinet d'exécution des projets structurants. Nous transformons les intentions en réalisations concrètes.",
+    "services": "Services",
+    "serviceLinks": {
+      "structuring": "Structuration de projets",
+      "moa": "Maîtrise d'ouvrage déléguée",
+      "financing": "Mobilisation de financements",
+      "capacity": "Renforcement de capacités"
+    },
+    "presence": "Présences",
+    "contact": "Contact",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité",
+    "gdpr": "RGPD",
+    "copyright": "© 2026 GIRA — Tous droits réservés",
+    "addressLabel": "128, rue de la Boétie\n75008 Paris — France",
+    "followUs": "Suivez-nous",
+    "contactUs": "Nous contacter"
+  },
+  "home": {
+    "hero": {
+      "badge": "Partenaire PND RCA 2024-2028",
+      "title": "Cabinet d'exécution\ndes projets structurants",
+      "subtitle": "Nous structurons, finançons et exécutons des projets qui transforment durablement l'Afrique.",
+      "cta1": "Parler à un expert",
+      "cta2": "Découvrir nos services",
+      "scroll": "Défiler"
+    },
+    "clients": {
+      "title": "Nous accompagnons les acteurs clés de la transformation en Afrique",
+      "items": {
+        "gov": { "title": "Gouvernements & Ministères", "desc": "Appui à la conception, structuration et exécution des politiques publiques et projets souverains." },
+        "institutions": { "title": "Institutions & Bailleurs", "desc": "Partenariat avec les organisations internationales pour l'instruction et le suivi des projets financés." },
+        "private": { "title": "Entreprises & Groupes Privés", "desc": "Accompagnement des investisseurs privés dans leur implantation et développement sur le continent." },
+        "ngo": { "title": "ONG & Organisations Internationales", "desc": "Structuration des programmes d'aide au développement pour maximiser l'impact sur le terrain." },
+        "funds": { "title": "Fonds & Investisseurs", "desc": "Mobilisation et structuration de financements pour les projets à fort rendement social et économique." },
+        "startups": { "title": "Startups & Innovation", "desc": "Accompagnement des entrepreneurs africains dans la scale-up et la levée de fonds institutionnels." }
+      }
+    },
+    "pillars": {
+      "title": "Nous changeons le narratif\nen passant à l'exécution",
+      "subtitle": "GIRA ne se contente pas de conseiller. Nous exécutons.",
+      "items": {
+        "1": { "num": "01", "title": "Changer le narratif et le paradigme", "desc": "Passer de l'aide à l'investissement. Du discours à l'action. GIRA porte une vision radicalement différente du développement africain." },
+        "2": { "num": "02", "title": "Repenser la gouvernance des projets", "desc": "Des structures de gouvernance robustes, des comités de pilotage efficaces et une reddition de comptes rigoureuse." },
+        "3": { "num": "03", "title": "Redéfinir le management & le leadership", "desc": "Former et positionner les talents africains au cœur des décisions stratégiques et opérationnelles." },
+        "4": { "num": "04", "title": "Piloter la transformation dans la durée", "desc": "Un engagement long terme. Des résultats mesurables. Une présence terrain continue pour garantir l'impact." }
+      }
+    },
+    "sectors": {
+      "title": "Des expertises ciblées,\nau service de projets concrets",
+      "subtitle": "Chaque secteur requiert une connaissance approfondie. Nos experts sectoriels interviennent avec précision.",
+      "tabs": {
+        "water": "Eau",
+        "health": "Santé",
+        "energy": "Énergie",
+        "agri": "Agriculture",
+        "mining": "Mines",
+        "construction": "Construction",
+        "tech": "Technologies",
+        "transport": "Transports"
+      }
+    },
+    "stats": {
+      "experts": { "value": "45+", "label": "Experts mobilisables" },
+      "countries": { "value": "3", "label": "Pays d'implantation" },
+      "sectors": { "value": "8", "label": "Secteurs d'intervention" },
+      "pnd": { "value": "1", "label": "PND National soutenu" }
+    },
+    "pnd": {
+      "badge": "Partenaire officiel PND RCA 2024-2028",
+      "title": "GIRA au cœur du Plan National de Développement",
+      "desc": "Partenaire stratégique de la République Centrafricaine, GIRA accompagne la mise en œuvre du PND 2024-2028 et la préparation de la Table Ronde des Investisseurs de Casablanca.",
+      "cta": "Découvrir notre implication"
+    },
+    "cta": {
+      "title": "Vous avez un projet stratégique à concrétiser ?",
+      "subtitle": "Parlons-en. GIRA met à votre disposition une équipe d'experts prêts à transformer votre vision en réalité.",
+      "button": "Nous contacter"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "À propos de GIRA",
+      "subtitle": "Un cabinet d'exécution tourné vers l'impact durable en Afrique"
+    },
+    "mission": {
+      "title": "Notre mission",
+      "subtitle": "GIRA est né d'un constat simple : l'Afrique ne manque pas de projets ni de financements, mais d'exécution.",
+      "points": [
+        "Structurer les projets pour les rendre finançables et exécutables",
+        "Mobiliser les financements internationaux et privés",
+        "Assurer la maîtrise d'ouvrage déléguée jusqu'à la livraison",
+        "Transférer les compétences pour pérenniser les acquis"
+      ]
+    },
+    "values": {
+      "title": "Nos valeurs",
+      "items": {
+        "innovation": { "title": "Innovation", "desc": "Solutions créatives adaptées aux réalités africaines" },
+        "excellence": { "title": "Exigence", "desc": "Standards internationaux dans chaque engagement" },
+        "transparency": { "title": "Transparence", "desc": "Reddition de comptes rigoureuse à chaque étape" },
+        "impact": { "title": "Impact", "desc": "Des résultats mesurables, pas seulement des rapports" }
+      }
+    }
+  },
+  "services": {
+    "hero": {
+      "title": "Notre offre & services",
+      "subtitle": "Quatre lignes de service intégrées pour couvrir l'intégralité du cycle de vie des projets"
+    },
+    "cta": "Demander un devis",
+    "learnMore": "En savoir plus"
+  },
+  "contact": {
+    "hero": {
+      "title": "Contactez-nous",
+      "subtitle": "Notre équipe répond dans les 24h ouvrées"
+    },
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "organization": "Organisation",
+      "function": "Fonction",
+      "country": "Pays",
+      "email": "Email professionnel",
+      "phone": "Téléphone (optionnel)",
+      "type": "Type de demande",
+      "message": "Votre message",
+      "rgpd": "J'accepte que mes données soient traitées pour répondre à ma demande.",
+      "submit": "Envoyer le message",
+      "sending": "Envoi en cours...",
+      "success": "Message envoyé ! Nous vous répondrons sous 24h.",
+      "error": "Erreur lors de l'envoi. Réessayez ou contactez-nous directement.",
+      "types": {
+        "gov": "Gouvernement / Institution publique",
+        "investor": "Investisseur / Fonds",
+        "institution": "Institution internationale / Bailleur",
+        "company": "Entreprise privée",
+        "ngo": "ONG / Organisation internationale",
+        "other": "Autre"
+      }
+    },
+    "info": {
+      "address": "Adresse",
+      "email": "Email",
+      "response": "Délai de réponse",
+      "responseValue": "Sous 24h ouvrées",
+      "languages": "Langues",
+      "languagesValue": "Français & Anglais"
+    }
+  },
+  "careers": {
+    "hero": {
+      "title": "Rejoindre GIRA",
+      "subtitle": "Construisez votre carrière au service de l'Afrique"
+    },
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "position": "Poste souhaité",
+      "message": "Lettre de motivation",
+      "cv": "Curriculum Vitae (PDF, max 5MB)",
+      "submit": "Envoyer ma candidature",
+      "success": "Candidature envoyée ! Nous reviendrons vers vous.",
+      "error": "Erreur lors de l'envoi. Réessayez."
+    }
+  },
+  "common": {
+    "readMore": "Lire la suite",
+    "backToHome": "Retour à l'accueil",
+    "backToNews": "Retour aux actualités",
+    "contactUs": "Nous contacter",
+    "discover": "Découvrir",
+    "learnMore": "En savoir plus",
+    "seeAll": "Voir tout",
+    "loading": "Chargement...",
+    "notFound": {
+      "title": "Page introuvable",
+      "desc": "La page que vous recherchez n'existe pas ou a été déplacée.",
+      "button": "Retour à l'accueil"
+    }
+  },
+  "chat": {
+    "title": "Parler à un expert GIRA",
+    "subtitle": "Réponse immédiate · 24h/24",
+    "placeholder": "Décrivez votre projet...",
+    "welcome": "Bonjour ! Je suis l'assistant GIRA. Comment puis-je vous aider aujourd'hui ? Vous pouvez me parler de votre projet, demander un devis indicatif, ou en savoir plus sur nos services.",
+    "send": "Envoyer"
+  },
+  "cookie": {
+    "text": "GIRA utilise Vercel Analytics pour mesurer l'audience. Aucun cookie publicitaire. Aucune revente de données.",
+    "accept": "Accepter",
+    "refuse": "Refuser",
+    "learnMore": "En savoir plus"
+  }
+}

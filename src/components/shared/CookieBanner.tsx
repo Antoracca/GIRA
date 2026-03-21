@@ -3,10 +3,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Analytics } from "@vercel/analytics/react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 const CONSENT_KEY = "gira_cookie_consent";
 
 export default function CookieBanner() {
+  const t = useTranslations("cookie");
   const [show, setShow] = useState(false);
   const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
 
@@ -54,15 +57,14 @@ export default function CookieBanner() {
                   🍪 Cookies & Confidentialité
                 </p>
                 <p className="text-gray-300 text-xs leading-relaxed">
-                  Nous utilisons des cookies d&apos;analyse anonymes (Vercel Analytics) pour
-                  améliorer votre expérience. Aucune donnée personnelle n&apos;est vendue.{" "}
-                  <a
+                  {t("text")}{" "}
+                  <Link
                     href="/politique-confidentialite"
                     className="underline hover:text-yellow-400 transition-colors"
                     style={{ color: "#E8D5A3" }}
                   >
-                    En savoir plus
-                  </a>
+                    {t("learnMore")}
+                  </Link>
                 </p>
               </div>
 
@@ -72,14 +74,14 @@ export default function CookieBanner() {
                   className="text-xs px-4 py-2 rounded-lg border transition-colors text-gray-300 hover:text-white"
                   style={{ borderColor: "#ffffff33" }}
                 >
-                  Refuser
+                  {t("refuse")}
                 </button>
                 <button
                   onClick={accept}
                   className="text-xs px-4 py-2 rounded-lg font-semibold transition-all hover:opacity-90"
                   style={{ backgroundColor: "#C9A84C", color: "#0D0D0D" }}
                 >
-                  Accepter
+                  {t("accept")}
                 </button>
               </div>
             </div>

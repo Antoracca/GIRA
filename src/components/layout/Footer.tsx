@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { Linkedin, Twitter, Facebook, Instagram, Youtube, ArrowRight } from "lucide-react";
 import { GIRA } from "@/lib/constants";
 

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { scrollToElement } from "@/lib/lenis-instance";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight, Globe, ChevronRight } from "lucide-react";
@@ -334,10 +334,10 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen]               = useState(false);
   const [activeSection, setActiveSection]     = useState<string | null>(null);
   const [hoveredItem, setHoveredItem]         = useState<NavSubItem | null>(null);
-  const [lang, setLang]                       = useState<"FR" | "EN">("FR");
   const [activeTab, setActiveTab]             = useState(0);
   const [isDark, setIsDark]                   = useState(false);
-  const pathname  = usePathname();
+  const locale    = useLocale(); // "fr" | "en" — from next-intl
+  const pathname  = usePathname(); // path WITHOUT locale prefix (e.g. "/a-propos")
   const router    = useRouter();
   const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -670,14 +670,20 @@ export default function Navbar() {
             className="flex items-center gap-2 px-3 py-2 rounded-2xl flex-shrink-0"
             style={{ background: pillBg, border: `1px solid ${pillBrd}`, boxShadow: pillSh, backdropFilter: dark ? "blur(12px)" : "none", WebkitBackdropFilter: dark ? "blur(12px)" : "none", transition: "background 0.35s, border 0.35s" }}
           >
-            <button onClick={() => setLang(lang === "FR" ? "EN" : "FR")}
+            {/* Language switcher — switches locale while staying on the same page */}
+            <button
+              onClick={() => {
+                const nextLocale = locale === "fr" ? "en" : "fr";
+                router.replace(pathname as "/", { locale: nextLocale });
+              }}
+              aria-label={locale === "fr" ? "Switch to English" : "Passer en français"}
               className="flex items-center gap-1.5 px-2 py-1 rounded-xl text-[11px] font-semibold tracking-wider transition-colors"
               style={{ color: txtMuted }}
             >
               <Globe size={12} style={{ color: G }} />
-              <span style={{ color: lang === "FR" ? G : txtMuted }}>FR</span>
+              <span style={{ color: locale === "fr" ? G : txtMuted }}>FR</span>
               <span style={{ color: dark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.15)" }}>|</span>
-              <span style={{ color: lang === "EN" ? G : txtMuted }}>EN</span>
+              <span style={{ color: locale === "en" ? G : txtMuted }}>EN</span>
             </button>
             <Link href="/contact"
               className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all hover:opacity-90 whitespace-nowrap"
