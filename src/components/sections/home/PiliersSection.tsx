@@ -64,24 +64,6 @@ const piliers = [
   },
 ];
 
-const liens = [
-  {
-    label: "Notre mission",
-    desc: "Créer un impact mesurable sur le développement durable en Afrique.",
-    href: "/a-propos",
-  },
-  {
-    label: "Notre approche",
-    desc: "Une méthodologie éprouvée alliant rigueur technique et ancrage local.",
-    href: "/a-propos",
-  },
-  {
-    label: "Nos valeurs",
-    desc: "Excellence, intégrité et engagement au service du continent africain.",
-    href: "/a-propos",
-  },
-];
-
 /* ─── Tokens ─────────────────────────────────────────────── */
 const G = "#C9A84C";
 const G30 = "rgba(201,168,76,0.30)";
@@ -699,11 +681,11 @@ export default function PiliersSection() {
                   exit="exit"
                   className="flex flex-col"
                 >
-                  {/* Visual zone (Lottie / SVG) */}
+                  {/* Visual zone (Lottie / SVG) — hauteur FIXE pour éviter layout shift */}
                   <div
                     style={{
                       width: "100%",
-                      height: active === 1 ? "330px" : "280px",
+                      height: "330px",
                     }}
                   >
                     <PilierViz index={active} />
@@ -743,158 +725,292 @@ export default function PiliersSection() {
         </div>
       </section>
 
-      {/* BLOC 2 — Nous connaître (white background) */}
-      <section className="py-20 md:py-28" style={{ backgroundColor: "#FFFFFF" }}>
-        <div className="max-w-screen-xl mx-auto px-6 md:px-12 lg:px-20">
-          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16 lg:gap-24">
-            {/* Circular photo */}
+      {/* BLOC 2 — Notre identité : accordion hover-reveal */}
+      <NousConnaitreSection />
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────
+   Data — identité items
+──────────────────────────────────────────────────────────── */
+const identiteItems = [
+  {
+    num: "01",
+    title: "Notre mission",
+    desc: "Créer un impact mesurable et durable en structurant, finançant et pilotant des projets prioritaires au service des gouvernements africains, des institutions internationales et des investisseurs engagés pour le continent.",
+    img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=900&q=85",
+    alt: "Équipe GIRA en réunion stratégique",
+  },
+  {
+    num: "02",
+    title: "Notre approche",
+    desc: "Une méthodologie éprouvée alliant rigueur technique et ancrage local, du cadrage stratégique à la livraison finale, en passant par la mobilisation des financements multilatéraux et le pilotage opérationnel terrain.",
+    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=85",
+    alt: "Analyse stratégique et planification de projets",
+  },
+  {
+    num: "03",
+    title: "Nos valeurs",
+    desc: "Excellence, intégrité et engagement au cœur de chaque décision. Nous agissons avec transparence, plaçons l'impact au-dessus de tout et défendons une vision africaine du développement souverain et durable.",
+    img: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=900&q=85",
+    alt: "Valeurs et engagement de l'équipe GIRA",
+  },
+];
+
+const SERIF = "Georgia, 'Cambria', 'Times New Roman', serif";
+
+/* ────────────────────────────────────────────────────────────
+   NousConnaitreSection — accordion hover (desktop) / tap (mobile)
+──────────────────────────────────────────────────────────── */
+function NousConnaitreSection() {
+  const [open, setOpen] = useState<number | null>(null);
+
+  /* Desktop: open on hover, close on leave */
+  const handleEnter = (i: number) => setOpen(i);
+  const handleLeave = () => setOpen(null);
+  /* Mobile: toggle on tap */
+  const handleTap = (i: number) => setOpen((prev) => (prev === i ? null : i));
+
+  const COLLAPSED = 80;
+  const EXPANDED_DESKTOP = 300;
+  const EXPANDED_MOBILE = 340;
+
+  return (
+    /*
+      ANTI-LAYOUT-SHIFT mobile :
+      min-h-[940px] = header(174px) + 3 boutons(192px) + 1 item ouvert(340px)
+      + 3 dividers(3px) + CTA(100px) + marges = ~940px.
+      Comme la section est toujours ≥ 940px, l'accordion mobile n'agrandit
+      jamais la section et ne fait pas trembler les sections voisines.
+      Sur tablet/desktop (md:) la hauteur est auto — le conteneur fixe gère.
+    */
+    <section style={{ backgroundColor: "#FFFFFF" }} className="min-h-[940px] md:min-h-0">
+      <div className="max-w-screen-xl mx-auto">
+
+        {/* ── Section header ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6 }}
+          className="px-6 md:px-12 lg:px-20 pt-20 md:pt-28 pb-10 md:pb-14"
+        >
+          <p
+            className="text-[11px] uppercase tracking-[0.32em] font-bold mb-4"
+            style={{ color: G, fontFamily: "var(--font-inter)" }}
+          >
+            Notre identité
+          </p>
+          <h2
+            className="leading-tight"
+            style={{
+              fontFamily: SERIF,
+              fontWeight: 400,
+              fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
+              color: "#0D0D0D",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Nous{" "}
+            <em style={{ fontStyle: "italic", color: "#555" }}>connaître</em>
+          </h2>
+        </motion.div>
+
+        {/* Top divider */}
+        <div
+          className="mx-6 md:mx-12 lg:mx-20"
+          style={{ height: 1, backgroundColor: "rgba(0,0,0,0.08)" }}
+        />
+
+        {/* ── Accordion rows — conteneur fixe sur desktop (évite le layout shift entre sections) ──
+            Max desktop = EXPANDED_DESKTOP(300) + 2×COLLAPSED(80) + 3 séparateurs = 463px */}
+        <div className="md:h-[463px] md:overflow-hidden">
+        {identiteItems.map((item, i) => (
+          <div key={item.num}>
+            {/* ── DESKTOP ROW ── */}
             <motion.div
-              initial={{ opacity: 0, x: -24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.7 }}
-              className="relative flex-shrink-0 mx-auto md:mx-0"
-              style={{ width: 300, height: 300 }}
+              className="hidden md:flex overflow-hidden cursor-default"
+              animate={{ height: open === i ? EXPANDED_DESKTOP : COLLAPSED }}
+              transition={{ duration: 0.55, ease: [0.23, 1, 0.32, 1] }}
+              onMouseEnter={() => handleEnter(i)}
+              onMouseLeave={handleLeave}
             >
+              {/* Left: text */}
+              <div className="flex flex-col justify-start flex-1 px-12 lg:px-20 pt-5 pb-6">
+                {/* Row header */}
+                <div className="flex items-baseline gap-5" style={{ minHeight: COLLAPSED }}>
+                  <span
+                    className="text-[11px] font-bold tracking-widest flex-shrink-0"
+                    style={{ color: G, fontFamily: "var(--font-inter)", marginTop: 4 }}
+                  >
+                    {item.num}
+                  </span>
+                  <h3
+                    className="leading-tight transition-colors duration-300"
+                    style={{
+                      fontFamily: SERIF,
+                      fontWeight: 400,
+                      fontSize: "clamp(1.3rem, 2vw, 1.75rem)",
+                      color: open === i ? "#0D0D0D" : "#444",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+                </div>
+                {/* Description — fades in when expanded */}
+                <AnimatePresence>
+                  {open === i && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.35, delay: 0.12 }}
+                      className="text-sm md:text-base leading-relaxed"
+                      style={{
+                        color: "#666",
+                        fontFamily: "var(--font-inter)",
+                        maxWidth: 480,
+                        paddingLeft: 40,
+                      }}
+                    >
+                      {item.desc}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Right: image — always present, opacity animated */}
               <div
-                className="absolute rounded-full"
-                style={{
-                  top: -12,
-                  left: -12,
-                  width: "calc(100% + 24px)",
-                  height: "calc(100% + 24px)",
-                  border: "1.5px solid rgba(201,168,76,0.25)",
-                }}
-              />
-              <div
-                className="absolute rounded-full"
-                style={{
-                  top: -5,
-                  left: -5,
-                  width: "calc(100% + 10px)",
-                  height: "calc(100% + 10px)",
-                  border: "2px solid rgba(201,168,76,0.45)",
-                }}
-              />
-              <div className="relative w-full h-full rounded-full overflow-hidden shadow-xl">
-                <Image
-                  src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80"
-                  alt="Équipe GIRA en réunion stratégique"
-                  fill
-                  className="object-cover"
-                  sizes="300px"
-                  unoptimized
-                />
+                className="relative overflow-hidden flex-shrink-0"
+                style={{ width: "38%", maxWidth: 420 }}
+              >
+                <motion.div
+                  animate={{ opacity: open === i ? 1 : 0, scale: open === i ? 1 : 1.04 }}
+                  transition={{ duration: 0.55, delay: open === i ? 0.08 : 0 }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={item.img}
+                    alt={item.alt}
+                    fill
+                    className="object-cover"
+                    sizes="420px"
+                    unoptimized
+                  />
+                  {/* Subtle left gradient blending with white */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(to right, rgba(255,255,255,0.9) 0%, transparent 20%), linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, transparent 30%)",
+                    }}
+                  />
+                </motion.div>
               </div>
             </motion.div>
 
-            {/* Text + links + CTA */}
-            <motion.div
-              initial={{ opacity: 0, x: 24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.7, delay: 0.12 }}
-              className="flex-1 text-center md:text-left"
-            >
-              <p
-                className="text-xs uppercase tracking-[0.28em] font-semibold mb-4"
-                style={{ color: G, fontFamily: "var(--font-inter)" }}
+            {/* ── MOBILE ROW ── */}
+            <div className="md:hidden">
+              {/* Tap header */}
+              <button
+                className="w-full flex items-center gap-5 px-6 py-5 text-left"
+                onClick={() => handleTap(i)}
               >
-                Notre identité
-              </p>
-              <h2
-                className="text-3xl md:text-4xl lg:text-5xl font-black mb-5 leading-tight"
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "#0D0D0D",
-                }}
-              >
-                Nous{" "}
                 <span
+                  className="text-[11px] font-bold tracking-widest flex-shrink-0"
+                  style={{ color: G, fontFamily: "var(--font-inter)" }}
+                >
+                  {item.num}
+                </span>
+                <h3
+                  className="flex-1 leading-snug"
                   style={{
-                    background:
-                      "linear-gradient(transparent 54%, rgba(201,168,76,0.35) 54%)",
+                    fontFamily: SERIF,
+                    fontWeight: 400,
+                    fontSize: "1.2rem",
+                    color: open === i ? "#0D0D0D" : "#444",
+                    letterSpacing: "-0.01em",
                   }}
                 >
-                  connaître
+                  {item.title}
+                </h3>
+                {/* +/- indicator */}
+                <span
+                  className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300"
+                  style={{
+                    backgroundColor: open === i ? G : "rgba(0,0,0,0.05)",
+                    color: open === i ? "#0D0D0D" : "#999",
+                    fontSize: 18,
+                    fontWeight: 300,
+                  }}
+                >
+                  {open === i ? "−" : "+"}
                 </span>
-              </h2>
-              <p
-                className="text-sm md:text-base leading-relaxed mb-8 max-w-md mx-auto md:mx-0"
-                style={{ color: "#666", fontFamily: "var(--font-inter)" }}
-              >
-                GIRA est un cabinet d&apos;exécution basé à Paris, engagé aux
-                côtés des gouvernements africains, des institutions
-                internationales et des investisseurs pour structurer, financer
-                et piloter des projets à fort impact.
-              </p>
+              </button>
 
-              <div className="flex flex-col gap-0 mb-9 border-t border-black/[0.06]">
-                {liens.map((lien, i) => (
-                  <motion.div
-                    key={lien.label}
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.25 + i * 0.09 }}
+              {/* Expandable content — mobile */}
+              <motion.div
+                animate={{ height: open === i ? EXPANDED_MOBILE : 0 }}
+                transition={{ duration: 0.45, ease: [0.23, 1, 0.32, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="px-6 pb-6">
+                  {/* Image on mobile */}
+                  <div className="relative w-full mb-4 rounded-xl overflow-hidden" style={{ height: 160 }}>
+                    <Image
+                      src={item.img}
+                      alt={item.alt}
+                      fill
+                      className="object-cover"
+                      sizes="100vw"
+                      unoptimized
+                    />
+                  </div>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "#666", fontFamily: "var(--font-inter)" }}
                   >
-                    <Link
-                      href={lien.href}
-                      className="flex items-start gap-4 py-4 border-b border-black/[0.06] group"
-                    >
-                      <div
-                        className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5"
-                        style={{
-                          backgroundColor: "rgba(201,168,76,0.10)",
-                        }}
-                      >
-                        <ArrowRight
-                          size={14}
-                          className="transition-transform duration-200 group-hover:translate-x-0.5"
-                          style={{ color: G }}
-                        />
-                      </div>
-                      <div className="text-left">
-                        <p
-                          className="text-sm font-bold mb-0.5 group-hover:text-[#C9A84C] transition-colors duration-200"
-                          style={{
-                            color: "#0D0D0D",
-                            fontFamily: "var(--font-montserrat)",
-                          }}
-                        >
-                          {lien.label}
-                        </p>
-                        <p
-                          className="text-xs leading-relaxed"
-                          style={{
-                            color: "#888",
-                            fontFamily: "var(--font-inter)",
-                          }}
-                        >
-                          {lien.desc}
-                        </p>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
+                    {item.desc}
+                  </p>
+                </div>
+              </motion.div>
+            </div>
 
-              <Link
-                href="/a-propos"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-200 hover:opacity-90"
-                style={{
-                  backgroundColor: G,
-                  color: "#0D0D0D",
-                  fontFamily: "var(--font-inter)",
-                }}
-              >
-                En savoir plus
-                <ArrowRight size={14} strokeWidth={2.5} />
-              </Link>
-            </motion.div>
+            {/* Row divider */}
+            <div
+              className="mx-6 md:mx-12 lg:mx-20"
+              style={{ height: 1, backgroundColor: "rgba(0,0,0,0.06)" }}
+            />
           </div>
+        ))}
+        </div>{/* fin du conteneur fixe desktop */}
+
+        {/* ── Single CTA ── */}
+        <div className="px-6 md:px-12 lg:px-20 py-10 md:py-14 flex justify-end">
+          <Link
+            href="/a-propos"
+            className="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-[0.18em] transition-all duration-200"
+            style={{ color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
+          >
+            <span className="group-hover:translate-x-1 transition-transform duration-200 inline-block">
+              En comprendre plus
+            </span>
+            <span
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+              style={{
+                backgroundColor: "rgba(201,168,76,0.12)",
+                border: `1.5px solid ${G}`,
+                color: G,
+              }}
+            >
+              <ArrowRight size={14} />
+            </span>
+          </Link>
         </div>
-      </section>
-    </>
+
+      </div>
+    </section>
   );
 }

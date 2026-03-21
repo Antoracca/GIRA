@@ -16,13 +16,13 @@ const stats = [
     value: 3,
     suffix: "",
     label: "Pays de présence",
-    desc: "Paris · Casablanca · Bratislava — un ancrage stratégique entre l'Europe et l'Afrique",
+    desc: "Paris · Casablanca · Bratislava, un ancrage stratégique entre l'Europe et l'Afrique",
   },
   {
     value: 8,
     suffix: "",
     label: "Secteurs couverts",
-    desc: "Solutions digitales déployées de l'eau à la tech, sur l'ensemble des piliers structurants",
+    desc: "Eau, santé, énergie, agriculture, mines, construction, tech et transports",
   },
   {
     value: 1,
@@ -42,9 +42,22 @@ function StatItem({ stat, index }: { stat: (typeof stats)[0]; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.4 }}
       transition={{ duration: 0.6, delay: index * 0.12 }}
-      className="flex flex-col px-8 py-10 md:py-12 relative"
+      /* Mobile : flex-row (chiffre à gauche, texte à droite)
+         sm+   : flex-col (empilé) comme desktop */
+      className="flex flex-row items-center gap-5
+                 sm:flex-col sm:items-start sm:gap-0
+                 px-5 py-6 sm:px-6 sm:py-9 md:px-8 md:py-12
+                 relative"
     >
-      {/* Vertical divider (desktop) */}
+      {/* ── Séparateur horizontal entre items (mobile 1-col) ── */}
+      {index > 0 && (
+        <div
+          className="sm:hidden absolute top-0 left-5 right-5 h-px"
+          style={{ backgroundColor: "rgba(255,255,255,0.07)" }}
+        />
+      )}
+
+      {/* ── Séparateur vertical entre items (desktop 4-col) ── */}
       {index > 0 && (
         <div
           className="hidden lg:block absolute left-0 top-8 bottom-8 w-px"
@@ -52,44 +65,56 @@ function StatItem({ stat, index }: { stat: (typeof stats)[0]; index: number }) {
         />
       )}
 
-      {/* Horizontal divider (mobile grid 2×2) */}
-      {index >= 2 && (
+      {/* ── Séparateur vertical entre items (tablet 2-col) ── */}
+      {index % 2 !== 0 && (
         <div
-          className="lg:hidden absolute top-0 left-4 right-4 h-px"
+          className="hidden sm:block lg:hidden absolute left-0 top-8 bottom-8 w-px"
           style={{ backgroundColor: "rgba(255,255,255,0.07)" }}
         />
       )}
 
-      {/* Number */}
+      {/* ── Séparateur horizontal bas (tablet row 1 → row 2) ── */}
+      {index < 2 && (
+        <div
+          className="hidden sm:block lg:hidden absolute bottom-0 left-4 right-4 h-px"
+          style={{ backgroundColor: "rgba(255,255,255,0.07)" }}
+        />
+      )}
+
+      {/* ── Chiffre ── */}
       <div
-        className="text-5xl md:text-6xl lg:text-7xl font-black leading-none tabular-nums mb-3"
+        className="flex-shrink-0 leading-none tabular-nums
+                   text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-black
+                   sm:mb-3 min-w-[3.5rem] sm:min-w-0"
         style={{ color: "#FFFFFF", fontFamily: "var(--font-montserrat)" }}
       >
         {count}
         <span style={{ color: G }}>{stat.suffix}</span>
       </div>
 
-      {/* Label */}
-      <p
-        className="text-sm font-bold mb-3"
-        style={{ color: G, fontFamily: "var(--font-montserrat)", letterSpacing: "0.01em" }}
-      >
-        {stat.label}
-      </p>
+      {/* ── Texte : label + séparateur + description ── */}
+      <div className="flex-1 min-w-0">
+        <p
+          className="text-xs sm:text-sm font-bold mb-2"
+          style={{ color: G, fontFamily: "var(--font-montserrat)", letterSpacing: "0.01em" }}
+        >
+          {stat.label}
+        </p>
 
-      {/* Separator */}
-      <div
-        className="w-8 h-px mb-3"
-        style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
-      />
+        {/* Séparateur décoratif */}
+        <div
+          className="w-6 h-px mb-2"
+          style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
+        />
 
-      {/* Description */}
-      <p
-        className="text-xs leading-relaxed"
-        style={{ color: "rgba(255,255,255,0.38)", fontFamily: "var(--font-inter)" }}
-      >
-        {stat.desc}
-      </p>
+        {/* Description — masquée sur très petit écran, visible à partir de xs */}
+        <p
+          className="text-xs leading-relaxed hidden xs:block sm:block"
+          style={{ color: "rgba(255,255,255,0.38)", fontFamily: "var(--font-inter)" }}
+        >
+          {stat.desc}
+        </p>
+      </div>
     </motion.div>
   );
 }
@@ -97,24 +122,19 @@ function StatItem({ stat, index }: { stat: (typeof stats)[0]; index: number }) {
 export default function ChiffresSection() {
   return (
     <section
-      className="relative py-20 md:py-28 overflow-hidden"
+      className="relative py-16 sm:py-20 md:py-28 overflow-hidden"
       style={{
         background: [
-          /* nappe blanche principale — coin haut-droit, forte */
           "radial-gradient(ellipse 72% 60% at 96% 5%, rgba(255,255,255,0.13) 0%, transparent 62%)",
-          /* nappe blanche — coin bas-gauche */
           "radial-gradient(ellipse 60% 72% at 2% 98%, rgba(255,255,255,0.085) 0%, transparent 58%)",
-          /* couronne or — centre, chaleur chaude */
           "radial-gradient(ellipse 52% 48% at 42% 50%, rgba(201,168,76,0.11) 0%, transparent 54%)",
-          /* éclat mi-droite */
           "radial-gradient(ellipse 38% 52% at 78% 65%, rgba(255,255,255,0.06) 0%, transparent 50%)",
-          /* éclat haut-gauche discret */
           "radial-gradient(ellipse 32% 38% at 12% 18%, rgba(255,255,255,0.055) 0%, transparent 48%)",
           "#0D0D0D",
         ].join(", "),
       }}
     >
-      {/* ── Grain cinématique ── */}
+      {/* Grain cinématique */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
@@ -126,25 +146,29 @@ export default function ChiffresSection() {
         }}
       />
 
-      <div className="relative z-10 max-w-screen-xl mx-auto px-6 md:px-12 lg:px-20">
+      <div className="relative z-10 max-w-screen-xl mx-auto px-5 sm:px-8 md:px-12 lg:px-20">
 
-        {/* Header */}
+        {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6 }}
-          className="mb-14 md:mb-20"
+          className="mb-10 sm:mb-14 md:mb-20"
         >
           <p
-            className="text-[10px] uppercase tracking-[0.28em] font-semibold mb-4"
+            className="text-[10px] uppercase tracking-[0.28em] font-semibold mb-3"
             style={{ color: G, fontFamily: "var(--font-inter)" }}
           >
             Notre empreinte
           </p>
           <h2
-            className="text-3xl md:text-4xl lg:text-5xl font-black leading-tight max-w-2xl"
-            style={{ color: "#FFFFFF", fontFamily: "var(--font-montserrat)" }}
+            className="font-black leading-tight"
+            style={{
+              color: "#FFFFFF",
+              fontFamily: "var(--font-montserrat)",
+              fontSize: "clamp(1.6rem, 5vw, 3rem)",
+            }}
           >
             Des résultats concrets,{" "}
             <span style={{ color: "rgba(255,255,255,0.35)" }}>
@@ -153,9 +177,12 @@ export default function ChiffresSection() {
           </h2>
         </motion.div>
 
-        {/* Stats grid */}
+        {/* ── Grille stats ──
+            Mobile  : 1 colonne (flex-col via StatItem)
+            sm      : 2 colonnes
+            lg      : 4 colonnes */}
         <div
-          className="grid grid-cols-2 lg:grid-cols-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
           style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
         >
           {stats.map((s, i) => (
@@ -163,13 +190,13 @@ export default function ChiffresSection() {
           ))}
         </div>
 
-        {/* Bottom tagline */}
+        {/* ── Citation basse ── */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-14 md:mt-16 pt-10"
+          className="mt-10 sm:mt-14 md:mt-16 pt-8 sm:pt-10"
           style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
         >
           <p

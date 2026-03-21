@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Montserrat, Inter } from "next/font/google";
+import { Montserrat, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import ChatWidget from "@/components/shared/ChatWidget";
 import CookieBanner from "@/components/shared/CookieBanner";
+import PageLoader from "@/components/shared/PageLoader";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -15,6 +16,14 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "700", "800", "900"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -37,7 +46,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={`${montserrat.variable} ${inter.variable} antialiased`}>
+      <body className={`${montserrat.variable} ${inter.variable} ${playfair.variable} antialiased`}>
+        <PageLoader />
         {children}
         <ChatWidget />
         <CookieBanner />

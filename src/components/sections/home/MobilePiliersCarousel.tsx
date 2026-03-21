@@ -466,7 +466,7 @@ export default function MobilePiliersCarousel({
               style={{
                 width: "100%",
                 maxWidth: 340,
-                height: active === 1 ? 220 : 200,
+                height: 220,
                 borderRadius: 16,
                 background:
                   "radial-gradient(ellipse at center, rgba(56,189,248,0.03) 0%, transparent 70%)",

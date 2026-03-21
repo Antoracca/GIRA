@@ -31,6 +31,44 @@ interface NavSection {
    Click → navigue ET ferme le menu
 ───────────────────────────────────────────────────────────── */
 const sections: NavSection[] = [
+  /* ── 3. GIRA DEV ────────────────────────────────────────── */
+  {
+    label: "GIRA Dev",
+    href: "/x",
+    overview:
+      "L'unité tech & innovation de GIRA. Nous concevons les outils numériques qui transforment durablement l'Afrique : IA, plateformes gouvernementales, infrastructure digitale.",
+    items: [
+      {
+        group: "Plateformes & IA",
+        label: "Data & Intelligence Artificielle",
+        href: "/x/data-ia",
+        img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&q=85&auto=format&fit=crop",
+        desc: "Systèmes d'IA et de traitement de la donnée pour les institutions africaines, de la collecte terrain à la décision stratégique en temps réel.",
+      },
+      {
+        group: "Plateformes & IA",
+        label: "Digital Gov & e-Services",
+        href: "/x/digital-gov",
+        img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&q=85&auto=format&fit=crop",
+        desc: "Portails gouvernementaux, e-services publics et systèmes d'identité numérique. Nous numérisons les États pour rapprocher citoyens et institutions.",
+      },
+      {
+        group: "Infrastructure & Finance",
+        label: "Infrastructure Tech & IoT",
+        href: "/x/infrastructure",
+        img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85&auto=format&fit=crop",
+        desc: "Supervision intelligente des chantiers, IoT sur les projets d'eau et d'énergie. Tableaux de bord de pilotage en temps réel pour les maîtres d'ouvrage.",
+      },
+      {
+        group: "Infrastructure & Finance",
+        label: "Finance & Impact ESG",
+        href: "/x/finance-impact",
+        img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=85&auto=format&fit=crop",
+        desc: "Plateformes de suivi des investissements, reporting ESG automatisé, outils de mobilisation des bailleurs et fonds d'impact pour l'Afrique.",
+      },
+    ],
+  },
+
   /* ── 1. NOS EXPERTISES ──────────────────────────────────── */
   {
     label: "Nos Expertises",
@@ -112,7 +150,7 @@ const sections: NavSection[] = [
         label: "PND RCA 2024-2028 & TRI",
         href: "/pnd-rca-tri",
         img: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=1200&q=85&auto=format&fit=crop",
-        desc: "Partenaire officiel du Plan National de Développement RCA. GIRA a co-organisé la Table Ronde des Investisseurs de Casablanca — 9 Mds USD mobilisés.",
+        desc: "Partenaire officiel du Plan National de Développement RCA. GIRA a co-organisé la Table Ronde des Investisseurs de Casablanca, avec 9 Mds USD mobilisés.",
       },
       {
         group: "Engagements Stratégiques",
@@ -124,7 +162,7 @@ const sections: NavSection[] = [
     ],
   },
 
-  /* ── 3. NOUS REJOINDRE ──────────────────────────────────── */
+  /* ── 4. NOUS REJOINDRE ──────────────────────────────────── */
   {
     label: "Nous Rejoindre",
     href: "/carrieres",
@@ -190,11 +228,11 @@ const PAGE_CONTEXTS: Record<string, PageContext> = {
       { label: "Gouv.", anchor: "#gouvernement" },
       { label: "Web & App", anchor: "#applications" },
       { label: "IA", anchor: "#ia" },
-      { label: "Réseau", anchor: "#connectivite" },
+      { label: "Connectivité", anchor: "#connectivite" },
       { label: "Sécurité", anchor: "#securite" },
-      { label: "Finance", anchor: "#finance" },
+      { label: "ERP & SI", anchor: "#systemes" },
       { label: "Santé", anchor: "#sante" },
-      { label: "Agri.", anchor: "#agriculture" },
+      { label: "Agriculture", anchor: "#agriculture" },
     ],
   },
   "/pnd-rca-tri": {
@@ -236,6 +274,57 @@ const PAGE_CONTEXTS: Record<string, PageContext> = {
       { label: "Publications", anchor: "#publications" },
     ],
   },
+  "/x": {
+    label: "GIRA DEV",
+    tabs: [
+      { label: "Vision", anchor: "#vision" },
+      { label: "Impact", anchor: "#impact" },
+      { label: "Capacités", anchor: "#capabilities" },
+      { label: "Équipe", anchor: "#team" },
+      { label: "Domaines", anchor: "#domaines" },
+      { label: "Insights", anchor: "#insights" },
+    ],
+  },
+  "/x/data-ia": {
+    label: "GIRA DEV",
+    tabs: [
+      { label: "GIRA Dev", anchor: "/x" },
+      { label: "Data & IA", anchor: "/x/data-ia" },
+      { label: "Digital Gov", anchor: "/x/digital-gov" },
+      { label: "Infrastructure", anchor: "/x/infrastructure" },
+      { label: "Finance ESG", anchor: "/x/finance-impact" },
+    ],
+  },
+  "/x/digital-gov": {
+    label: "GIRA DEV",
+    tabs: [
+      { label: "GIRA Dev", anchor: "/x" },
+      { label: "Data & IA", anchor: "/x/data-ia" },
+      { label: "Digital Gov", anchor: "/x/digital-gov" },
+      { label: "Infrastructure", anchor: "/x/infrastructure" },
+      { label: "Finance ESG", anchor: "/x/finance-impact" },
+    ],
+  },
+  "/x/infrastructure": {
+    label: "GIRA DEV",
+    tabs: [
+      { label: "GIRA Dev", anchor: "/x" },
+      { label: "Data & IA", anchor: "/x/data-ia" },
+      { label: "Digital Gov", anchor: "/x/digital-gov" },
+      { label: "Infrastructure", anchor: "/x/infrastructure" },
+      { label: "Finance ESG", anchor: "/x/finance-impact" },
+    ],
+  },
+  "/x/finance-impact": {
+    label: "GIRA DEV",
+    tabs: [
+      { label: "GIRA Dev", anchor: "/x" },
+      { label: "Data & IA", anchor: "/x/data-ia" },
+      { label: "Digital Gov", anchor: "/x/digital-gov" },
+      { label: "Infrastructure", anchor: "/x/infrastructure" },
+      { label: "Finance ESG", anchor: "/x/finance-impact" },
+    ],
+  },
 };
 
 /* ─────────────────────────────────────────────────────────────
@@ -255,8 +344,30 @@ export default function Navbar() {
   /* Resolved early — used in useEffects below */
   const pageContext = PAGE_CONTEXTS[pathname] ?? null;
 
-  /* Detect dark hero background */
+  /* Detect dark hero background — always dark on /x sub-pages */
   useEffect(() => {
+    if (pathname.startsWith("/x")) {
+      setIsDark(true);
+      // Watch for light-background sections; use a Set to track all intersecting ones
+      let obs: IntersectionObserver | null = null;
+      const timer = setTimeout(() => {
+        const lightSections = document.querySelectorAll("[data-nav-light]");
+        if (!lightSections.length) return;
+        const intersecting = new Set<Element>();
+        obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) intersecting.add(e.target);
+              else intersecting.delete(e.target);
+            });
+            setIsDark(intersecting.size === 0);
+          },
+          { rootMargin: "-76px 0px 0px 0px", threshold: 0 }
+        );
+        lightSections.forEach((el) => obs!.observe(el));
+      }, 250);
+      return () => { clearTimeout(timer); obs?.disconnect(); };
+    }
     if (pathname !== "/") { setIsDark(false); return; }
     const onScroll = () => setIsDark(window.scrollY < window.innerHeight * 0.6);
     onScroll();
@@ -374,10 +485,9 @@ export default function Navbar() {
       >
         <div className="flex items-center gap-3 px-4 sm:px-5 lg:px-8 h-[76px] pointer-events-auto">
 
-          {/* ── LEFT PILL: hamburger + logo ── */}
-          <motion.button
-            onClick={toggleMenu}
-            className="flex items-center gap-0 rounded-2xl focus:outline-none flex-shrink-0 overflow-hidden"
+          {/* ── LEFT PILL: hamburger | logo (home) ── */}
+          <motion.div
+            className="flex items-center gap-0 rounded-2xl flex-shrink-0 overflow-hidden"
             style={{
               background: pillBg,
               border: `1px solid ${pillBrd}`,
@@ -386,12 +496,14 @@ export default function Navbar() {
               WebkitBackdropFilter: dark ? "blur(12px)" : "none",
               transition: "background 0.35s, border 0.35s, box-shadow 0.35s",
             }}
-            aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
-            aria-expanded={menuOpen}
             whileTap={{ scale: 0.97 }}
           >
-            <div
-              className="flex items-center justify-center rounded-xl m-1.5 flex-shrink-0"
+            {/* Hamburger toggle */}
+            <button
+              onClick={toggleMenu}
+              aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={menuOpen}
+              className="flex items-center justify-center rounded-xl m-1.5 flex-shrink-0 focus:outline-none"
               style={{ width: 42, height: 42, background: hamBg, transition: "background 0.35s" }}
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -411,15 +523,51 @@ export default function Navbar() {
                   </motion.span>
                 )}
               </AnimatePresence>
-            </div>
-            <div className="pr-4 pl-2 flex items-center">
-              <Image src="/logoGIRA.png" alt="GIRA" width={80} height={30}
+            </button>
+
+            {/* Separateur vertical */}
+            <div
+              className="w-px self-stretch my-2.5 flex-shrink-0"
+              style={{ background: dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.07)" }}
+            />
+
+            {/* Logo = lien Accueil */}
+            <Link
+              href="/"
+              onClick={menuOpen ? closeMenu : undefined}
+              className="pr-4 pl-3 flex items-center h-full focus:outline-none"
+              aria-label="Accueil GIRA"
+              title="Accueil"
+            >
+              <Image
+                src="/logoGIRA.png"
+                alt={pathname.startsWith("/x") ? "GIRA Dev" : "GIRA"}
+                width={80}
+                height={30}
                 className="object-contain"
                 style={{ filter: logoflt, transition: "filter 0.35s" }}
                 priority
               />
-            </div>
-          </motion.button>
+              {pathname.startsWith("/x") && (
+                <span
+                  style={{
+                    fontFamily: "var(--font-montserrat)",
+                    fontWeight: 900,
+                    fontSize: "1.55rem",
+                    lineHeight: 1,
+                    color: "#E8C547",
+                    letterSpacing: "-0.06em",
+                    display: "inline-block",
+                    transform: "rotate(-9deg) translateY(-4px)",
+                    textShadow: "0 0 20px rgba(232,197,71,0.75), 0 0 6px rgba(232,197,71,0.5)",
+                    marginLeft: "-6px",
+                  }}
+                >
+                  X
+                </span>
+              )}
+            </Link>
+          </motion.div>
 
           {/* ── CENTER PILL: page context tabs ── */}
           <AnimatePresence>
@@ -444,7 +592,7 @@ export default function Navbar() {
                 <div className="flex xl:hidden items-center gap-2 pl-1">
                   <a
                     href={pageContext.tabs[activeTab]?.anchor}
-                    onClick={(e) => { e.preventDefault(); scrollToElement(pageContext.tabs[activeTab].anchor); }}
+                    onClick={(e) => { e.preventDefault(); const a = pageContext.tabs[activeTab].anchor; a.startsWith("/") ? router.push(a) : scrollToElement(a); }}
                     className="relative px-3 py-1.5 rounded-xl text-[11px] font-semibold"
                     style={{ color: "#0D0D0D", fontFamily: "var(--font-inter)", textDecoration: "none" }}
                   >
@@ -460,7 +608,7 @@ export default function Navbar() {
                       onClick={() => {
                         const prev = (activeTab - 1 + pageContext.tabs.length) % pageContext.tabs.length;
                         setActiveTab(prev);
-                        scrollToElement(pageContext.tabs[prev].anchor);
+                        const a = pageContext.tabs[prev].anchor; a.startsWith("/") ? router.push(a) : scrollToElement(a);
                       }}
                       className="w-5 h-5 flex items-center justify-center rounded-lg transition-opacity hover:opacity-70"
                       style={{ color: txtMuted, fontSize: 14 }}
@@ -470,7 +618,7 @@ export default function Navbar() {
                       onClick={() => {
                         const next = (activeTab + 1) % pageContext.tabs.length;
                         setActiveTab(next);
-                        scrollToElement(pageContext.tabs[next].anchor);
+                        const a = pageContext.tabs[next].anchor; a.startsWith("/") ? router.push(a) : scrollToElement(a);
                       }}
                       className="w-5 h-5 flex items-center justify-center rounded-lg transition-opacity hover:opacity-70"
                       style={{ color: txtMuted, fontSize: 14 }}
@@ -488,13 +636,13 @@ export default function Navbar() {
                 {/* ── xl+ (large desktop) : full tabs row ── */}
                 <div className="hidden xl:flex items-center gap-0.5 pl-1">
                   {pageContext.tabs.map((tab, i) => {
-                    const isA = i === activeTab;
+                    const isA = tab.anchor === pathname || i === activeTab;
                     return (
                       <a key={tab.anchor} href={tab.anchor}
                         onClick={(e) => {
                           e.preventDefault();
                           setActiveTab(i);
-                          scrollToElement(tab.anchor);
+                          tab.anchor.startsWith("/") ? router.push(tab.anchor) : scrollToElement(tab.anchor);
                         }}
                         className="relative px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-colors duration-200"
                         style={{ color: isA ? "#0D0D0D" : txtMuted, fontFamily: "var(--font-inter)", textDecoration: "none" }}
@@ -570,32 +718,47 @@ export default function Navbar() {
                 <div className="flex flex-col gap-1 mb-6">
                   {sections.map((sec) => {
                     const isA = activeSection === sec.label;
+                    const isGiraDev = sec.label === "GIRA Dev";
                     return (
                       <button
                         key={sec.label}
                         onClick={() => {
                           setActiveSection(isA ? null : sec.label);
                           if (!isA) setHoveredItem(sec.items[0]);
+                          if (isGiraDev) router.push("/x");
                         }}
                         className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left transition-all duration-200"
                         style={{
-                          backgroundColor: isA ? "#0D0D0D" : "transparent",
+                          backgroundColor: isA
+                            ? (isGiraDev ? "#C9A84C" : "#0D0D0D")
+                            : (isGiraDev ? "rgba(201,168,76,0.06)" : "transparent"),
+                          border: isGiraDev && !isA ? "1px solid rgba(201,168,76,0.2)" : "1px solid transparent",
                         }}
                       >
-                        <span
-                          className="text-base font-bold tracking-tight"
-                          style={{
-                            color: isA ? "#FFFFFF" : "#333",
-                            fontFamily: "var(--font-montserrat)",
-                            transition: "color 0.2s",
-                          }}
-                        >
-                          {sec.label}
+                        <span className="flex items-center gap-2.5">
+                          <span
+                            className="text-base font-bold tracking-tight"
+                            style={{
+                              color: isA ? (isGiraDev ? "#0D0D0D" : "#FFFFFF") : (isGiraDev ? "#C9A84C" : "#333"),
+                              fontFamily: "var(--font-montserrat)",
+                              transition: "color 0.2s",
+                            }}
+                          >
+                            {sec.label}
+                          </span>
+                          {isGiraDev && !isA && (
+                            <span
+                              className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full"
+                              style={{ backgroundColor: "rgba(201,168,76,0.15)", color: "#C9A84C", fontFamily: "var(--font-inter)" }}
+                            >
+                              NEW
+                            </span>
+                          )}
                         </span>
                         <ChevronRight
                           size={15}
                           style={{
-                            color: isA ? G : "#ccc",
+                            color: isA ? (isGiraDev ? "#0D0D0D" : G) : (isGiraDev ? G : "#ccc"),
                             transform: isA ? "rotate(90deg)" : "rotate(0deg)",
                             transition: "transform 0.22s, color 0.22s",
                           }}
@@ -729,7 +892,10 @@ export default function Navbar() {
             {/* ──────────────────────────────────
                 RIGHT PREVIEW PANEL
             ────────────────────────────────── */}
-            <div className="hidden md:flex flex-1 overflow-hidden relative bg-[#F5F4F0]">
+            <div
+              className="hidden md:flex flex-1 overflow-hidden relative transition-colors duration-300"
+              style={{ backgroundColor: currentSection?.label === "GIRA Dev" ? "#0D0D0D" : "#F5F4F0" }}
+            >
               <AnimatePresence mode="wait">
                 {hoveredItem ? (
                   <motion.div
@@ -780,13 +946,20 @@ export default function Navbar() {
                       <div>
                         <h3
                           className="text-3xl lg:text-4xl font-black leading-tight mb-4"
-                          style={{ fontFamily: "var(--font-montserrat)", color: "#0D0D0D" }}
+                          style={{
+                            fontFamily: "var(--font-montserrat)",
+                            color: currentSection?.label === "GIRA Dev" ? "#FFFFFF" : "#0D0D0D",
+                          }}
                         >
                           {hoveredItem.label}
                         </h3>
                         <p
                           className="text-[15px] leading-relaxed"
-                          style={{ color: "#555", fontFamily: "var(--font-inter)", maxWidth: 520 }}
+                          style={{
+                            color: currentSection?.label === "GIRA Dev" ? "rgba(255,255,255,0.55)" : "#555",
+                            fontFamily: "var(--font-inter)",
+                            maxWidth: 520,
+                          }}
                         >
                           {hoveredItem.desc}
                         </p>
@@ -797,9 +970,27 @@ export default function Navbar() {
                         <button
                           onClick={() => handleItemClick(hoveredItem)}
                           className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full font-bold text-[11px] uppercase tracking-wider transition-all group"
-                          style={{ backgroundColor: "#0D0D0D", color: "#FFFFFF", fontFamily: "var(--font-inter)" }}
-                          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = G; (e.currentTarget as HTMLElement).style.color = "#0D0D0D"; }}
-                          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "#0D0D0D"; (e.currentTarget as HTMLElement).style.color = "#FFFFFF"; }}
+                          style={{
+                            backgroundColor: currentSection?.label === "GIRA Dev" ? G : "#0D0D0D",
+                            color: currentSection?.label === "GIRA Dev" ? "#0D0D0D" : "#FFFFFF",
+                            fontFamily: "var(--font-inter)",
+                          }}
+                          onMouseEnter={(e) => {
+                            if (currentSection?.label === "GIRA Dev") {
+                              (e.currentTarget as HTMLElement).style.backgroundColor = "#D4AF37";
+                            } else {
+                              (e.currentTarget as HTMLElement).style.backgroundColor = G;
+                              (e.currentTarget as HTMLElement).style.color = "#0D0D0D";
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (currentSection?.label === "GIRA Dev") {
+                              (e.currentTarget as HTMLElement).style.backgroundColor = G;
+                            } else {
+                              (e.currentTarget as HTMLElement).style.backgroundColor = "#0D0D0D";
+                              (e.currentTarget as HTMLElement).style.color = "#FFFFFF";
+                            }
+                          }}
                         >
                           Voir la page
                           <ArrowRight size={13} strokeWidth={2.5} />
@@ -808,7 +999,10 @@ export default function Navbar() {
                         {/* Page URL hint */}
                         <span
                           className="text-[10px] font-mono"
-                          style={{ color: "#bbb", fontFamily: "var(--font-inter)" }}
+                          style={{
+                            color: currentSection?.label === "GIRA Dev" ? "rgba(255,255,255,0.25)" : "#bbb",
+                            fontFamily: "var(--font-inter)",
+                          }}
                         >
                           gira-cf.com{hoveredItem.href}
                         </span>
@@ -823,25 +1017,63 @@ export default function Navbar() {
                     animate={{ opacity: 1 }}
                     className="flex flex-col items-start justify-center w-full h-full px-14"
                   >
-                    <Image
-                      src="/logoGIRA.png"
-                      alt="GIRA"
-                      width={72}
-                      height={28}
-                      className="object-contain mb-8 opacity-30"
-                    />
-                    <p
-                      className="text-[11px] font-black uppercase tracking-[0.3em] mb-4"
-                      style={{ color: G, fontFamily: "var(--font-inter)" }}
-                    >
-                      {currentSection?.label ?? "Navigation"}
-                    </p>
-                    <p
-                      className="text-xl leading-relaxed"
-                      style={{ color: "#555", fontFamily: "var(--font-inter)", maxWidth: 420 }}
-                    >
-                      {currentSection?.overview ?? "Sélectionnez une rubrique pour explorer notre offre."}
-                    </p>
+                    {currentSection?.label === "GIRA Dev" ? (
+                      /* GIRA Dev special overview — dark theme */
+                      <>
+                        <span
+                          className="text-[10px] font-black uppercase tracking-[0.4em] mb-6 px-3 py-1.5 rounded-full"
+                          style={{ color: "#0D0D0D", backgroundColor: G, fontFamily: "var(--font-inter)" }}
+                        >
+                          GIRA DEV
+                        </span>
+                        <p
+                          className="text-3xl lg:text-4xl font-bold leading-tight mb-6"
+                          style={{ color: "#FFFFFF", fontFamily: "var(--font-playfair)", maxWidth: 420 }}
+                        >
+                          Nous Bâtissons<br />
+                          <em style={{ color: G }}>le Futur</em><br />
+                          de l&apos;Afrique.
+                        </p>
+                        <p
+                          className="text-sm leading-relaxed mb-8"
+                          style={{ color: "rgba(255,255,255,0.45)", fontFamily: "var(--font-inter)", maxWidth: 380 }}
+                        >
+                          {currentSection.overview}
+                        </p>
+                        <Link
+                          href="/x"
+                          onClick={closeMenu}
+                          className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all"
+                          style={{ backgroundColor: G, color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
+                        >
+                          Visiter GIRA Dev
+                          <ArrowRight size={12} strokeWidth={2.5} />
+                        </Link>
+                      </>
+                    ) : (
+                      /* Default overview */
+                      <>
+                        <Image
+                          src="/logoGIRA.png"
+                          alt="GIRA"
+                          width={72}
+                          height={28}
+                          className="object-contain mb-8 opacity-30"
+                        />
+                        <p
+                          className="text-[11px] font-black uppercase tracking-[0.3em] mb-4"
+                          style={{ color: G, fontFamily: "var(--font-inter)" }}
+                        >
+                          {currentSection?.label ?? "Navigation"}
+                        </p>
+                        <p
+                          className="text-xl leading-relaxed"
+                          style={{ color: "#555", fontFamily: "var(--font-inter)", maxWidth: 420 }}
+                        >
+                          {currentSection?.overview ?? "Sélectionnez une rubrique pour explorer notre offre."}
+                        </p>
+                      </>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>

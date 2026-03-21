@@ -117,20 +117,20 @@ const SERVICES: ServiceSection[] = [
   },
   {
     id: "fintech",
-    category: "SÉCURITÉ & FINANCE",
-    title: "Fintech & Transformation Bancaire",
+    category: "SYSTÈMES & INTÉGRATION",
+    title: "ERP, Bases de données & Solutions clés en main",
     paragraph:
-      "GIRA accompagne les banques et institutions financières africaines dans leur transformation digitale. Du core banking aux solutions de paiement mobile, nous modernisons l’infrastructure technologique du secteur financier avec une attention particulière à la conformité réglementaire.",
+      "GIRA accompagne entreprises et institutions publiques dans le déploiement de systèmes d’information structurants : ERP intégrés, bases de données gouvernementales, outils statistiques et plateformes d’évaluation orientées résultats.",
     items: [
-      "Intégration et modernisation de systèmes de core banking",
-      "Plateformes de paiement mobile et Mobile Money",
-      "Portails client nouvelle génération et applications bancaires",
-      "Conformité KYC/AML et reporting réglementaire automatisé",
+      "Intégration et déploiement de solutions ERP clés en main",
+      "Systèmes d’information d’État et bases de données centralisées",
+      "Tableaux de bord statistiques et outils de pilotage",
+      "Plateformes d’évaluation, de suivi et de reporting institutionnel",
     ],
     image:
-      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1400&q=85&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=85&auto=format&fit=crop",
     imageAlt:
-      "Transaction de paiement mobile illustrant la transformation bancaire digitale",
+      "Tableaux de bord et systèmes d’information pour entreprises et institutions publiques",
     dark: true,
     reversed: true,
   },
@@ -387,8 +387,8 @@ export default function ServicesPageContent() {
             className="mt-5 text-base md:text-lg max-w-2xl leading-relaxed"
             style={{ color: "#E8D5A3", fontFamily: "var(--font-inter)" }}
           >
-            De la gouvernance digitale à l'intelligence artificielle
-            — nous concevons, développons et déployons des
+            De la gouvernance digitale à l'intelligence artificielle,
+            nous concevons, développons et déployons des
             solutions numériques sur mesure.
           </motion.p>
 

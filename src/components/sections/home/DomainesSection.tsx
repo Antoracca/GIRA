@@ -2,373 +2,387 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 
-/* ── Types ─────────────────────────────────────── */
+/* ── Design tokens ─────────────────────────── */
+const GOLD = "#C9A84C";
+const NAVY = "#1A1A2E";
+const SKY = "#38BDF8";
+const GOLD_BORDER = "rgba(201,168,76,0.45)";
+const PILL_W = 52;
+const CARD_BORDER = `2px solid ${GOLD_BORDER}`;
+const EASE: [number, number, number, number] = [0.23, 1, 0.32, 1];
+const AUTO_DELAY = 7500;
+const MANUAL_PAUSE = 12000;
+
+/* ── SVG Icons — 2 couleurs (navy + gold), draw animation ── */
+function IconGov() {
+  const d = 0.12;
+  return (
+    <svg viewBox="0 0 180 180" fill="none" className="w-full h-full">
+      {/* Roof triangle */}
+      <motion.path d="M90 30 L150 70 L30 70 Z" stroke={NAVY} strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.8, delay: d }} />
+      {/* Columns */}
+      {[50, 75, 105, 130].map((x, i) => (
+        <motion.line key={x} x1={x} y1={75} x2={x} y2={135} stroke={GOLD} strokeWidth="2.5" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5, delay: d + 0.3 + i * 0.1 }} />
+      ))}
+      {/* Base */}
+      <motion.line x1={30} y1={138} x2={150} y2={138} stroke={NAVY} strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.6, delay: d + 0.7 }} />
+      {/* Flag circle */}
+      <motion.circle cx={90} cy={52} r={6} stroke={GOLD} strokeWidth="1.5" fill="none" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: d + 1, type: "spring" }} />
+    </svg>
+  );
+}
+
+function IconWeb() {
+  return (
+    <svg viewBox="0 0 180 180" fill="none" className="w-full h-full">
+      {/* Browser window */}
+      <motion.rect x={25} y={35} width={100} height={75} rx={8} stroke={NAVY} strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.7 }} />
+      <motion.line x1={25} y1={52} x2={125} y2={52} stroke={NAVY} strokeWidth="1.5" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.4, delay: 0.5 }} />
+      {/* Browser dots */}
+      {[38, 50, 62].map((x, i) => (
+        <motion.circle key={x} cx={x} cy={43} r={2.5} fill={i === 0 ? GOLD : NAVY} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.7 + i * 0.08 }} />
+      ))}
+      {/* Phone */}
+      <motion.rect x={105} y={60} width={50} height={85} rx={10} stroke={GOLD} strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.7, delay: 0.3 }} />
+      <motion.circle cx={130} cy={135} r={4} stroke={GOLD} strokeWidth="1.5" fill="none" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1 }} />
+    </svg>
+  );
+}
+
+function IconIA() {
+  const nodes = [
+    { x: 90, y: 45 }, { x: 50, y: 75 }, { x: 130, y: 75 },
+    { x: 40, y: 115 }, { x: 90, y: 105 }, { x: 140, y: 115 },
+    { x: 70, y: 145 }, { x: 110, y: 145 },
+  ];
+  const links = [[0, 1], [0, 2], [1, 3], [1, 4], [2, 4], [2, 5], [3, 6], [4, 6], [4, 7], [5, 7]];
+  return (
+    <svg viewBox="0 0 180 180" fill="none" className="w-full h-full">
+      {links.map(([a, b], i) => (
+        <motion.line key={i} x1={nodes[a].x} y1={nodes[a].y} x2={nodes[b].x} y2={nodes[b].y} stroke="rgba(201,168,76,0.3)" strokeWidth="1" strokeDasharray="4 3" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5, delay: 0.1 + i * 0.05 }} />
+      ))}
+      {nodes.map((n, i) => (
+        <motion.circle key={i} cx={n.x} cy={n.y} r={i < 3 ? 8 : 6} stroke={i % 2 === 0 ? GOLD : NAVY} strokeWidth="2" fill={i === 0 || i === 4 ? GOLD : "none"} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2 + i * 0.08, type: "spring" }} />
+      ))}
+    </svg>
+  );
+}
+
+function IconConnect() {
+  return (
+    <svg viewBox="0 0 180 180" fill="none" className="w-full h-full">
+      {/* Satellite */}
+      <motion.circle cx={90} cy={90} r={8} fill={GOLD} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", delay: 0.1 }} />
+      {/* Signal arcs */}
+      {[30, 50, 70].map((r, i) => (
+        <motion.circle key={r} cx={90} cy={90} r={r} stroke={i % 2 === 0 ? GOLD : NAVY} strokeWidth="1.5" strokeDasharray="8 6" fill="none" initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 - i * 0.25 }} transition={{ duration: 0.8, delay: 0.3 + i * 0.2 }} />
+      ))}
+      {/* Signal dots */}
+      {[[55, 60], [125, 60], [50, 125], [130, 125]].map(([x, y], i) => (
+        <motion.circle key={i} cx={x} cy={y} r={4} fill={SKY} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 0.7 }} transition={{ delay: 0.8 + i * 0.12, type: "spring" }} />
+      ))}
+    </svg>
+  );
+}
+
+function IconSecure() {
+  return (
+    <svg viewBox="0 0 180 180" fill="none" className="w-full h-full">
+      {/* Shield */}
+      <motion.path d="M90 30 L140 55 L140 105 Q140 140 90 160 Q40 140 40 105 L40 55 Z" stroke={NAVY} strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1 }} />
+      {/* Inner shield */}
+      <motion.path d="M90 50 L125 67 L125 100 Q125 125 90 140 Q55 125 55 100 L55 67 Z" stroke={GOLD} strokeWidth="1.5" strokeDasharray="6 4" fill="none" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.8, delay: 0.5 }} />
+      {/* Lock */}
+      <motion.rect x={78} y={88} width={24} height={20} rx={4} stroke={GOLD} strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5, delay: 0.8 }} />
+      <motion.path d="M83 88 L83 78 Q83 70 90 70 Q97 70 97 78 L97 88" stroke={GOLD} strokeWidth="2" fill="none" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5, delay: 1 }} />
+      <motion.circle cx={90} cy={99} r={2.5} fill={GOLD} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.3 }} />
+    </svg>
+  );
+}
+
+function IconFinance() {
+  const bars = [
+    { x: 40, h: 55 }, { x: 65, h: 85 }, { x: 90, h: 65 },
+    { x: 115, h: 100 }, { x: 140, h: 75 },
+  ];
+  return (
+    <svg viewBox="0 0 180 180" fill="none" className="w-full h-full">
+      {/* Bars */}
+      {bars.map((b, i) => (
+        <motion.rect key={i} x={b.x - 8} y={150 - b.h} width={16} height={b.h} rx={3} fill={i === 3 ? GOLD : "none"} stroke={i === 3 ? GOLD : NAVY} strokeWidth="1.5" initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} style={{ transformOrigin: `${b.x}px 150px` }} transition={{ duration: 0.5, delay: 0.15 + i * 0.1, ease: EASE }} />
+      ))}
+      {/* Trend line */}
+      <motion.path d="M40 115 L65 80 L90 95 L115 50 L140 70" stroke={SKY} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.8, delay: 0.8 }} />
+      {/* Baseline */}
+      <motion.line x1={30} y1={153} x2={150} y2={153} stroke={NAVY} strokeWidth="1.5" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5 }} />
+    </svg>
+  );
+}
+
+function IconSante() {
+  return (
+    <svg viewBox="0 0 180 180" fill="none" className="w-full h-full">
+      {/* Heart */}
+      <motion.path d="M90 140 Q40 105 40 70 Q40 45 65 45 Q80 45 90 60 Q100 45 115 45 Q140 45 140 70 Q140 105 90 140 Z" stroke={NAVY} strokeWidth="2" fill="none" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.2 }} />
+      {/* Pulse line */}
+      <motion.path d="M30 90 L65 90 L75 60 L85 115 L95 75 L105 100 L115 90 L150 90" stroke={GOLD} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.9, delay: 0.6 }} />
+      {/* Pulse dot */}
+      <motion.circle cx={150} cy={90} r={3} fill={GOLD} initial={{ scale: 0 }} animate={{ scale: [0, 1.3, 1] }} transition={{ delay: 1.4, duration: 0.4 }} />
+    </svg>
+  );
+}
+
+function IconAgri() {
+  return (
+    <svg viewBox="0 0 180 180" fill="none" className="w-full h-full">
+      {/* Stem */}
+      <motion.path d="M90 155 L90 75" stroke={NAVY} strokeWidth="2" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.6 }} />
+      {/* Right leaf */}
+      <motion.path d="M90 95 Q130 70 140 40 Q110 60 90 95 Z" stroke={GOLD} strokeWidth="1.5" fill="rgba(201,168,76,0.12)" initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 0.7, delay: 0.4 }} />
+      {/* Left leaf */}
+      <motion.path d="M90 115 Q50 90 40 60 Q70 80 90 115 Z" stroke={NAVY} strokeWidth="1.5" fill="rgba(26,26,46,0.08)" initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 0.7, delay: 0.6 }} />
+      {/* Leaf veins */}
+      <motion.path d="M90 95 Q115 75 125 55" stroke={GOLD} strokeWidth="1" strokeDasharray="3 3" fill="none" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5, delay: 0.9 }} />
+      {/* Growth dots */}
+      {[[70, 145], [55, 130], [130, 140], [115, 150]].map(([x, y], i) => (
+        <motion.circle key={i} cx={x} cy={y} r={2.5} fill={SKY} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1 + i * 0.1, type: "spring" }} />
+      ))}
+    </svg>
+  );
+}
+
+const ICONS = [IconGov, IconWeb, IconIA, IconConnect, IconSecure, IconFinance, IconSante, IconAgri];
+
+/* ── Domain data ─────────────────────────────── */
 interface Domaine {
   id: string;
-  shortLabel: string;
+  pill: string;
   tag: string;
   headline: string;
   description: string;
   interventions: string[];
-  image: string;
 }
 
-/* ── Data — Spécialités réelles GIRA ───────────── */
 const domaines: Domaine[] = [
   {
     id: "gouvernement",
-    shortLabel: "Portails Gouvernementaux",
+    pill: "Gov. & Institutions",
     tag: "Gouvernement · Ambassades · Ministères",
     headline: "Digitaliser les institutions d'État",
-    description:
-      "Conception et déploiement de portails officiels, sites d'ambassades, intranets ministériels et plateformes institutionnelles conformes aux standards de sécurité les plus exigeants.",
-    interventions: [
-      "Sites officiels de ministères et ambassades",
-      "Portails citoyens et guichets numériques",
-      "Intranets sécurisés pour administrations",
-      "Plateformes de publication et de diffusion officielle",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1541872705-1f73c6400ec9?w=1600&q=85&auto=format&fit=crop",
+    description: "Conception et déploiement de portails officiels, sites d'ambassades, intranets ministériels et plateformes institutionnelles.",
+    interventions: ["Sites officiels de ministères", "Portails citoyens et guichets numériques", "Intranets sécurisés"],
   },
   {
     id: "web-mobile",
-    shortLabel: "Applications Web & Mobile",
-    tag: "Web · Mobile · PME & Grandes Entreprises",
+    pill: "Web & Mobile",
+    tag: "Web · Mobile · PME & Entreprises",
     headline: "Des applications taillées pour vos enjeux",
-    description:
-      "Développement d'applications web et mobiles sur mesure pour PME, grands groupes et organisations internationales — de la conception UX au déploiement en production.",
-    interventions: [
-      "Applications web SaaS et plateformes métier",
-      "Applications mobiles iOS et Android natives",
-      "Back-office, CRM et tableaux de bord",
-      "Intégration API, ERP et systèmes existants",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&q=85&auto=format&fit=crop",
+    description: "Développement d'applications web et mobiles sur mesure pour PME, grands groupes et organisations internationales.",
+    interventions: ["Applications web SaaS et plateformes métier", "Applications mobiles iOS et Android", "Back-office et tableaux de bord"],
   },
   {
     id: "ia",
-    shortLabel: "Intelligence Artificielle",
+    pill: "Intelligence Artificielle",
     tag: "IA · Machine Learning · Automatisation",
     headline: "Des intelligences artificielles sur mesure",
-    description:
-      "Développement, entraînement et intégration de modèles d'intelligence artificielle adaptés à vos données et vos processus — pour automatiser, prédire et décider plus vite.",
-    interventions: [
-      "Développement et entraînement de modèles IA",
-      "Chatbots et assistants virtuels institutionnels",
-      "Automatisation de processus documentaires",
-      "Analyse prédictive et aide à la décision",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=85&auto=format&fit=crop",
+    description: "Développement, entraînement et intégration de modèles IA adaptés à vos données et vos processus.",
+    interventions: ["Développement de modèles IA", "Chatbots et assistants virtuels", "Analyse prédictive et aide à la décision"],
   },
   {
     id: "connectivite",
-    shortLabel: "Connectivité & Points Relais",
+    pill: "Connectivité",
     tag: "Starlink · WiFi Hotspot · Infrastructure",
-    headline: "Connecter les zones isolées à internet",
-    description:
-      "Déploiement de points relais WiFi communautaires via technologie Starlink — accès internet à la minute (30 min, 1h) par paiement mobile, pour les zones rurales et périurbaines.",
-    interventions: [
-      "Infrastructure Starlink et points relais WiFi",
-      "Hotspots communautaires à accès payant (Mobile Money)",
-      "Couverture réseau des zones rurales et camps",
-      "Maintenance et supervision à distance des nœuds",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600&q=85&auto=format&fit=crop",
+    headline: "Connecter les zones isolées",
+    description: "Déploiement de points relais WiFi communautaires via Starlink, accès internet par paiement mobile.",
+    interventions: ["Infrastructure Starlink et points relais", "Hotspots communautaires (Mobile Money)", "Couverture réseau zones rurales"],
   },
   {
     id: "securite",
-    shortLabel: "Communication Sécurisée",
+    pill: "Com. Sécurisée",
     tag: "VPN · Chiffrement · Liaison inter-institutions",
     headline: "Des canaux de communication inviolables",
-    description:
-      "Mise en place de canaux sécurisés et chiffrés pour la liaison entre institutions, ambassades et organisations diplomatiques — confidentialité, intégrité et disponibilité garanties.",
-    interventions: [
-      "VPN diplomatiques et tunnels chiffrés",
-      "Plateformes de messagerie sécurisée inter-institutions",
-      "Authentification forte et gestion des accès",
-      "Audit de sécurité et conformité RGPD / ANSSI",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1600&q=85&auto=format&fit=crop",
+    description: "Mise en place de canaux sécurisés et chiffrés pour la liaison entre institutions et ambassades.",
+    interventions: ["VPN diplomatiques et tunnels chiffrés", "Messagerie sécurisée inter-institutions", "Audit de sécurité et conformité"],
   },
   {
-    id: "banque",
-    shortLabel: "Banques & Finance",
-    tag: "Fintech · Core Banking · Conformité",
-    headline: "La transformation numérique des banques",
-    description:
-      "Accompagnement des institutions financières dans leur digitalisation : core banking, solutions de paiement mobile, conformité réglementaire et interfaces client nouvelle génération.",
-    interventions: [
-      "Intégration et modernisation de core banking",
-      "Plateformes de paiement mobile et Mobile Money",
-      "Portails client et applications bancaires mobiles",
-      "Conformité KYC/AML et reporting réglementaire",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&q=85&auto=format&fit=crop",
+    id: "erp",
+    pill: "ERP & Systèmes",
+    tag: "ERP · Intégration · Solutions clés en main",
+    headline: "Des systèmes intégrés au service de la performance",
+    description: "Déploiement et intégration de solutions ERP, bases de données et outils d'évaluation pour entreprises et institutions publiques.",
+    interventions: ["Intégration ERP et solutions clés en main", "Bases de données et systèmes d'information d'État", "Tableaux de bord statistiques et outils d'évaluation"],
   },
   {
     id: "sante",
-    shortLabel: "Santé Digitale",
+    pill: "Santé Digitale",
     tag: "SIH · Télémédecine · e-Santé",
-    headline: "Digitaliser les systèmes de santé de bout en bout",
-    description:
-      "Logiciels de gestion hospitalière (SIH), dossier patient numérique, plateformes de télémédecine et outils d'aide à la décision médicale pour hôpitaux et cliniques.",
-    interventions: [
-      "Systèmes d'information hospitaliers (SIH) sur mesure",
-      "Dossier patient numérique et télémédecine",
-      "Gestion de la supply chain pharmaceutique",
-      "Dashboards épidémiologiques et analytics santé",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&q=85&auto=format&fit=crop",
+    headline: "Digitaliser les systèmes de santé",
+    description: "Logiciels de gestion hospitalière, dossier patient numérique et plateformes de télémédecine.",
+    interventions: ["Systèmes d'information hospitaliers", "Dossier patient et télémédecine", "Dashboards épidémiologiques"],
   },
   {
     id: "agriculture",
-    shortLabel: "Agriculture & Traçabilité",
+    pill: "AgriTech",
     tag: "AgriTech · Traçabilité · Applications mobiles",
     headline: "Connecter l'agriculture à la technologie",
-    description:
-      "Développement de plateformes AgriTech, systèmes de traçabilité des filières, applications mobiles pour agriculteurs et outils de gestion et de prévision pour coopératives.",
-    interventions: [
-      "Plateformes de mise en relation agriculteurs et marchés",
-      "Traçabilité des filières et gestion de la qualité",
-      "Applications mobiles pour la gestion des cultures",
-      "Systèmes de prévision et d'aide à la décision",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1600&q=85&auto=format&fit=crop",
+    description: "Développement de plateformes AgriTech, systèmes de traçabilité et outils de gestion pour coopératives.",
+    interventions: ["Mise en relation agriculteurs et marchés", "Traçabilité des filières", "Applications de gestion des cultures"],
   },
 ];
 
-const G = "#C9A84C";
-const AUTO_DURATION = 7500;
-const MANUAL_PAUSE = 15000;
-
-/* ── Hover Card ────────────────────────────────── */
-function DomaineCard({
-  domaine,
-  isActive,
-  onClick,
-}: {
-  domaine: Domaine;
-  isActive: boolean;
-  onClick: () => void;
-}) {
-  const [hovered, setHovered] = useState(false);
-
+/* ── Active Card Content — layout horizontal (icon left + content right) ── */
+function ActiveCard({ d, iconIndex }: { d: Domaine; iconIndex: number }) {
+  const Icon = ICONS[iconIndex];
   return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="relative overflow-hidden rounded-2xl text-left focus:outline-none"
-      style={{ aspectRatio: "4/3", outline: "none" }}
-    >
-      {/* Image */}
+    <div className="h-full flex flex-col lg:flex-row p-6 md:p-8 lg:p-10 overflow-y-auto">
+
+      {/* Icon zone — plus petit sur mobile, taille normale sur desktop */}
       <div
-        className="absolute inset-0"
-        style={{
-          transform: hovered ? "scale(1.07)" : "scale(1.0)",
-          transition: "transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94)",
-        }}
+        className="flex-shrink-0 flex items-center justify-center
+                   mx-auto mb-4
+                   lg:mx-0 lg:mb-0 lg:mr-10"
+        style={{ width: "clamp(80px, 20vw, 140px)", height: "clamp(80px, 20vw, 140px)" }}
       >
-        <Image
-          src={domaine.image}
-          alt={domaine.shortLabel}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 50vw, 25vw"
-          unoptimized
-        />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={d.id}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4 }}
+            className="w-full h-full"
+          >
+            <Icon />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Active — thin gold top border */}
-      <div
-        className="absolute top-0 left-0 right-0 z-20"
-        style={{
-          height: 2,
-          backgroundColor: G,
-          opacity: isActive ? 1 : 0,
-          transition: "opacity 0.3s ease",
-        }}
-      />
-
-      {/* Overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: hovered
-            ? "linear-gradient(to top, rgba(13,13,13,0.97) 0%, rgba(13,13,13,0.72) 50%, rgba(13,13,13,0.28) 100%)"
-            : "linear-gradient(to top, rgba(13,13,13,0.88) 0%, rgba(13,13,13,0.18) 70%, transparent 100%)",
-          transition: "background 0.4s ease",
-        }}
-      />
-
-      {/* Default label */}
-      <div
-        className="absolute inset-0 flex flex-col justify-end p-4"
-        style={{
-          opacity: hovered ? 0 : 1,
-          transform: hovered ? "translateY(-8px)" : "translateY(0)",
-          transition: "opacity 0.28s, transform 0.28s",
-        }}
-      >
-        <p className="text-white font-bold text-sm leading-tight" style={{ fontFamily: "var(--font-montserrat)" }}>
-          {domaine.shortLabel}
-        </p>
-        <p className="text-white/45 text-[10px] mt-1" style={{ fontFamily: "var(--font-inter)" }}>
-          {domaine.tag.split(" · ")[0]}
-        </p>
-      </div>
-
-      {/* Hover detail */}
-      <div
-        className="absolute inset-0 flex flex-col justify-end p-4"
-        style={{
-          opacity: hovered ? 1 : 0,
-          transform: hovered ? "translateY(0)" : "translateY(14px)",
-          transition: "opacity 0.3s ease, transform 0.32s ease",
-        }}
-      >
-        <span
-          className="text-[9px] uppercase tracking-[0.22em] font-bold mb-1.5 block"
-          style={{ color: G, fontFamily: "var(--font-inter)" }}
+      {/* Content — right on desktop */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={d.id}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.42, ease: EASE }}
+          className="flex-1 flex flex-col min-w-0"
         >
-          {domaine.tag}
-        </span>
-        <p className="text-white font-bold text-sm mb-2 leading-tight" style={{ fontFamily: "var(--font-montserrat)" }}>
-          {domaine.shortLabel}
-        </p>
-        <p className="text-white/58 text-[11px] leading-relaxed mb-3.5 line-clamp-2" style={{ fontFamily: "var(--font-inter)" }}>
-          {domaine.description}
-        </p>
-        <div
-          className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider"
-          style={{ color: G, fontFamily: "var(--font-inter)" }}
-        >
-          En savoir plus <ArrowRight size={10} strokeWidth={2.5} />
-        </div>
-      </div>
-    </button>
+          <p
+            className="text-[10px] uppercase tracking-[0.24em] font-bold mb-2"
+            style={{ color: GOLD, fontFamily: "var(--font-inter)" }}
+          >
+            {d.tag}
+          </p>
+          <h3
+            className="text-xl md:text-2xl lg:text-[28px] font-black leading-tight mb-3"
+            style={{ fontFamily: "var(--font-montserrat)", color: "#0D0D0D" }}
+          >
+            {d.headline}
+          </h3>
+          <p
+            className="text-sm leading-relaxed mb-5"
+            style={{ color: "rgba(13,13,13,0.52)", fontFamily: "var(--font-inter)" }}
+          >
+            {d.description}
+          </p>
+          <ul className="space-y-2 mb-6">
+            {d.interventions.map((item, i) => (
+              <motion.li
+                key={i}
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.15 + i * 0.07, duration: 0.28 }}
+                className="flex items-start gap-2 text-sm"
+                style={{ color: "rgba(13,13,13,0.65)", fontFamily: "var(--font-inter)" }}
+              >
+                <CheckCircle2 size={13} strokeWidth={2} style={{ color: GOLD, flexShrink: 0, marginTop: 2 }} />
+                {item}
+              </motion.li>
+            ))}
+          </ul>
+          <Link
+            href="/secteurs"
+            className="inline-flex items-center gap-2 self-start text-sm font-bold uppercase tracking-wider transition-all duration-200 hover:gap-3 mt-auto"
+            style={{ color: GOLD, fontFamily: "var(--font-inter)" }}
+          >
+            En savoir plus
+            <ArrowRight size={14} strokeWidth={2.5} />
+          </Link>
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }
 
-/* ── Nav Arrow Button ──────────────────────────── */
-function NavArrow({
-  dir,
-  onClick,
-}: {
-  dir: "prev" | "next";
-  onClick: () => void;
-}) {
-  const [hov, setHov] = useState(false);
+/* ── Pill Label (vertical text) ───────────────── */
+function PillLabel({ label, isHovered }: { label: string; isHovered: boolean }) {
   return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      aria-label={dir === "prev" ? "Précédent" : "Suivant"}
-      className="w-10 h-10 flex items-center justify-center rounded-full transition-all duration-200 focus:outline-none"
-      style={{
-        border: `1px solid ${hov ? G : "rgba(255,255,255,0.22)"}`,
-        backgroundColor: hov ? "rgba(201,168,76,0.12)" : "rgba(0,0,0,0.35)",
-        color: hov ? G : "rgba(255,255,255,0.55)",
-        backdropFilter: "blur(10px)",
-        WebkitBackdropFilter: "blur(10px)",
-      }}
-    >
-      {dir === "prev" ? <ChevronLeft size={16} strokeWidth={2} /> : <ChevronRight size={16} strokeWidth={2} />}
-    </button>
+    <div className="h-full flex items-center justify-center overflow-hidden">
+      <span
+        className="text-[12px] font-semibold tracking-wide whitespace-nowrap transition-colors duration-300"
+        style={{
+          writingMode: "vertical-lr",
+          transform: "rotate(180deg)",
+          fontFamily: "var(--font-inter)",
+          color: isHovered ? GOLD : "rgba(13,13,13,0.45)",
+        }}
+      >
+        {label}
+      </span>
+    </div>
   );
 }
 
-/* ── Main Section ──────────────────────────────── */
+/* ── Main Section ─────────────────────────────── */
 export default function DomainesSection() {
   const [active, setActive] = useState(0);
+  const [hoveredPill, setHoveredPill] = useState<number | null>(null);
+  const pausedUntilRef = useRef(0);
 
-  const pausedUntilRef = useRef<number>(0);
-
+  /* Auto-advance */
   useEffect(() => {
-    let timerId: ReturnType<typeof setTimeout>;
+    let t: ReturnType<typeof setTimeout>;
     const tryAdvance = () => {
       const now = Date.now();
       if (now < pausedUntilRef.current) {
-        timerId = setTimeout(tryAdvance, pausedUntilRef.current - now + 80);
+        t = setTimeout(tryAdvance, pausedUntilRef.current - now + 80);
       } else {
         setActive((p) => (p + 1) % domaines.length);
       }
     };
-    timerId = setTimeout(tryAdvance, AUTO_DURATION);
-    return () => clearTimeout(timerId);
+    t = setTimeout(tryAdvance, AUTO_DELAY);
+    return () => clearTimeout(t);
   }, [active]);
 
-  const manualSelect = useCallback((i: number) => {
+  const select = useCallback((i: number) => {
     pausedUntilRef.current = Date.now() + MANUAL_PAUSE;
     setActive(i);
   }, []);
 
-  const goPrev = useCallback(() => manualSelect((active - 1 + domaines.length) % domaines.length), [active, manualSelect]);
-  const goNext = useCallback(() => manualSelect((active + 1) % domaines.length), [active, manualSelect]);
-
-  /* swipe / touch */
-  const touchStartX = useRef<number>(0);
-  const touchStartY = useRef<number>(0);
-
+  /* Touch swipe for mobile */
+  const touchX = useRef(0);
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
+    touchX.current = e.touches[0].clientX;
   }, []);
-
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent) => {
-      const dx = e.changedTouches[0].clientX - touchStartX.current;
-      const dy = e.changedTouches[0].clientY - touchStartY.current;
-      if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-        if (dx < 0) goNext();
-        else goPrev();
+      const dx = e.changedTouches[0].clientX - touchX.current;
+      if (Math.abs(dx) > 50) {
+        const next = dx < 0
+          ? (active + 1) % domaines.length
+          : (active - 1 + domaines.length) % domaines.length;
+        select(next);
       }
     },
-    [goNext, goPrev]
+    [active, select]
   );
 
-  const cur = domaines[active];
-
   return (
-    <section
-      className="relative py-20 md:py-32 overflow-hidden"
-      style={{
-        background: [
-          "radial-gradient(ellipse 80% 55% at 4% 8%, rgba(255,255,255,0.11) 0%, transparent 62%)",
-          "radial-gradient(ellipse 65% 70% at 98% 96%, rgba(255,255,255,0.08) 0%, transparent 58%)",
-          "radial-gradient(ellipse 58% 52% at 45% 40%, rgba(201,168,76,0.10) 0%, transparent 55%)",
-          "radial-gradient(ellipse 45% 38% at 18% 82%, rgba(255,255,255,0.065) 0%, transparent 52%)",
-          "radial-gradient(ellipse 35% 42% at 78% 18%, rgba(255,255,255,0.055) 0%, transparent 50%)",
-          "#0D0D0D",
-        ].join(", "),
-      }}
-    >
-      {/* Grain cinématique */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E")`,
-          opacity: 0.045,
-          mixBlendMode: "overlay" as const,
-          zIndex: 0,
-        }}
-      />
-
-      <div className="relative z-10 max-w-screen-xl mx-auto px-6 md:px-12 lg:px-20">
+    <section className="py-20 md:py-32" style={{ backgroundColor: "#F5F5F0" }}>
+      <div className="max-w-screen-xl mx-auto px-6 md:px-12 lg:px-20">
 
         {/* Header */}
         <motion.div
@@ -379,157 +393,81 @@ export default function DomainesSection() {
           className="mb-12 md:mb-16"
         >
           <p
-            className="text-xs uppercase tracking-[0.28em] font-semibold mb-4"
-            style={{ color: G, fontFamily: "var(--font-inter)" }}
+            className="text-[11px] uppercase tracking-[0.28em] font-bold mb-4"
+            style={{ color: GOLD, fontFamily: "var(--font-inter)" }}
           >
             Domaines d&apos;expertise
           </p>
           <h2
             className="text-3xl md:text-4xl lg:text-5xl font-black leading-tight max-w-3xl"
-            style={{ color: "#FFFFFF", fontFamily: "var(--font-montserrat)" }}
+            style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
           >
-            De la gouvernance digitale à l&apos;intelligence artificielle
+            Ce que nous savons faire
           </h2>
-          <p
-            className="text-base md:text-lg mt-4 max-w-2xl leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.42)", fontFamily: "var(--font-inter)" }}
-          >
-            Nous concevons, développons et déployons des solutions numériques
-            sur mesure pour les institutions, gouvernements et entreprises.
-          </p>
         </motion.div>
 
-        {/* ── Featured panel ── */}
-        <div
-          className="relative rounded-3xl overflow-hidden mb-4 select-none touch-pan-y"
-          style={{ height: 540 }}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* Cross-fade image */}
-          <AnimatePresence>
-            <motion.div
-              key={`img-${active}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.85, ease: "easeInOut" }}
-              className="absolute inset-0"
-            >
-              <Image
-                src={cur.image}
-                alt={cur.shortLabel}
-                fill
-                className="object-cover"
-                sizes="1200px"
-                priority
-                unoptimized
-              />
-            </motion.div>
-          </AnimatePresence>
+        {/* ═══ DESKTOP: BCG X sliding tabs ═══ */}
+        <div className="hidden lg:flex gap-1.5" style={{ height: 520 }}>
+          {domaines.map((d, i) => {
+            const isActive = i === active;
+            return (
+              <div
+                key={d.id}
+                onClick={() => !isActive && select(i)}
+                onMouseEnter={() => !isActive && setHoveredPill(i)}
+                onMouseLeave={() => setHoveredPill(null)}
+                className="overflow-hidden rounded-2xl"
+                style={{
+                  flexGrow: isActive ? 1 : 0,
+                  flexShrink: 0,
+                  flexBasis: isActive ? 0 : PILL_W,
+                  minWidth: isActive ? 0 : PILL_W,
+                  border: isActive ? CARD_BORDER : `1px solid ${hoveredPill === i ? GOLD_BORDER : "rgba(0,0,0,0.08)"}`,
+                  backgroundColor: isActive ? "#FFFFFF" : hoveredPill === i ? "rgba(201,168,76,0.06)" : "rgba(255,255,255,0.5)",
+                  cursor: isActive ? "default" : "pointer",
+                  transition: `flex-grow 0.55s cubic-bezier(${EASE.join(",")}), flex-basis 0.55s cubic-bezier(${EASE.join(",")}), border-color 0.3s, background-color 0.3s`,
+                }}
+              >
+                {isActive ? (
+                  <ActiveCard d={d} iconIndex={i} />
+                ) : (
+                  <PillLabel label={d.pill} isHovered={hoveredPill === i} />
+                )}
+              </div>
+            );
+          })}
+        </div>
 
-          {/* Gradients */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to right, rgba(13,13,13,0.97) 0%, rgba(13,13,13,0.85) 38%, rgba(13,13,13,0.28) 68%, transparent 100%)",
-            }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background: "linear-gradient(to top, rgba(13,13,13,0.50) 0%, transparent 45%)",
-            }}
-          />
-
-          {/* Sliding content */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`content-${active}`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative z-10 h-full flex flex-col justify-center px-8 md:px-14"
-              style={{ maxWidth: 570 }}
-            >
-              <span
-                className="text-[11px] uppercase tracking-[0.24em] font-bold mb-5 block"
-                style={{ color: G, fontFamily: "var(--font-inter)" }}
+        {/* ═══ MOBILE: horizontal scroll tabs + card ═══ */}
+        <div className="lg:hidden" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+          {/* Horizontal scrollable pills */}
+          <div className="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide" style={{ WebkitOverflowScrolling: "touch" }}>
+            {domaines.map((d, i) => (
+              <button
+                key={d.id}
+                onClick={() => select(i)}
+                className="flex-shrink-0 px-4 py-2.5 rounded-full text-[12px] font-semibold tracking-wide whitespace-nowrap transition-all duration-300"
+                style={{
+                  fontFamily: "var(--font-inter)",
+                  backgroundColor: i === active ? GOLD : "rgba(255,255,255,0.8)",
+                  color: i === active ? "#0D0D0D" : "rgba(13,13,13,0.45)",
+                  border: `1px solid ${i === active ? GOLD : "rgba(0,0,0,0.08)"}`,
+                }}
               >
-                {cur.tag}
-              </span>
-              <h3
-                className="text-3xl md:text-[38px] font-black text-white leading-tight mb-4"
-                style={{ fontFamily: "var(--font-montserrat)" }}
-              >
-                {cur.headline}
-              </h3>
-              <p
-                className="text-base leading-relaxed mb-8"
-                style={{ color: "rgba(255,255,255,0.58)", fontFamily: "var(--font-inter)" }}
-              >
-                {cur.description}
-              </p>
-              <ul className="space-y-3 mb-10">
-                {cur.interventions.map((item, i) => (
-                  <motion.li
-                    key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.16 + i * 0.07, duration: 0.32 }}
-                    className="flex items-start gap-3 text-sm"
-                    style={{ color: "rgba(255,255,255,0.80)", fontFamily: "var(--font-inter)" }}
-                  >
-                    <CheckCircle2 size={14} strokeWidth={2} style={{ color: G, flexShrink: 0, marginTop: 3 }} />
-                    {item}
-                  </motion.li>
-                ))}
-              </ul>
-              <Link
-                href="/secteurs"
-                className="inline-flex items-center gap-2.5 self-start px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wider transition-all hover:opacity-90"
-                style={{ backgroundColor: G, color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
-              >
-                Voir nos prestations
-                <ArrowRight size={14} strokeWidth={2.5} />
-              </Link>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* ── Navigation arrows — desktop ── */}
-          <div className="absolute bottom-6 right-6 z-20 flex items-center gap-2">
-            <NavArrow dir="prev" onClick={goPrev} />
-            <NavArrow dir="next" onClick={goNext} />
+                {d.pill}
+              </button>
+            ))}
           </div>
 
-          {/* Progress line */}
+          {/* Active card — mobile : hauteur fixe pour éviter le layout shift lors du changement d'onglet */}
           <div
-            className="absolute bottom-0 left-0 right-0 z-10"
-            style={{ height: 1, backgroundColor: "rgba(255,255,255,0.05)" }}
+            className="rounded-2xl overflow-hidden"
+            style={{ border: CARD_BORDER, backgroundColor: "#FFFFFF", minHeight: 420, overflowY: "auto" }}
           >
-            <motion.div
-              key={`progress-${active}`}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: AUTO_DURATION / 1000, ease: "linear" }}
-              style={{ height: "100%", backgroundColor: "rgba(201,168,76,0.25)", transformOrigin: "left" }}
-            />
+            <ActiveCard d={domaines[active]} iconIndex={active} />
           </div>
         </div>
 
-        {/* ── Card grid ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {domaines.map((d, i) => (
-            <DomaineCard
-              key={d.id}
-              domaine={d}
-              isActive={i === active}
-              onClick={() => manualSelect(i)}
-            />
-          ))}
-        </div>
       </div>
     </section>
   );
