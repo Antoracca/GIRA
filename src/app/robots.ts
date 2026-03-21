@@ -184,25 +184,52 @@ export default function robots(): MetadataRoute.Robots {
       },
 
       /* ══════════════════════════════════════════════
-         MAUVAIS BOTS — BLOQUÉS
-         Scrapers, spam, SEO toxique, DDoS
+         OUTILS SEO PROFESSIONNELS — AUTORISÉS
+         Ahrefs, Semrush, Moz… permettent aux agences
+         et partenaires d'analyser et référencer GIRA
       ══════════════════════════════════════════════ */
-      { userAgent: "AhrefsBot",       disallow: ["/"] },
-      { userAgent: "SemrushBot",      disallow: ["/"] },
-      { userAgent: "MJ12bot",         disallow: ["/"] },
-      { userAgent: "DotBot",          disallow: ["/"] },
-      { userAgent: "BLEXBot",         disallow: ["/"] },
-      { userAgent: "SeznamBot",       disallow: ["/"] },
-      { userAgent: "Exabot",          disallow: ["/"] },
-      { userAgent: "ia_archiver",     disallow: ["/"] }, // Alexa archiver
-      { userAgent: "Scrapy",          disallow: ["/"] },
-      { userAgent: "PetalBot",        disallow: ["/"] },
-      { userAgent: "DataForSeoBot",   disallow: ["/"] },
-      { userAgent: "serpstatbot",     disallow: ["/"] },
-      { userAgent: "linkdexbot",      disallow: ["/"] },
-      { userAgent: "MegaIndex",       disallow: ["/"] },
-      { userAgent: "spbot",           disallow: ["/"] },
-      { userAgent: "Pinterestbot",    disallow: ["/"] },
+      {
+        userAgent: "AhrefsBot",      // Ahrefs — analyse backlinks
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "SemrushBot",     // Semrush — audit SEO
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "MJ12bot",        // Majestic SEO
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "DotBot",         // OpenLinkProfiler
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "DataForSeoBot",  // DataForSEO
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "serpstatbot",    // Serpstat
+        allow: "/",
+        disallow: ["/api/"],
+      },
+
+      /* ══════════════════════════════════════════════
+         BOTS NUISIBLES — BLOQUÉS
+         Scrapers purs, spam, collecteurs de données
+      ══════════════════════════════════════════════ */
+      { userAgent: "Scrapy",          disallow: ["/"] }, // scraper Python
+      { userAgent: "BLEXBot",         disallow: ["/"] }, // scraper agressif
+      { userAgent: "SeznamBot",       disallow: ["/"] }, // moteur inconnu
+      { userAgent: "Exabot",          disallow: ["/"] }, // scraper FR inactif
+      { userAgent: "ia_archiver",     disallow: ["/"] }, // Alexa archiver obsolète
+      { userAgent: "MegaIndex",       disallow: ["/"] }, // spam russe
+      { userAgent: "spbot",           disallow: ["/"] }, // spam bot
 
       /* ══════════════════════════════════════════════
          RÈGLE GÉNÉRALE (fallback)
