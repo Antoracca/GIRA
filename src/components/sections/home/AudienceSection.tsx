@@ -4,49 +4,89 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useLocale } from "next-intl";
 
 const G = "#C9A84C";
 const BG = "#F5F5F0";
 
 const TREE_IMG = "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=1400&q=85";
 
-const profiles = [
-  {
-    id: "gouvernements",
-    label: "Gouvernements",
-    sublabel: "& Ministères",
-    desc: "GIRA accompagne les États dans la structuration et l'exécution de leurs projets prioritaires, du cadrage stratégique au transfert de compétences aux équipes locales.",
-    img: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1400&q=85",
-  },
-  {
-    id: "institutions",
-    label: "Institutions",
-    sublabel: "& Bailleurs",
-    desc: "Banque Mondiale, BAD, AFD : GIRA sécurise l'impact de vos financements grâce à une maîtrise d'ouvrage transparente et une gouvernance sans compromis.",
-    img: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=1400&q=85",
-  },
-  {
-    id: "entreprises",
-    label: "Entreprises",
-    sublabel: "& Groupes Privés",
-    desc: "Pour les groupes souhaitant s'implanter ou croître en Afrique, GIRA structure les projets, mobilise les financements et pilote l'exécution jusqu'à la livraison.",
-    img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&q=85",
-  },
-  {
-    id: "investisseurs",
-    label: "Fonds",
-    sublabel: "& Investisseurs",
-    desc: "GIRA identifie et structure des opportunités alignées sur les priorités stratégiques des États africains, viabilisées, dé-risquées et prêtes à financer.",
-    img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1400&q=85",
-  },
-  {
-    id: "startups",
-    label: "Startups",
-    sublabel: "& Innovateurs",
-    desc: "Porteurs de solutions pour le continent, GIRA vous accompagne dans la structuration, la mise à l'échelle et l'accès aux marchés publics africains.",
-    img: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1400&q=85",
-  },
-];
+const PROFILES = {
+  fr: [
+    {
+      id: "gouvernements",
+      label: "Gouvernements",
+      sublabel: "& Ministères",
+      desc: "GIRA accompagne les États dans la structuration et l'exécution de leurs projets prioritaires, du cadrage stratégique au transfert de compétences aux équipes locales.",
+      img: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1400&q=85",
+    },
+    {
+      id: "institutions",
+      label: "Institutions",
+      sublabel: "& Bailleurs",
+      desc: "Banque Mondiale, BAD, AFD : GIRA sécurise l'impact de vos financements grâce à une maîtrise d'ouvrage transparente et une gouvernance sans compromis.",
+      img: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=1400&q=85",
+    },
+    {
+      id: "entreprises",
+      label: "Entreprises",
+      sublabel: "& Groupes Privés",
+      desc: "Pour les groupes souhaitant s'implanter ou croître en Afrique, GIRA structure les projets, mobilise les financements et pilote l'exécution jusqu'à la livraison.",
+      img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&q=85",
+    },
+    {
+      id: "investisseurs",
+      label: "Fonds",
+      sublabel: "& Investisseurs",
+      desc: "GIRA identifie et structure des opportunités alignées sur les priorités stratégiques des États africains, viabilisées, dé-risquées et prêtes à financer.",
+      img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1400&q=85",
+    },
+    {
+      id: "startups",
+      label: "Startups",
+      sublabel: "& Innovateurs",
+      desc: "Porteurs de solutions pour le continent, GIRA vous accompagne dans la structuration, la mise à l'échelle et l'accès aux marchés publics africains.",
+      img: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1400&q=85",
+    },
+  ],
+  en: [
+    {
+      id: "gouvernements",
+      label: "Governments",
+      sublabel: "& Ministries",
+      desc: "GIRA supports states in structuring and executing their priority projects, from strategic framing to skills transfer to local teams.",
+      img: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1400&q=85",
+    },
+    {
+      id: "institutions",
+      label: "Institutions",
+      sublabel: "& Development Banks",
+      desc: "World Bank, AfDB, AFD: GIRA secures the impact of your financing through transparent project ownership and uncompromising governance.",
+      img: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=1400&q=85",
+    },
+    {
+      id: "entreprises",
+      label: "Companies",
+      sublabel: "& Private Groups",
+      desc: "For groups looking to establish or grow in Africa, GIRA structures projects, mobilizes financing, and manages execution through to delivery.",
+      img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&q=85",
+    },
+    {
+      id: "investisseurs",
+      label: "Funds",
+      sublabel: "& Investors",
+      desc: "GIRA identifies and structures opportunities aligned with African states' strategic priorities — de-risked, viable, and investment-ready.",
+      img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1400&q=85",
+    },
+    {
+      id: "startups",
+      label: "Startups",
+      sublabel: "& Innovators",
+      desc: "Solution providers for the continent: GIRA supports your structuring, scale-up, and access to African public procurement markets.",
+      img: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1400&q=85",
+    },
+  ],
+};
 
 const textV = {
   enter: { opacity: 0, y: 14 },
@@ -73,13 +113,19 @@ const imgV = {
 };
 
 export default function AudienceSection() {
+  const locale = useLocale() as "fr" | "en";
+  const profiles = PROFILES[locale] ?? PROFILES.fr;
+
   const [idx, setIdx] = useState(-1);
 
+  // Reset on locale change
+  useEffect(() => { setIdx(-1); }, [locale]);
+
   const goTo = useCallback((i: number) => setIdx(i), []);
-  const next = useCallback(() => setIdx((p) => (p + 1) % profiles.length), []);
+  const next = useCallback(() => setIdx((p) => (p + 1) % profiles.length), [profiles.length]);
   const prev = useCallback(
     () => setIdx((p) => (p <= 0 ? profiles.length - 1 : p - 1)),
-    []
+    [profiles.length]
   );
 
   useEffect(() => {
@@ -122,7 +168,7 @@ export default function AudienceSection() {
             className="text-[11px] uppercase tracking-[0.32em] font-bold mb-8"
             style={{ color: G, fontFamily: "var(--font-inter)" }}
           >
-            Nos cibles
+            {locale === "en" ? "Our targets" : "Nos cibles"}
           </p>
 
           {/* Titre statique */}
@@ -136,9 +182,11 @@ export default function AudienceSection() {
               letterSpacing: "-0.02em",
             }}
           >
-            Comment pouvons-nous
-            <br />
-            vous accompagner&nbsp;?
+            {locale === "en" ? (
+              <>How can we<br />support you?</>
+            ) : (
+              <>Comment pouvons-nous<br />vous accompagner&nbsp;?</>
+            )}
           </h2>
 
           {/*
@@ -165,7 +213,7 @@ export default function AudienceSection() {
                     className="text-[11px] uppercase tracking-[0.28em] font-bold mb-3"
                     style={{ color: "rgba(0,0,0,0.35)", fontFamily: "var(--font-inter)" }}
                   >
-                    Vous êtes
+                    {locale === "en" ? "You are" : "Vous êtes"}
                   </p>
                   <h3
                     className="font-black leading-none uppercase mb-1"
@@ -214,8 +262,9 @@ export default function AudienceSection() {
                     fontStyle: "italic",
                   }}
                 >
-                  Gouvernements, institutions, investisseurs, entreprises. GIRA
-                  structure, finance et exécute des projets à fort impact en Afrique.
+                  {locale === "en"
+                    ? "Governments, institutions, investors, companies. GIRA structures, finances and executes high-impact projects across Africa."
+                    : "Gouvernements, institutions, investisseurs, entreprises. GIRA structure, finance et exécute des projets à fort impact en Afrique."}
                 </motion.p>
               )}
             </AnimatePresence>

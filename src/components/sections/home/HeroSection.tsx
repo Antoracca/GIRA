@@ -2,39 +2,52 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
-const animatedWords = [
-  "Infrastructures",
-  "Stratégiques",
-  "Souverains",
-  "Technologiques",
-  "Régionaux",
-];
+const ANIMATED_WORDS = {
+  fr: ["Infrastructures", "Stratégiques", "Souverains", "Technologiques", "Régionaux"],
+  en: ["Infrastructural", "Strategic", "Sovereign", "Technological", "Regional"],
+};
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=1920&q=90";
 
 export default function HeroSection() {
+  const locale = useLocale() as "fr" | "en";
   const [index, setIndex] = useState(0);
+
+  const animatedWords = ANIMATED_WORDS[locale] ?? ANIMATED_WORDS.fr;
+
+  // Reset index when locale changes
+  useEffect(() => { setIndex(0); }, [locale]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % animatedWords.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [animatedWords.length]);
+
+  const line1 = locale === "en" ? "Structure and execute" : "Structurer et exécuter";
+  const line2 = locale === "en" ? "your projects" : "vos projets";
+  const subtitle =
+    locale === "en"
+      ? "GIRA structures, finances and executes projects that sustainably transform Africa alongside governments, international institutions and investors."
+      : "GIRA structure, finance et exécute des projets qui transforment durablement l'Afrique aux côtés des gouvernements, institutions internationales et investisseurs.";
+  const cta1 = locale === "en" ? "Start a mandate" : "Initier un mandat";
+  const cta2 = locale === "en" ? "Discover our method" : "Découvrir la méthode";
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
 
-      {/* ── Background image (AFD-style full bleed) ───── */}
+      {/* ── Background image ───── */}
       <div className="absolute inset-0 z-0">
         <Image
           src={HERO_IMAGE}
-          alt="Paysage africain — GIRA projets structurants"
+          alt={locale === "en" ? "African landscape — GIRA structural projects" : "Paysage africain — GIRA projets structurants"}
           fill
           className="object-cover"
           priority
@@ -55,28 +68,22 @@ export default function HeroSection() {
       {/* ── Foreground content ──────── */}
       <div className="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-12 lg:px-20 pt-24 pb-32 flex flex-col items-start text-left">
 
-
-
-        {/* Main title — AFD-level impact */}
+        {/* Main title */}
         <h1
           className="text-4xl sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[6.5rem] font-black text-white leading-[1.1] sm:leading-[1.05] tracking-tight mb-6 break-words"
           style={{ fontFamily: "var(--font-montserrat)", wordBreak: "break-word" }}
         >
           <motion.span
+            key={`line1-${locale}`}
             className="block"
             initial="hidden"
             animate="visible"
-            variants={{
-              visible: { transition: { staggerChildren: 0.04 } },
-            }}
+            variants={{ visible: { transition: { staggerChildren: 0.04 } } }}
           >
-            {"Structurer et exécuter".split("").map((char, index) => (
+            {line1.split("").map((char, i) => (
               <motion.span
-                key={index}
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { opacity: 1 },
-                }}
+                key={i}
+                variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
                 transition={{ duration: 0.05 }}
               >
                 {char}
@@ -84,20 +91,16 @@ export default function HeroSection() {
             ))}
           </motion.span>
           <motion.span
+            key={`line2-${locale}`}
             className="block mt-1"
             initial="hidden"
             animate="visible"
-            variants={{
-              visible: { transition: { staggerChildren: 0.04, delayChildren: 0.9 } },
-            }}
+            variants={{ visible: { transition: { staggerChildren: 0.04, delayChildren: 0.9 } } }}
           >
-            {"vos projets".split("").map((char, index) => (
+            {line2.split("").map((char, i) => (
               <motion.span
-                key={index}
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { opacity: 1 },
-                }}
+                key={i}
+                variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
                 transition={{ duration: 0.05 }}
               >
                 {char}
@@ -105,7 +108,7 @@ export default function HeroSection() {
             ))}
           </motion.span>
 
-          {/* Animated rotating word (appears after typing finishes) */}
+          {/* Animated rotating word */}
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -115,7 +118,7 @@ export default function HeroSection() {
           >
             <AnimatePresence mode="popLayout">
               <motion.span
-                key={index}
+                key={`${locale}-${index}`}
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
@@ -131,6 +134,7 @@ export default function HeroSection() {
 
         {/* Subtitle */}
         <motion.p
+          key={`subtitle-${locale}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
@@ -141,9 +145,7 @@ export default function HeroSection() {
             fontWeight: 400,
           }}
         >
-          GIRA structure, finance et exécute des projets qui transforment
-          durablement l&apos;Afrique aux côtés des gouvernements,
-          institutions internationales et investisseurs.
+          {subtitle}
         </motion.p>
 
         {/* CTAs */}
@@ -162,7 +164,7 @@ export default function HeroSection() {
               fontFamily: "var(--font-inter)",
             }}
           >
-            Initier un mandat
+            {cta1}
             <ArrowRight
               size={16}
               className="group-hover:translate-x-1 transition-transform"
@@ -178,15 +180,13 @@ export default function HeroSection() {
               fontFamily: "var(--font-inter)",
             }}
           >
-            Découvrir la méthode
+            {cta2}
           </Link>
         </motion.div>
 
       </div>
 
-
-
-      {/* ── Curved bottom mask (AFD-style transition) ─── */}
+      {/* ── Curved bottom mask ─── */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden z-10 pointer-events-none">
         <svg
           viewBox="0 0 1440 72"

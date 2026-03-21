@@ -1,20 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { useLocale } from "next-intl";
 
 const G = "#C9A84C";
 
-const stats = [
-  { value: "9 Mds $", label: "Mobilisés" },
-  { value: "500+", label: "Participants" },
-  { value: "18", label: "Accords signés" },
-  { value: "Sept. 2025", label: "Casablanca" },
-];
+const STATS_DATA = {
+  fr: [
+    { value: "9 Mds $", label: "Mobilisés" },
+    { value: "500+", label: "Participants" },
+    { value: "18", label: "Accords signés" },
+    { value: "Sept. 2025", label: "Casablanca" },
+  ],
+  en: [
+    { value: "$9 Bn", label: "Mobilized" },
+    { value: "500+", label: "Participants" },
+    { value: "18", label: "Agreements signed" },
+    { value: "Sept. 2025", label: "Casablanca" },
+  ],
+};
 
 export default function PNDSection() {
+  const locale = useLocale() as "fr" | "en";
+  const stats = STATS_DATA[locale] ?? STATS_DATA.fr;
   return (
     <section
       className="relative flex items-center overflow-hidden"
@@ -83,7 +94,7 @@ export default function PNDSection() {
                 className="text-[9px] uppercase tracking-[0.38em] font-semibold leading-none mb-1.5"
                 style={{ color: "rgba(201,168,76,0.6)", fontFamily: "var(--font-inter)" }}
               >
-                Partenaire officiel
+                {locale === "en" ? "Official partner" : "Partenaire officiel"}
               </p>
               <p
                 className="text-sm font-black leading-none"
@@ -106,10 +117,21 @@ export default function PNDSection() {
               fontSize: "clamp(1.6rem, 5vw, 3.5rem)",
             }}
           >
-            RCA 2024-2028&nbsp;:{" "}
-            <span style={{ color: G }}>Sceller la confiance</span>
-            <br />
-            entre l&apos;État et la finance internationale
+            {locale === "en" ? (
+              <>
+                CAR 2024-2028:{" "}
+                <span style={{ color: G }}>Sealing trust</span>
+                <br />
+                between the State and international finance
+              </>
+            ) : (
+              <>
+                RCA 2024-2028&nbsp;:{" "}
+                <span style={{ color: G }}>Sceller la confiance</span>
+                <br />
+                entre l&apos;État et la finance internationale
+              </>
+            )}
           </motion.h2>
 
           {/* Corps */}
@@ -121,13 +143,26 @@ export default function PNDSection() {
             className="text-sm sm:text-base md:text-lg leading-relaxed mb-8 sm:mb-10"
             style={{ color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-inter)" }}
           >
-            Né dans le sillage du Plan National de Développement de la République
-            Centrafricaine, GIRA a orchestré la Table Ronde des Investisseurs (TRI) de
-            Casablanca, un événement historique ayant mobilisé{" "}
-            <strong className="font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>
-              9 milliards de dollars
-            </strong>{" "}
-            auprès de 500 participants issus de 4 continents, en septembre 2025.
+            {locale === "en" ? (
+              <>
+                Born out of the Central African Republic&apos;s National Development Plan, GIRA orchestrated
+                the Casablanca Investors Roundtable (CIR), a historic event that mobilized{" "}
+                <strong className="font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>
+                  9 billion dollars
+                </strong>{" "}
+                from 500 participants across 4 continents, in September 2025.
+              </>
+            ) : (
+              <>
+                Né dans le sillage du Plan National de Développement de la République
+                Centrafricaine, GIRA a orchestré la Table Ronde des Investisseurs (TRI) de
+                Casablanca, un événement historique ayant mobilisé{" "}
+                <strong className="font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>
+                  9 milliards de dollars
+                </strong>{" "}
+                auprès de 500 participants issus de 4 continents, en septembre 2025.
+              </>
+            )}
           </motion.p>
 
           {/* Chips de stats ── 2 colonnes sur mobile, 4 sur sm+ */}
@@ -176,7 +211,9 @@ export default function PNDSection() {
               className="inline-flex items-center gap-2 text-sm font-semibold group"
               style={{ color: G, fontFamily: "var(--font-inter)" }}
             >
-              Découvrir notre implication dans le PND &amp; la TRI
+              {locale === "en"
+                ? "Discover our involvement in the NDP & CIR"
+                : "Découvrir notre implication dans le PND & la TRI"}
               <ArrowRight
                 size={14}
                 className="group-hover:translate-x-1 transition-transform duration-200 flex-shrink-0"
@@ -199,7 +236,7 @@ export default function PNDSection() {
                 ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)")
               }
             >
-              Nous contacter
+              {locale === "en" ? "Contact us" : "Nous contacter"}
             </Link>
           </motion.div>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import {
@@ -11,6 +12,7 @@ import {
   MoveHorizontal,
 } from "lucide-react";
 import { useRef, useCallback } from "react";
+import { useLocale } from "next-intl";
 import dynamic from "next/dynamic";
 
 const LottiePlayer = dynamic(() => import("@/components/shared/LottiePlayer"), {
@@ -18,49 +20,8 @@ const LottiePlayer = dynamic(() => import("@/components/shared/LottiePlayer"), {
   loading: () => <div className="w-full h-full" style={{ minHeight: 80 }} />,
 });
 
-/* ─── Shared data (must match PiliersSection) ────────── */
-const piliers = [
-  {
-    num: "01",
-    label: "Viabilité",
-    titre: "L'ingénierie de la viabilité",
-    texte:
-      "Audit, reconfiguration et fiabilisation de l'architecture technique et financière de vos projets pour les rendre bancables.",
-    icon: ShieldCheck,
-  },
-  {
-    num: "02",
-    label: "Exécution",
-    titre: "Le pilotage absolu du risque",
-    texte:
-      "Du premier jalon à la livraison finale, nous garantissons délais, maîtrise budgétaire et conformité terrain.",
-    icon: Crosshair,
-  },
-  {
-    num: "03",
-    label: "Financement",
-    titre: "Mobiliser le capital stratégique",
-    texte:
-      "Accès privilégié aux bailleurs multilatéraux et fonds privés grâce à des montages financiers innovants et dé-risqués.",
-    icon: Landmark,
-  },
-  {
-    num: "04",
-    label: "Gouvernance",
-    titre: "Pérenniser la gouvernance locale",
-    texte:
-      "Transfert de compétences aux administrations africaines pour une souveraineté durable sur leurs projets.",
-    icon: Users,
-  },
-  {
-    num: "05",
-    label: "Impact",
-    titre: "Mesure de l'impact socio-économique",
-    texte:
-      "Évaluation continue des retombées pour garantir un développement durable et inclusif des populations locales.",
-    icon: Target,
-  },
-];
+/* Icons re-exported for type usage */
+export { ShieldCheck, Crosshair, Landmark, Users, Target };
 
 /* ─── Tokens ─────────────────────────────────────────── */
 const G = "#C9A84C";
@@ -174,9 +135,11 @@ function MobilePilierViz({ index }: { index: number }) {
 function MiniOrbit({
   active,
   onSelect,
+  piliers,
 }: {
   active: number;
   onSelect: (i: number) => void;
+  piliers: Array<{ num: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }> }>;
 }) {
   return (
     <div
@@ -397,11 +360,20 @@ const textItemVariants = {
 /* ════════════════════════════════════════════════════════
    MAIN COMPONENT
 ════════════════════════════════════════════════════════ */
+interface PilierItem {
+  num: string;
+  label: string;
+  titre: string;
+  texte: string;
+  icon: React.ComponentType<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }>;
+}
+
 interface MobilePiliersCarouselProps {
   active: number;
   direction: number;
   onSelect: (i: number) => void;
   onSwipe: (dir: 1 | -1) => void;
+  piliers: PilierItem[];
 }
 
 export default function MobilePiliersCarousel({
@@ -409,7 +381,9 @@ export default function MobilePiliersCarousel({
   direction,
   onSelect,
   onSwipe,
+  piliers,
 }: MobilePiliersCarouselProps) {
+  const locale = useLocale() as "fr" | "en";
   const hasInteracted = useRef(false);
 
   const handleDragEnd = useCallback(
@@ -438,7 +412,7 @@ export default function MobilePiliersCarousel({
   return (
     <div className="flex flex-col items-center gap-6">
       {/* ─── A: Mini Orbit ─── */}
-      <MiniOrbit active={active} onSelect={handleSelect} />
+      <MiniOrbit active={active} onSelect={handleSelect} piliers={piliers} />
 
       {/* ─── B + C: Swipeable content zone ─── */}
       <div
@@ -563,7 +537,7 @@ export default function MobilePiliersCarousel({
               color: "rgba(13,13,13,0.25)",
             }}
           >
-            Glissez pour explorer
+            {locale === "en" ? "Swipe to explore" : "Glissez pour explorer"}
           </span>
         </motion.div>
       )}

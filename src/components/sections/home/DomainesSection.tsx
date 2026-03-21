@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { useLocale } from "next-intl";
 
 /* ── Design tokens ─────────────────────────── */
 const GOLD = "#C9A84C";
@@ -166,75 +167,144 @@ interface Domaine {
   interventions: string[];
 }
 
-const domaines: Domaine[] = [
-  {
-    id: "gouvernement",
-    pill: "Gov. & Institutions",
-    tag: "Gouvernement · Ambassades · Ministères",
-    headline: "Digitaliser les institutions d'État",
-    description: "Conception et déploiement de portails officiels, sites d'ambassades, intranets ministériels et plateformes institutionnelles.",
-    interventions: ["Sites officiels de ministères", "Portails citoyens et guichets numériques", "Intranets sécurisés"],
-  },
-  {
-    id: "web-mobile",
-    pill: "Web & Mobile",
-    tag: "Web · Mobile · PME & Entreprises",
-    headline: "Des applications taillées pour vos enjeux",
-    description: "Développement d'applications web et mobiles sur mesure pour PME, grands groupes et organisations internationales.",
-    interventions: ["Applications web SaaS et plateformes métier", "Applications mobiles iOS et Android", "Back-office et tableaux de bord"],
-  },
-  {
-    id: "ia",
-    pill: "Intelligence Artificielle",
-    tag: "IA · Machine Learning · Automatisation",
-    headline: "Des intelligences artificielles sur mesure",
-    description: "Développement, entraînement et intégration de modèles IA adaptés à vos données et vos processus.",
-    interventions: ["Développement de modèles IA", "Chatbots et assistants virtuels", "Analyse prédictive et aide à la décision"],
-  },
-  {
-    id: "connectivite",
-    pill: "Connectivité",
-    tag: "Starlink · WiFi Hotspot · Infrastructure",
-    headline: "Connecter les zones isolées",
-    description: "Déploiement de points relais WiFi communautaires via Starlink, accès internet par paiement mobile.",
-    interventions: ["Infrastructure Starlink et points relais", "Hotspots communautaires (Mobile Money)", "Couverture réseau zones rurales"],
-  },
-  {
-    id: "securite",
-    pill: "Com. Sécurisée",
-    tag: "VPN · Chiffrement · Liaison inter-institutions",
-    headline: "Des canaux de communication inviolables",
-    description: "Mise en place de canaux sécurisés et chiffrés pour la liaison entre institutions et ambassades.",
-    interventions: ["VPN diplomatiques et tunnels chiffrés", "Messagerie sécurisée inter-institutions", "Audit de sécurité et conformité"],
-  },
-  {
-    id: "erp",
-    pill: "ERP & Systèmes",
-    tag: "ERP · Intégration · Solutions clés en main",
-    headline: "Des systèmes intégrés au service de la performance",
-    description: "Déploiement et intégration de solutions ERP, bases de données et outils d'évaluation pour entreprises et institutions publiques.",
-    interventions: ["Intégration ERP et solutions clés en main", "Bases de données et systèmes d'information d'État", "Tableaux de bord statistiques et outils d'évaluation"],
-  },
-  {
-    id: "sante",
-    pill: "Santé Digitale",
-    tag: "SIH · Télémédecine · e-Santé",
-    headline: "Digitaliser les systèmes de santé",
-    description: "Logiciels de gestion hospitalière, dossier patient numérique et plateformes de télémédecine.",
-    interventions: ["Systèmes d'information hospitaliers", "Dossier patient et télémédecine", "Dashboards épidémiologiques"],
-  },
-  {
-    id: "agriculture",
-    pill: "AgriTech",
-    tag: "AgriTech · Traçabilité · Applications mobiles",
-    headline: "Connecter l'agriculture à la technologie",
-    description: "Développement de plateformes AgriTech, systèmes de traçabilité et outils de gestion pour coopératives.",
-    interventions: ["Mise en relation agriculteurs et marchés", "Traçabilité des filières", "Applications de gestion des cultures"],
-  },
-];
+const DOMAINES_DATA: Record<string, Domaine[]> = {
+  fr: [
+    {
+      id: "gouvernement",
+      pill: "Gov. & Institutions",
+      tag: "Gouvernement · Ambassades · Ministères",
+      headline: "Digitaliser les institutions d'État",
+      description: "Conception et déploiement de portails officiels, sites d'ambassades, intranets ministériels et plateformes institutionnelles.",
+      interventions: ["Sites officiels de ministères", "Portails citoyens et guichets numériques", "Intranets sécurisés"],
+    },
+    {
+      id: "web-mobile",
+      pill: "Web & Mobile",
+      tag: "Web · Mobile · PME & Entreprises",
+      headline: "Des applications taillées pour vos enjeux",
+      description: "Développement d'applications web et mobiles sur mesure pour PME, grands groupes et organisations internationales.",
+      interventions: ["Applications web SaaS et plateformes métier", "Applications mobiles iOS et Android", "Back-office et tableaux de bord"],
+    },
+    {
+      id: "ia",
+      pill: "Intelligence Artificielle",
+      tag: "IA · Machine Learning · Automatisation",
+      headline: "Des intelligences artificielles sur mesure",
+      description: "Développement, entraînement et intégration de modèles IA adaptés à vos données et vos processus.",
+      interventions: ["Développement de modèles IA", "Chatbots et assistants virtuels", "Analyse prédictive et aide à la décision"],
+    },
+    {
+      id: "connectivite",
+      pill: "Connectivité",
+      tag: "Starlink · WiFi Hotspot · Infrastructure",
+      headline: "Connecter les zones isolées",
+      description: "Déploiement de points relais WiFi communautaires via Starlink, accès internet par paiement mobile.",
+      interventions: ["Infrastructure Starlink et points relais", "Hotspots communautaires (Mobile Money)", "Couverture réseau zones rurales"],
+    },
+    {
+      id: "securite",
+      pill: "Com. Sécurisée",
+      tag: "VPN · Chiffrement · Liaison inter-institutions",
+      headline: "Des canaux de communication inviolables",
+      description: "Mise en place de canaux sécurisés et chiffrés pour la liaison entre institutions et ambassades.",
+      interventions: ["VPN diplomatiques et tunnels chiffrés", "Messagerie sécurisée inter-institutions", "Audit de sécurité et conformité"],
+    },
+    {
+      id: "erp",
+      pill: "ERP & Systèmes",
+      tag: "ERP · Intégration · Solutions clés en main",
+      headline: "Des systèmes intégrés au service de la performance",
+      description: "Déploiement et intégration de solutions ERP, bases de données et outils d'évaluation pour entreprises et institutions publiques.",
+      interventions: ["Intégration ERP et solutions clés en main", "Bases de données et systèmes d'information d'État", "Tableaux de bord statistiques et outils d'évaluation"],
+    },
+    {
+      id: "sante",
+      pill: "Santé Digitale",
+      tag: "SIH · Télémédecine · e-Santé",
+      headline: "Digitaliser les systèmes de santé",
+      description: "Logiciels de gestion hospitalière, dossier patient numérique et plateformes de télémédecine.",
+      interventions: ["Systèmes d'information hospitaliers", "Dossier patient et télémédecine", "Dashboards épidémiologiques"],
+    },
+    {
+      id: "agriculture",
+      pill: "AgriTech",
+      tag: "AgriTech · Traçabilité · Applications mobiles",
+      headline: "Connecter l'agriculture à la technologie",
+      description: "Développement de plateformes AgriTech, systèmes de traçabilité et outils de gestion pour coopératives.",
+      interventions: ["Mise en relation agriculteurs et marchés", "Traçabilité des filières", "Applications de gestion des cultures"],
+    },
+  ],
+  en: [
+    {
+      id: "gouvernement",
+      pill: "Gov. & Institutions",
+      tag: "Government · Embassies · Ministries",
+      headline: "Digitalizing state institutions",
+      description: "Design and deployment of official portals, embassy websites, ministerial intranets and institutional platforms.",
+      interventions: ["Official ministry websites", "Citizen portals and digital service counters", "Secure intranets"],
+    },
+    {
+      id: "web-mobile",
+      pill: "Web & Mobile",
+      tag: "Web · Mobile · SMEs & Companies",
+      headline: "Applications tailored to your challenges",
+      description: "Custom web and mobile application development for SMEs, large groups and international organizations.",
+      interventions: ["SaaS web applications and business platforms", "iOS and Android mobile apps", "Back-office and dashboards"],
+    },
+    {
+      id: "ia",
+      pill: "Artificial Intelligence",
+      tag: "AI · Machine Learning · Automation",
+      headline: "Bespoke artificial intelligence solutions",
+      description: "Development, training and integration of AI models tailored to your data and processes.",
+      interventions: ["AI model development", "Chatbots and virtual assistants", "Predictive analytics and decision support"],
+    },
+    {
+      id: "connectivite",
+      pill: "Connectivity",
+      tag: "Starlink · WiFi Hotspot · Infrastructure",
+      headline: "Connecting isolated areas",
+      description: "Deployment of community WiFi relay points via Starlink, internet access via mobile payment.",
+      interventions: ["Starlink infrastructure and relay points", "Community hotspots (Mobile Money)", "Rural network coverage"],
+    },
+    {
+      id: "securite",
+      pill: "Secure Comms",
+      tag: "VPN · Encryption · Inter-institution links",
+      headline: "Inviolable communication channels",
+      description: "Establishment of secure, encrypted channels for liaison between institutions and embassies.",
+      interventions: ["Diplomatic VPNs and encrypted tunnels", "Secure inter-institution messaging", "Security audit and compliance"],
+    },
+    {
+      id: "erp",
+      pill: "ERP & Systems",
+      tag: "ERP · Integration · Turnkey solutions",
+      headline: "Integrated systems for performance",
+      description: "Deployment and integration of ERP solutions, databases and evaluation tools for companies and public institutions.",
+      interventions: ["ERP integration and turnkey solutions", "State databases and information systems", "Statistical dashboards and evaluation tools"],
+    },
+    {
+      id: "sante",
+      pill: "Digital Health",
+      tag: "HIS · Telemedicine · e-Health",
+      headline: "Digitalizing health systems",
+      description: "Hospital management software, digital patient records and telemedicine platforms.",
+      interventions: ["Hospital information systems", "Patient records and telemedicine", "Epidemiological dashboards"],
+    },
+    {
+      id: "agriculture",
+      pill: "AgriTech",
+      tag: "AgriTech · Traceability · Mobile apps",
+      headline: "Connecting agriculture to technology",
+      description: "Development of AgriTech platforms, traceability systems and management tools for cooperatives.",
+      interventions: ["Connecting farmers to markets", "Supply chain traceability", "Crop management applications"],
+    },
+  ],
+};
 
 /* ── Active Card Content — layout horizontal (icon left + content right) ── */
 function ActiveCard({ d, iconIndex }: { d: Domaine; iconIndex: number }) {
+  const locale = useLocale() as "fr" | "en";
   const Icon = ICONS[iconIndex];
   return (
     <div className="h-full flex flex-col lg:flex-row p-6 md:p-8 lg:p-10 overflow-y-auto">
@@ -308,7 +378,7 @@ function ActiveCard({ d, iconIndex }: { d: Domaine; iconIndex: number }) {
             className="inline-flex items-center gap-2 self-start text-sm font-bold uppercase tracking-wider transition-all duration-200 hover:gap-3 mt-auto"
             style={{ color: GOLD, fontFamily: "var(--font-inter)" }}
           >
-            En savoir plus
+            {locale === "en" ? "Learn more" : "En savoir plus"}
             <ArrowRight size={14} strokeWidth={2.5} />
           </Link>
         </motion.div>
@@ -338,9 +408,15 @@ function PillLabel({ label, isHovered }: { label: string; isHovered: boolean }) 
 
 /* ── Main Section ─────────────────────────────── */
 export default function DomainesSection() {
+  const locale = useLocale() as "fr" | "en";
+  const domaines = DOMAINES_DATA[locale] ?? DOMAINES_DATA.fr;
+
   const [active, setActive] = useState(0);
   const [hoveredPill, setHoveredPill] = useState<number | null>(null);
   const pausedUntilRef = useRef(0);
+
+  /* Reset on locale change */
+  useEffect(() => { setActive(0); }, [locale]);
 
   /* Auto-advance */
   useEffect(() => {
@@ -355,7 +431,7 @@ export default function DomainesSection() {
     };
     t = setTimeout(tryAdvance, AUTO_DELAY);
     return () => clearTimeout(t);
-  }, [active]);
+  }, [active, domaines.length]);
 
   const select = useCallback((i: number) => {
     pausedUntilRef.current = Date.now() + MANUAL_PAUSE;
@@ -396,13 +472,13 @@ export default function DomainesSection() {
             className="text-[11px] uppercase tracking-[0.28em] font-bold mb-4"
             style={{ color: GOLD, fontFamily: "var(--font-inter)" }}
           >
-            Domaines d&apos;expertise
+            {locale === "en" ? "Areas of expertise" : "Domaines d\u2019expertise"}
           </p>
           <h2
             className="text-3xl md:text-4xl lg:text-5xl font-black leading-tight max-w-3xl"
             style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
           >
-            Ce que nous savons faire
+            {locale === "en" ? "What we do best" : "Ce que nous savons faire"}
           </h2>
         </motion.div>
 

@@ -1,8 +1,10 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocale } from "next-intl";
 import {
   ArrowRight,
   ShieldCheck,
@@ -21,48 +23,92 @@ const LottiePlayer = dynamic(() => import("@/components/shared/LottiePlayer"), {
 });
 
 /* ─── Data ──────────────────────────────────────────────── */
-const piliers = [
-  {
-    num: "01",
-    label: "Viabilité",
-    titre: "L'ingénierie de la viabilité",
-    texte:
-      "Audit, reconfiguration et fiabilisation de l'architecture technique et financière de vos projets pour les rendre bancables.",
-    icon: ShieldCheck,
-  },
-  {
-    num: "02",
-    label: "Exécution",
-    titre: "Le pilotage absolu du risque",
-    texte:
-      "Du premier jalon à la livraison finale, nous garantissons délais, maîtrise budgétaire et conformité terrain.",
-    icon: Crosshair,
-  },
-  {
-    num: "03",
-    label: "Financement",
-    titre: "Mobiliser le capital stratégique",
-    texte:
-      "Accès privilégié aux bailleurs multilatéraux et fonds privés grâce à des montages financiers innovants et dé-risqués.",
-    icon: Landmark,
-  },
-  {
-    num: "04",
-    label: "Gouvernance",
-    titre: "Pérenniser la gouvernance locale",
-    texte:
-      "Transfert de compétences aux administrations africaines pour une souveraineté durable sur leurs projets.",
-    icon: Users,
-  },
-  {
-    num: "05",
-    label: "Impact",
-    titre: "Mesure de l'impact socio-économique",
-    texte:
-      "Évaluation continue des retombées pour garantir un développement durable et inclusif des populations locales.",
-    icon: Target,
-  },
-];
+const PILIERS_DATA = {
+  fr: [
+    {
+      num: "01",
+      label: "Viabilité",
+      titre: "L'ingénierie de la viabilité",
+      texte:
+        "Audit, reconfiguration et fiabilisation de l'architecture technique et financière de vos projets pour les rendre bancables.",
+      icon: ShieldCheck,
+    },
+    {
+      num: "02",
+      label: "Exécution",
+      titre: "Le pilotage absolu du risque",
+      texte:
+        "Du premier jalon à la livraison finale, nous garantissons délais, maîtrise budgétaire et conformité terrain.",
+      icon: Crosshair,
+    },
+    {
+      num: "03",
+      label: "Financement",
+      titre: "Mobiliser le capital stratégique",
+      texte:
+        "Accès privilégié aux bailleurs multilatéraux et fonds privés grâce à des montages financiers innovants et dé-risqués.",
+      icon: Landmark,
+    },
+    {
+      num: "04",
+      label: "Gouvernance",
+      titre: "Pérenniser la gouvernance locale",
+      texte:
+        "Transfert de compétences aux administrations africaines pour une souveraineté durable sur leurs projets.",
+      icon: Users,
+    },
+    {
+      num: "05",
+      label: "Impact",
+      titre: "Mesure de l'impact socio-économique",
+      texte:
+        "Évaluation continue des retombées pour garantir un développement durable et inclusif des populations locales.",
+      icon: Target,
+    },
+  ],
+  en: [
+    {
+      num: "01",
+      label: "Viability",
+      titre: "Engineering viability",
+      texte:
+        "Audit, reconfiguration and consolidation of the technical and financial architecture of your projects to make them bankable.",
+      icon: ShieldCheck,
+    },
+    {
+      num: "02",
+      label: "Execution",
+      titre: "Absolute risk management",
+      texte:
+        "From the first milestone to final delivery, we guarantee deadlines, budget control, and on-site compliance.",
+      icon: Crosshair,
+    },
+    {
+      num: "03",
+      label: "Financing",
+      titre: "Mobilizing strategic capital",
+      texte:
+        "Privileged access to multilateral lenders and private funds through innovative, de-risked financial structures.",
+      icon: Landmark,
+    },
+    {
+      num: "04",
+      label: "Governance",
+      titre: "Sustaining local governance",
+      texte:
+        "Skills transfer to African administrations for lasting sovereignty over their projects.",
+      icon: Users,
+    },
+    {
+      num: "05",
+      label: "Impact",
+      titre: "Measuring socio-economic impact",
+      texte:
+        "Continuous assessment of outcomes to ensure sustainable and inclusive development for local populations.",
+      icon: Target,
+    },
+  ],
+};
 
 /* ─── Tokens ─────────────────────────────────────────────── */
 const G = "#C9A84C";
@@ -356,12 +402,16 @@ function PilierViz({ index }: { index: number }) {
    - Items follow each other in a queue arc, not spread around circle
    - Transitions are slow and smooth
 ──────────────────────────────────────────────────────────── */
+type PilierEntry = { num: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number; style?: React.CSSProperties }> };
+
 function OrbitPanel({
   active,
   onSelect,
+  piliers,
 }: {
   active: number;
   onSelect: (i: number) => void;
+  piliers: PilierEntry[];
 }) {
   return (
     <div
@@ -573,6 +623,9 @@ const slideVariants = {
    PiliersSection — composant principal
 ──────────────────────────────────────────────────────────── */
 export default function PiliersSection() {
+  const locale = useLocale() as "fr" | "en";
+  const piliers = PILIERS_DATA[locale] ?? PILIERS_DATA.fr;
+
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState(1);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -602,7 +655,7 @@ export default function PiliersSection() {
     setDirection(dir);
     setActive((prev) => (prev + dir + piliers.length) % piliers.length);
     startTimer();
-  }, [startTimer]);
+  }, [startTimer, piliers.length]);
 
   return (
     <>
@@ -621,23 +674,31 @@ export default function PiliersSection() {
               className="text-xs uppercase tracking-[0.28em] font-semibold mb-4"
               style={{ color: G, fontFamily: "var(--font-inter)" }}
             >
-              Notre différence
+              {locale === "en" ? "Our difference" : "Notre différence"}
             </p>
             <h2
               className="text-4xl md:text-5xl lg:text-[52px] font-black leading-tight"
               style={{ fontFamily: "var(--font-montserrat)", color: TXT_DARK }}
             >
-              Nous changeons le narratif
-              <br className="hidden md:block" />
-              en passant à{" "}
-              <span
-                style={{
-                  background:
-                    "linear-gradient(transparent 54%, rgba(201,168,76,0.45) 54%)",
-                }}
-              >
-                l&apos;exécution
-              </span>
+              {locale === "en" ? (
+                <>
+                  We change the narrative
+                  <br className="hidden md:block" />
+                  by moving to{" "}
+                  <span style={{ background: "linear-gradient(transparent 54%, rgba(201,168,76,0.45) 54%)" }}>
+                    execution
+                  </span>
+                </>
+              ) : (
+                <>
+                  Nous changeons le narratif
+                  <br className="hidden md:block" />
+                  en passant à{" "}
+                  <span style={{ background: "linear-gradient(transparent 54%, rgba(201,168,76,0.45) 54%)" }}>
+                    l&apos;exécution
+                  </span>
+                </>
+              )}
             </h2>
           </motion.div>
 
@@ -648,6 +709,7 @@ export default function PiliersSection() {
               direction={direction}
               onSelect={handleSelect}
               onSwipe={handleSwipe}
+              piliers={piliers}
             />
           </div>
 
@@ -659,7 +721,7 @@ export default function PiliersSection() {
               style={{ position: "relative", zIndex: 5 }}
             >
               <div className="flex justify-center">
-                <OrbitPanel active={active} onSelect={handleSelect} />
+                <OrbitPanel active={active} onSelect={handleSelect} piliers={piliers} />
               </div>
             </div>
 
@@ -734,29 +796,54 @@ export default function PiliersSection() {
 /* ────────────────────────────────────────────────────────────
    Data — identité items
 ──────────────────────────────────────────────────────────── */
-const identiteItems = [
-  {
-    num: "01",
-    title: "Notre mission",
-    desc: "Créer un impact mesurable et durable en structurant, finançant et pilotant des projets prioritaires au service des gouvernements africains, des institutions internationales et des investisseurs engagés pour le continent.",
-    img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=900&q=85",
-    alt: "Équipe GIRA en réunion stratégique",
-  },
-  {
-    num: "02",
-    title: "Notre approche",
-    desc: "Une méthodologie éprouvée alliant rigueur technique et ancrage local, du cadrage stratégique à la livraison finale, en passant par la mobilisation des financements multilatéraux et le pilotage opérationnel terrain.",
-    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=85",
-    alt: "Analyse stratégique et planification de projets",
-  },
-  {
-    num: "03",
-    title: "Nos valeurs",
-    desc: "Excellence, intégrité et engagement au cœur de chaque décision. Nous agissons avec transparence, plaçons l'impact au-dessus de tout et défendons une vision africaine du développement souverain et durable.",
-    img: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=900&q=85",
-    alt: "Valeurs et engagement de l'équipe GIRA",
-  },
-];
+const IDENTITE_ITEMS = {
+  fr: [
+    {
+      num: "01",
+      title: "Notre mission",
+      desc: "Créer un impact mesurable et durable en structurant, finançant et pilotant des projets prioritaires au service des gouvernements africains, des institutions internationales et des investisseurs engagés pour le continent.",
+      img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=900&q=85",
+      alt: "Équipe GIRA en réunion stratégique",
+    },
+    {
+      num: "02",
+      title: "Notre approche",
+      desc: "Une méthodologie éprouvée alliant rigueur technique et ancrage local, du cadrage stratégique à la livraison finale, en passant par la mobilisation des financements multilatéraux et le pilotage opérationnel terrain.",
+      img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=85",
+      alt: "Analyse stratégique et planification de projets",
+    },
+    {
+      num: "03",
+      title: "Nos valeurs",
+      desc: "Excellence, intégrité et engagement au cœur de chaque décision. Nous agissons avec transparence, plaçons l'impact au-dessus de tout et défendons une vision africaine du développement souverain et durable.",
+      img: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=900&q=85",
+      alt: "Valeurs et engagement de l'équipe GIRA",
+    },
+  ],
+  en: [
+    {
+      num: "01",
+      title: "Our mission",
+      desc: "Creating measurable and lasting impact by structuring, financing, and managing priority projects for African governments, international institutions, and investors committed to the continent.",
+      img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=900&q=85",
+      alt: "GIRA team in strategic meeting",
+    },
+    {
+      num: "02",
+      title: "Our approach",
+      desc: "A proven methodology combining technical rigor and local anchoring, from strategic framing to final delivery, including multilateral financing mobilization and operational field management.",
+      img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=85",
+      alt: "Strategic analysis and project planning",
+    },
+    {
+      num: "03",
+      title: "Our values",
+      desc: "Excellence, integrity and commitment at the heart of every decision. We act with transparency, place impact above all else, and champion an African vision of sovereign and sustainable development.",
+      img: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=900&q=85",
+      alt: "Values and commitment of the GIRA team",
+    },
+  ],
+};
 
 const SERIF = "Georgia, 'Cambria', 'Times New Roman', serif";
 
@@ -764,6 +851,8 @@ const SERIF = "Georgia, 'Cambria', 'Times New Roman', serif";
    NousConnaitreSection — accordion hover (desktop) / tap (mobile)
 ──────────────────────────────────────────────────────────── */
 function NousConnaitreSection() {
+  const locale = useLocale() as "fr" | "en";
+  const identiteItems = IDENTITE_ITEMS[locale] ?? IDENTITE_ITEMS.fr;
   const [open, setOpen] = useState<number | null>(null);
 
   /* Desktop: open on hover, close on leave */
@@ -800,7 +889,7 @@ function NousConnaitreSection() {
             className="text-[11px] uppercase tracking-[0.32em] font-bold mb-4"
             style={{ color: G, fontFamily: "var(--font-inter)" }}
           >
-            Notre identité
+            {locale === "en" ? "Our identity" : "Notre identité"}
           </p>
           <h2
             className="leading-tight"
@@ -812,8 +901,11 @@ function NousConnaitreSection() {
               letterSpacing: "-0.02em",
             }}
           >
-            Nous{" "}
-            <em style={{ fontStyle: "italic", color: "#555" }}>connaître</em>
+            {locale === "en" ? (
+              <>Know{" "}<em style={{ fontStyle: "italic", color: "#555" }}>us</em></>
+            ) : (
+              <>Nous{" "}<em style={{ fontStyle: "italic", color: "#555" }}>connaître</em></>
+            )}
           </h2>
         </motion.div>
 
@@ -995,7 +1087,7 @@ function NousConnaitreSection() {
             style={{ color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
           >
             <span className="group-hover:translate-x-1 transition-transform duration-200 inline-block">
-              En comprendre plus
+              {locale === "en" ? "Learn more" : "En comprendre plus"}
             </span>
             <span
               className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"

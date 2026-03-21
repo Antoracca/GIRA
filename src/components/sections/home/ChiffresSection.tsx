@@ -2,37 +2,67 @@
 
 import { motion } from "framer-motion";
 import { useCountUp } from "@/hooks/useCountUp";
+import { useLocale } from "next-intl";
 
 const G = "#C9A84C";
 
-const stats = [
-  {
-    value: 45,
-    suffix: "+",
-    label: "Experts mobilisés",
-    desc: "Professionnels issus de ministères, institutions financières et cabinets internationaux",
-  },
-  {
-    value: 3,
-    suffix: "",
-    label: "Pays de présence",
-    desc: "Paris · Casablanca · Bratislava, un ancrage stratégique entre l'Europe et l'Afrique",
-  },
-  {
-    value: 8,
-    suffix: "",
-    label: "Secteurs couverts",
-    desc: "Eau, santé, énergie, agriculture, mines, construction, tech et transports",
-  },
-  {
-    value: 1,
-    suffix: "",
-    label: "PND soutenu",
-    desc: "Partenaire officiel du Plan National de Développement RCA 2024-2028",
-  },
-];
+const STATS_DATA = {
+  fr: [
+    {
+      value: 45,
+      suffix: "+",
+      label: "Experts mobilisés",
+      desc: "Professionnels issus de ministères, institutions financières et cabinets internationaux",
+    },
+    {
+      value: 3,
+      suffix: "",
+      label: "Pays de présence",
+      desc: "Paris · Casablanca · Bratislava, un ancrage stratégique entre l'Europe et l'Afrique",
+    },
+    {
+      value: 8,
+      suffix: "",
+      label: "Secteurs couverts",
+      desc: "Eau, santé, énergie, agriculture, mines, construction, tech et transports",
+    },
+    {
+      value: 1,
+      suffix: "",
+      label: "PND soutenu",
+      desc: "Partenaire officiel du Plan National de Développement RCA 2024-2028",
+    },
+  ],
+  en: [
+    {
+      value: 45,
+      suffix: "+",
+      label: "Experts mobilized",
+      desc: "Professionals from ministries, financial institutions and international consulting firms",
+    },
+    {
+      value: 3,
+      suffix: "",
+      label: "Countries of presence",
+      desc: "Paris · Casablanca · Bratislava, a strategic foothold between Europe and Africa",
+    },
+    {
+      value: 8,
+      suffix: "",
+      label: "Sectors covered",
+      desc: "Water, health, energy, agriculture, mining, construction, tech and transport",
+    },
+    {
+      value: 1,
+      suffix: "",
+      label: "NDP supported",
+      desc: "Official partner of the Central African Republic National Development Plan 2024-2028",
+    },
+  ],
+};
 
-function StatItem({ stat, index }: { stat: (typeof stats)[0]; index: number }) {
+type StatEntry = { value: number; suffix: string; label: string; desc: string };
+function StatItem({ stat, index }: { stat: StatEntry; index: number }) {
   const { count, ref } = useCountUp(stat.value, 2200);
 
   return (
@@ -120,6 +150,8 @@ function StatItem({ stat, index }: { stat: (typeof stats)[0]; index: number }) {
 }
 
 export default function ChiffresSection() {
+  const locale = useLocale() as "fr" | "en";
+  const stats = STATS_DATA[locale] ?? STATS_DATA.fr;
   return (
     <section
       className="relative py-16 sm:py-20 md:py-28 overflow-hidden"
@@ -160,7 +192,7 @@ export default function ChiffresSection() {
             className="text-[10px] uppercase tracking-[0.28em] font-semibold mb-3"
             style={{ color: G, fontFamily: "var(--font-inter)" }}
           >
-            Notre empreinte
+            {locale === "en" ? "Our footprint" : "Notre empreinte"}
           </p>
           <h2
             className="font-black leading-tight"
@@ -170,10 +202,17 @@ export default function ChiffresSection() {
               fontSize: "clamp(1.6rem, 5vw, 3rem)",
             }}
           >
-            Des résultats concrets,{" "}
-            <span style={{ color: "rgba(255,255,255,0.35)" }}>
-              une présence affirmée
-            </span>
+            {locale === "en" ? (
+              <>
+                Concrete results,{" "}
+                <span style={{ color: "rgba(255,255,255,0.35)" }}>an established presence</span>
+              </>
+            ) : (
+              <>
+                Des résultats concrets,{" "}
+                <span style={{ color: "rgba(255,255,255,0.35)" }}>une présence affirmée</span>
+              </>
+            )}
           </h2>
         </motion.div>
 
@@ -207,8 +246,9 @@ export default function ChiffresSection() {
               fontStyle: "italic",
             }}
           >
-            &ldquo;Notre ambition : structurer 100 projets à fort impact d&apos;ici 2030,
-            au service de 100 millions d&apos;Africains.&rdquo;
+            {locale === "en"
+              ? "\u201COur ambition: to structure 100 high-impact projects by 2030, serving 100 million Africans.\u201D"
+              : "\u201CNos ambitions\u00a0: structurer 100 projets \u00e0 fort impact d\u2019ici 2030, au service de 100 millions d\u2019Africains.\u201D"}
           </p>
         </motion.div>
 
