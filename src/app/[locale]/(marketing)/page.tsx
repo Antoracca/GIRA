@@ -6,6 +6,7 @@ import DomainesSection from "@/components/sections/home/DomainesSection";
 import ChiffresSection from "@/components/sections/home/ChiffresSection";
 import PNDSection from "@/components/sections/home/PNDSection";
 import CTASection from "@/components/sections/home/CTASection";
+import GiraDevSection from "@/components/sections/home/GiraDevSection";
 
 export const metadata: Metadata = {
   title: "GIRA — Cabinet d'exécution des projets structurants en Afrique",
@@ -56,6 +57,7 @@ export default function HomePage() {
       <AudienceSection />
       <PiliersSection />
       <DomainesSection />
+      <GiraDevSection />
       <ChiffresSection />
       <PNDSection />
       <CTASection />
