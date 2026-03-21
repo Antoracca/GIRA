@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Link } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -12,6 +12,13 @@ import { ArrowRight } from "lucide-react";
 
 export default function GiraDevSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  function handleNavigate() {
+    // Force scroll to absolute top before navigating
+    window.scrollTo({ top: 0, behavior: "instant" });
+    router.push("/x");
+  }
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -117,9 +124,9 @@ export default function GiraDevSection() {
           transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="mt-8 md:mt-10"
         >
-          <Link
-            href="/x"
-            className="group inline-flex items-center gap-3 px-7 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300"
+          <button
+            onClick={handleNavigate}
+            className="group inline-flex items-center gap-3 px-7 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer"
             style={{
               backgroundColor: "#C9A84C",
               color: "#0D0D0D",
@@ -131,7 +138,7 @@ export default function GiraDevSection() {
               size={16}
               className="transition-transform duration-300 group-hover:translate-x-1"
             />
-          </Link>
+          </button>
         </motion.div>
       </div>
 
