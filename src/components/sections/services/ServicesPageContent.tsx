@@ -301,33 +301,6 @@ const staggerContainer = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-/* ─── Sidebar nav ───────────────────────────────────── */
-
-function SidebarNav({ label, services }: { label: string; services: ServiceSection[] }) {
-  return (
-    <aside className="hidden xl:block fixed top-32 left-8 z-30 w-52">
-      <p
-        className="text-xs uppercase tracking-widest mb-4 font-semibold"
-        style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
-      >
-        {label}
-      </p>
-      <nav className="space-y-2">
-        {services.map((s) => (
-          <a
-            key={s.id}
-            href={`#${s.id}`}
-            className="block text-sm leading-snug py-1 transition-colors duration-200 hover:text-[#C9A84C]"
-            style={{ color: "#888888", fontFamily: "var(--font-inter)" }}
-          >
-            {s.title}
-          </a>
-        ))}
-      </nav>
-    </aside>
-  );
-}
-
 /* ─── Service section component ─────────────────────── */
 
 function ServiceBlock({ service, ctaLabel }: { service: ServiceSection; ctaLabel: string }) {
@@ -558,7 +531,6 @@ export default function ServicesPageContent() {
       </section>
 
       {/* ── Sidebar nav ───────────────────────────── */}
-      <SidebarNav label={t.sidebarLabel} services={t.services} />
 
       {/* ── Service sections ──────────────────────── */}
       {t.services.map((service) => (
