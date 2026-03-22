@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Loader2, ChevronRight, ArrowRight, UserCheck, Phone } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { ChatMessage } from "@/lib/types";
 
@@ -67,24 +67,55 @@ function inlineMarkdown(text: string): React.ReactNode[] {
   return parts;
 }
 
-/* ── Messages pré-définis ────────────────────────────────── */
-const WELCOME: ChatMessage = {
-  role: "assistant",
-  content: "Bonjour ! Je suis l'assistant GIRA. Je peux répondre à vos questions, qualifier votre projet ou vous proposer un premier devis indicatif.\n\nComment puis-je vous aider ?",
-};
-
-const INACTIVITY_MSGS = [
-  "Êtes-vous toujours là ? Je suis disponible si vous avez des questions sur nos services ou si vous souhaitez qualifier votre projet. 😊",
-  "Puis-je vous aider à aller plus loin ? Notre équipe d'experts est également disponible pour un échange personnalisé.",
-  "N'hésitez pas à me poser vos questions — ou à contacter directement notre équipe via le formulaire pour une réponse formelle.",
-];
-
-const SUGGESTIONS = [
-  "Quels sont les services de GIRA ?",
-  "Je veux demander un devis",
-  "GIRA et le PND RCA 2024-2028",
-  "Comment rejoindre le réseau GIRA ?",
-];
+/* ── Messages pré-définis (locale-keyed) ─────────────────── */
+const CHAT_DATA = {
+  fr: {
+    welcome: "Bonjour ! Je suis l'assistant GIRA. Je peux répondre à vos questions, qualifier votre projet ou vous proposer un premier devis indicatif.\n\nComment puis-je vous aider ?",
+    inactivity: [
+      "Êtes-vous toujours là ? Je suis disponible si vous avez des questions sur nos services ou si vous souhaitez qualifier votre projet.",
+      "Puis-je vous aider à aller plus loin ? Notre équipe d'experts est également disponible pour un échange personnalisé.",
+      "N'hésitez pas à me poser vos questions — ou à contacter directement notre équipe via le formulaire pour une réponse formelle.",
+    ],
+    suggestions: [
+      "Quels sont les services de GIRA ?",
+      "Je veux demander un devis",
+      "GIRA et le PND RCA 2024-2028",
+      "Comment rejoindre le réseau GIRA ?",
+    ],
+    expertLabel: "Parler à un expert",
+    expertBody: "Un consultant GIRA peut vous accompagner personnellement dans la structuration de votre projet.",
+    expertCta: "Initier un mandat",
+    contactLink: "Formulaire de contact",
+    formCta: "Passer au formulaire de contact",
+    errorMsg: "Une erreur est survenue. Contactez-nous directement à contact@gira-cf.com.",
+    fallbackMsg: "Je n'ai pas pu générer une réponse. Réessayez.",
+    closeLabel: "Fermer l'assistant",
+    suggestionsLabel: "Suggestions",
+  },
+  en: {
+    welcome: "Hello! I'm the GIRA assistant. I can answer your questions, qualify your project or provide an initial indicative quote.\n\nHow can I help you?",
+    inactivity: [
+      "Are you still there? I'm available if you have questions about our services or would like to qualify your project.",
+      "Can I help you go further? Our team of experts is also available for a personalized discussion.",
+      "Feel free to ask me your questions — or contact our team directly via the form for a formal response.",
+    ],
+    suggestions: [
+      "What are GIRA's services?",
+      "I want to request a quote",
+      "GIRA and the RCA NDP 2024-2028",
+      "How to join the GIRA network?",
+    ],
+    expertLabel: "Talk to an expert",
+    expertBody: "A GIRA consultant can personally guide you through the structuring of your project.",
+    expertCta: "Initiate a mandate",
+    contactLink: "Contact form",
+    formCta: "Go to contact form",
+    errorMsg: "An error occurred. Contact us directly at contact@gira-cf.com.",
+    fallbackMsg: "I couldn't generate a response. Please try again.",
+    closeLabel: "Close assistant",
+    suggestionsLabel: "Suggestions",
+  },
+} as const;
 
 /* ── Icône chat ──────────────────────────────────────────── */
 function ChatIcon({ size = 24 }: { size?: number }) {
@@ -104,9 +135,14 @@ function ChatIcon({ size = 24 }: { size?: number }) {
 ══════════════════════════════════════════════════════════ */
 export default function ChatWidget() {
   const t = useTranslations("chat");
+  const rawLocale = useLocale();
+  const locale: "fr" | "en" = rawLocale === "en" ? "en" : "fr";
+  const c = CHAT_DATA[locale];
+
+  const welcomeMsg: ChatMessage = { role: "assistant", content: c.welcome };
 
   const [isOpen, setIsOpen]         = useState(false);
-  const [messages, setMessages]     = useState<ChatMessage[]>([WELCOME]);
+  const [messages, setMessages]     = useState<ChatMessage[]>([welcomeMsg]);
   const [input, setInput]           = useState("");
   const [isLoading, setIsLoading]   = useState(false);
   const [hasSent, setHasSent]       = useState(false);
@@ -140,10 +176,10 @@ export default function ChatWidget() {
     if (!isOpen || isLoading) return;
 
     inactivityTimer.current = setTimeout(() => {
-      const idx = inactivityCount % INACTIVITY_MSGS.length;
+      const idx = inactivityCount % c.inactivity.length;
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: INACTIVITY_MSGS[idx] },
+        { role: "assistant", content: c.inactivity[idx] },
       ]);
       setInactivityCount((c) => c + 1);
       // Après 2 relances, proposer un expert
@@ -180,12 +216,12 @@ export default function ChatWidget() {
       const data = await res.json();
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: data.message ?? "Je n'ai pas pu générer une réponse. Réessayez." },
+        { role: "assistant", content: data.message ?? c.fallbackMsg },
       ]);
     } catch {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Une erreur est survenue. Contactez-nous directement à contact@gira-cf.com." },
+        { role: "assistant", content: c.errorMsg },
       ]);
     } finally {
       setIsLoading(false);
@@ -275,7 +311,7 @@ export default function ChatWidget() {
                   onClick={() => setIsOpen(false)}
                   className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors hover:opacity-70"
                   style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
-                  aria-label="Fermer l'assistant"
+                  aria-label={c.closeLabel}
                 >
                   <X size={17} strokeWidth={2} style={{ color: "rgba(255,255,255,0.7)" }} />
                 </button>
@@ -347,10 +383,10 @@ export default function ChatWidget() {
                     >
                       <p className="text-[10px] font-bold uppercase tracking-widest mb-3 px-1"
                         style={{ color: "rgba(0,0,0,0.3)", fontFamily: "var(--font-inter)" }}>
-                        Suggestions
+                        {c.suggestionsLabel}
                       </p>
                       <div className="flex flex-col gap-2">
-                        {SUGGESTIONS.map((s) => (
+                        {c.suggestions.map((s) => (
                           <button key={s} onClick={() => send(s)}
                             className="flex items-center justify-between w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all hover:opacity-80 active:scale-[0.98]"
                             style={{
@@ -385,24 +421,24 @@ export default function ChatWidget() {
                           <UserCheck size={14} style={{ color: G }} />
                           <p className="text-[11px] font-bold uppercase tracking-widest"
                             style={{ color: G, fontFamily: "var(--font-montserrat)" }}>
-                            Parler à un expert
+                            {c.expertLabel}
                           </p>
                         </div>
                         <p className="text-xs mb-3" style={{ color: "#555", fontFamily: "var(--font-inter)" }}>
-                          Un consultant GIRA peut vous accompagner personnellement dans la structuration de votre projet.
+                          {c.expertBody}
                         </p>
                         <div className="flex flex-col gap-2">
                           <Link href="/contact" onClick={() => setIsOpen(false)}
                             className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold transition-all hover:opacity-90"
                             style={{ backgroundColor: G, color: "#0D0D0D", fontFamily: "var(--font-inter)" }}>
                             <Phone size={12} />
-                            Initier un mandat
+                            {c.expertCta}
                             <ArrowRight size={12} strokeWidth={2.5} />
                           </Link>
                           <Link href="/contact" onClick={() => setIsOpen(false)}
                             className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-xs font-medium transition-all hover:opacity-80"
                             style={{ border: `1px solid ${G}40`, color: G, fontFamily: "var(--font-inter)" }}>
-                            Formulaire de contact
+                            {c.contactLink}
                           </Link>
                         </div>
                       </div>
@@ -425,7 +461,7 @@ export default function ChatWidget() {
                     <Link href="/contact" onClick={() => setIsOpen(false)}
                       className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all hover:opacity-90"
                       style={{ backgroundColor: `${G}18`, color: G, border: `1px solid ${G}30`, fontFamily: "var(--font-inter)" }}>
-                      Passer au formulaire de contact
+                      {c.formCta}
                       <ChevronRight size={13} />
                     </Link>
                   </motion.div>
@@ -484,7 +520,7 @@ export default function ChatWidget() {
         style={{ backgroundColor: G, color: "#0D0D0D" }}
         whileHover={{ scale: 1.1, boxShadow: `0 8px 30px ${G}55` }}
         whileTap={{ scale: 0.94 }}
-        aria-label={isOpen ? "Fermer l'assistant" : "Ouvrir l'assistant GIRA"}
+        aria-label={isOpen ? c.closeLabel : (locale === "en" ? "Open GIRA assistant" : "Ouvrir l'assistant GIRA")}
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
