@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
+import { useLocale } from "next-intl";
 
 /* ── Tokens ──────────────────────────────────────────── */
 const GOLD  = "#C9A84C";
@@ -12,42 +13,200 @@ const BODY  = "#444444";
 const WHITE = "#FFFFFF";
 const OFF   = "#F5F5F0";
 
-/* ── Data ────────────────────────────────────────────── */
-const raisons = [
-  {
-    label: "Impact",
-    headline: "Vos décisions auront un poids réel",
-    desc: "Ici, les livrables finissent dans des vies, pas dans des tiroirs. Chaque mission que vous portez produit un résultat mesurable sur des populations, des territoires, des institutions.",
-  },
-  {
-    label: "Excellence",
-    headline: "L'exigence est notre point de départ",
-    desc: "Nous recrutons des profils qui ne se satisfont pas du bon. Standards internationaux, terrain africain, résultats concrets. Dès votre premier jour, vous opérez au niveau le plus haut.",
-  },
-  {
-    label: "Exposition",
-    headline: "Vous serez exposé là où peu accèdent",
-    desc: "Ministres, directeurs généraux, bailleurs de la Banque Mondiale et de la BAD. Des responsabilités directes dès le premier jour. Pas de stage factice, pas de hiérarchie opaque.",
-  },
-];
+/* ── i18n Data ────────────────────────────────────────── */
 
-const profils = [
-  { titre: "Consultant en Gouvernance & Politique Publique",  domaine: "Gouvernance · Secteur public" },
-  { titre: "Expert Infrastructure & BTP",                     domaine: "Infrastructure · Génie civil" },
-  { titre: "Ingénieur Eau, Énergie & Environnement",          domaine: "Eau · Énergie · Environnement" },
-  { titre: "Spécialiste Agriculture & Développement Rural",   domaine: "Agriculture · Territoire" },
-  { titre: "Consultant Financement & Mobilisation de Capitaux", domaine: "Finance · Bailleurs internationaux" },
-  { titre: "Expert Santé & Systèmes de Santé",                domaine: "Santé publique · OMS · Bailleurs" },
-  { titre: "Spécialiste Mines & Ressources Naturelles",       domaine: "Mines · Industrie extractive" },
-  { titre: "Développeur Full-Stack & Solutions Numériques",   domaine: "Tech · Numérique · ERP" },
-  { titre: "Expert IA & Analyse de Données",                  domaine: "Intelligence artificielle · Data" },
-  { titre: "Chef de Projet & Maîtrise d'Ouvrage Déléguée",   domaine: "Management · Coordination" },
-];
-
-const postes = profils.map(p => p.titre).concat(["Autre domaine"]);
+const CARRIERES_DATA = {
+  fr: {
+    hero: {
+      labelTop: "Rejoindre GIRA",
+      h1Line1: "Bâtisseurs",
+      h1Line2: "d\u2019impact.",
+      subtitle: "Un continent à transformer. Des missions à fort impact. Une équipe qui ne se satisfait pas du bon.",
+      cta1: "Postuler",
+      cta2: "Découvrir la culture GIRA",
+    },
+    manifeste: {
+      label: "Notre conviction",
+      headline1: "L\u2019Afrique n\u2019a pas besoin de plus de rapports.\u00a0",
+      headline2: "Elle a besoin d\u2019exécution.",
+    },
+    pourquoi: {
+      label: "Pourquoi nous rejoindre",
+      title: "Trois raisons qui font la différence",
+    },
+    raisons: [
+      {
+        label: "Impact",
+        headline: "Vos décisions auront un poids réel",
+        desc: "Ici, les livrables finissent dans des vies, pas dans des tiroirs. Chaque mission que vous portez produit un résultat mesurable sur des populations, des territoires, des institutions.",
+      },
+      {
+        label: "Excellence",
+        headline: "L\u2019exigence est notre point de départ",
+        desc: "Nous recrutons des profils qui ne se satisfont pas du bon. Standards internationaux, terrain africain, résultats concrets. Dès votre premier jour, vous opérez au niveau le plus haut.",
+      },
+      {
+        label: "Exposition",
+        headline: "Vous serez exposé là où peu accèdent",
+        desc: "Ministres, directeurs généraux, bailleurs de la Banque Mondiale et de la BAD. Des responsabilités directes dès le premier jour. Pas de stage factice, pas de hiérarchie opaque.",
+      },
+    ],
+    profils: {
+      label: "Nos opportunités",
+      title: "Profils recherchés",
+      cta: "Postuler maintenant",
+      list: [
+        { titre: "Consultant en Gouvernance & Politique Publique",    domaine: "Gouvernance · Secteur public" },
+        { titre: "Expert Infrastructure & BTP",                       domaine: "Infrastructure · Génie civil" },
+        { titre: "Ingénieur Eau, Énergie & Environnement",            domaine: "Eau · Énergie · Environnement" },
+        { titre: "Spécialiste Agriculture & Développement Rural",     domaine: "Agriculture · Territoire" },
+        { titre: "Consultant Financement & Mobilisation de Capitaux", domaine: "Finance · Bailleurs internationaux" },
+        { titre: "Expert Santé & Systèmes de Santé",                  domaine: "Santé publique · OMS · Bailleurs" },
+        { titre: "Spécialiste Mines & Ressources Naturelles",         domaine: "Mines · Industrie extractive" },
+        { titre: "Développeur Full-Stack & Solutions Numériques",     domaine: "Tech · Numérique · ERP" },
+        { titre: "Expert IA & Analyse de Données",                    domaine: "Intelligence artificielle · Data" },
+        { titre: "Chef de Projet & Maîtrise d\u2019Ouvrage Déléguée",domaine: "Management · Coordination" },
+      ],
+      autre: "Autre domaine",
+    },
+    form: {
+      labelSection: "Candidature",
+      title: "Candidature spontanée",
+      body: "Vous ne trouvez pas le profil idéal\u00a0? Envoyez-nous votre dossier. Notre équipe RH étudie chaque candidature avec attention et revient vers vous sous 5 jours ouvrés.",
+      emailIntro: "Vous pouvez aussi envoyer votre CV à",
+      fields: {
+        firstName: { label: "Prénom *",              placeholder: "Votre prénom" },
+        lastName:  { label: "Nom *",                 placeholder: "Votre nom" },
+        email:     { label: "Email *",               placeholder: "vous@exemple.com" },
+        phone:     { label: "Téléphone (optionnel)", placeholder: "+33 6 00 00 00 00" },
+        domaine:   { label: "Domaine d\u2019expertise *", placeholder: "Sélectionner un domaine" },
+        message:   { label: "Message & Motivation *", placeholder: "Décrivez votre parcours, vos motivations et ce que vous apporteriez à GIRA..." },
+      },
+      rgpd: {
+        text: "J\u2019accepte que GIRA traite mes données conformément à sa",
+        link: "politique de confidentialité",
+      },
+      submit: "Envoyer ma candidature",
+      submitting: "Envoi en cours\u2026",
+      success: {
+        title: "Candidature reçue.",
+        body: "Notre équipe RH vous recontactera sous 5 jours ouvrés. Merci de l\u2019intérêt que vous portez à GIRA.",
+      },
+      errors: {
+        firstName: "Prénom requis",
+        lastName:  "Nom requis",
+        email:     "Email invalide",
+        domaine:   "Veuillez sélectionner un domaine",
+        message:   "Message trop court (20 car. min.)",
+        rgpd:      "Vous devez accepter la politique RGPD",
+      },
+    },
+    cta: {
+      label: "Des questions\u00a0?",
+      title: "Notre équipe répond à toutes vos questions sur les opportunités chez GIRA.",
+      contact: "Nous contacter",
+    },
+  },
+  en: {
+    hero: {
+      labelTop: "Join GIRA",
+      h1Line1: "Builders",
+      h1Line2: "of impact.",
+      subtitle: "A continent to transform. High-impact missions. A team that is not satisfied with good enough.",
+      cta1: "Apply",
+      cta2: "Discover GIRA culture",
+    },
+    manifeste: {
+      label: "Our conviction",
+      headline1: "Africa doesn\u2019t need more reports.\u00a0",
+      headline2: "It needs execution.",
+    },
+    pourquoi: {
+      label: "Why join us",
+      title: "Three reasons that make the difference",
+    },
+    raisons: [
+      {
+        label: "Impact",
+        headline: "Your decisions will have real weight",
+        desc: "Here, deliverables end up in lives, not drawers. Every mission you carry produces a measurable result on populations, territories, institutions.",
+      },
+      {
+        label: "Excellence",
+        headline: "Excellence is our starting point",
+        desc: "We recruit profiles who are not satisfied with good. International standards, African ground, concrete results. From your first day, you operate at the highest level.",
+      },
+      {
+        label: "Exposure",
+        headline: "You will be exposed where few get access",
+        desc: "Ministers, CEOs, donors from the World Bank and AfDB. Direct responsibilities from day one. No token internship, no opaque hierarchy.",
+      },
+    ],
+    profils: {
+      label: "Our opportunities",
+      title: "Sought profiles",
+      cta: "Apply now",
+      list: [
+        { titre: "Governance & Public Policy Consultant",          domaine: "Governance · Public sector" },
+        { titre: "Infrastructure & Civil Engineering Expert",      domaine: "Infrastructure · Civil engineering" },
+        { titre: "Water, Energy & Environment Engineer",           domaine: "Water · Energy · Environment" },
+        { titre: "Agriculture & Rural Development Specialist",     domaine: "Agriculture · Territory" },
+        { titre: "Financing & Capital Mobilization Consultant",    domaine: "Finance · International donors" },
+        { titre: "Health & Health Systems Expert",                 domaine: "Public health · WHO · Donors" },
+        { titre: "Mining & Natural Resources Specialist",          domaine: "Mining · Extractive industry" },
+        { titre: "Full-Stack Developer & Digital Solutions",       domaine: "Tech · Digital · ERP" },
+        { titre: "AI & Data Analysis Expert",                      domaine: "Artificial intelligence · Data" },
+        { titre: "Project Manager & Delegated Project Management", domaine: "Management · Coordination" },
+      ],
+      autre: "Other domain",
+    },
+    form: {
+      labelSection: "Application",
+      title: "Spontaneous Application",
+      body: "Don\u2019t find the ideal profile? Send us your application. Our HR team studies each application carefully and gets back to you within 5 business days.",
+      emailIntro: "You can also send your CV to",
+      fields: {
+        firstName: { label: "First name *",        placeholder: "Your first name" },
+        lastName:  { label: "Last name *",         placeholder: "Your last name" },
+        email:     { label: "Email *",             placeholder: "you@example.com" },
+        phone:     { label: "Phone (optional)",    placeholder: "+33 6 00 00 00 00" },
+        domaine:   { label: "Area of expertise *", placeholder: "Select a domain" },
+        message:   { label: "Message & Motivation *", placeholder: "Describe your background, motivations and what you would bring to GIRA..." },
+      },
+      rgpd: {
+        text: "I agree that GIRA processes my data in accordance with its",
+        link: "privacy policy",
+      },
+      submit: "Submit my application",
+      submitting: "Submitting\u2026",
+      success: {
+        title: "Application received.",
+        body: "Our HR team will contact you within 5 business days. Thank you for your interest in GIRA.",
+      },
+      errors: {
+        firstName: "First name required",
+        lastName:  "Last name required",
+        email:     "Invalid email",
+        domaine:   "Please select a domain",
+        message:   "Message too short (20 chars min.)",
+        rgpd:      "You must accept the GDPR policy",
+      },
+    },
+    cta: {
+      label: "Questions?",
+      title: "Our team answers all your questions about opportunities at GIRA.",
+      contact: "Contact us",
+    },
+  },
+} as const;
 
 /* ── Page ────────────────────────────────────────────── */
 export default function CarrieresPage() {
+  const locale = useLocale() as "fr" | "en";
+  const t = CARRIERES_DATA[locale];
+
+  const postes: string[] = [...t.profils.list.map((p) => p.titre as string), t.profils.autre];
+
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY       = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
@@ -68,12 +227,13 @@ export default function CarrieresPage() {
 
   function validate() {
     const e: Record<string, string> = {};
-    if (!form.firstName.trim() || form.firstName.trim().length < 2) e.firstName = "Prénom requis";
-    if (!form.lastName.trim()  || form.lastName.trim().length  < 2) e.lastName  = "Nom requis";
-    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Email invalide";
-    if (!form.poste)   e.poste   = "Veuillez sélectionner un domaine";
-    if (!form.message.trim() || form.message.trim().length < 20) e.message = "Message trop court (20 car. min.)";
-    if (!form.rgpd)    e.rgpd    = "Vous devez accepter la politique RGPD";
+    const errs = t.form.errors;
+    if (!form.firstName.trim() || form.firstName.trim().length < 2) e.firstName = errs.firstName;
+    if (!form.lastName.trim()  || form.lastName.trim().length  < 2) e.lastName  = errs.lastName;
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = errs.email;
+    if (!form.poste)   e.poste   = errs.domaine;
+    if (!form.message.trim() || form.message.trim().length < 20) e.message = errs.message;
+    if (!form.rgpd)    e.rgpd    = errs.rgpd;
     return e;
   }
 
@@ -136,7 +296,7 @@ export default function CarrieresPage() {
             className="text-[10px] uppercase tracking-[0.45em] font-bold"
             style={{ color: GOLD, fontFamily: "var(--font-inter)" }}
           >
-            Rejoindre GIRA
+            {t.hero.labelTop}
           </span>
         </div>
 
@@ -152,8 +312,8 @@ export default function CarrieresPage() {
             className="font-black leading-[1.0] tracking-tight text-white max-w-3xl"
             style={{ fontSize: "clamp(3rem, 8vw, 7rem)", fontFamily: "var(--font-montserrat)" }}
           >
-            Bâtisseurs<br />
-            <span style={{ color: GOLD }}>d&apos;impact.</span>
+            {t.hero.h1Line1}<br />
+            <span style={{ color: GOLD }}>{t.hero.h1Line2}</span>
           </motion.h1>
 
           <motion.p
@@ -163,7 +323,7 @@ export default function CarrieresPage() {
             className="mt-6 text-base md:text-lg max-w-md leading-relaxed"
             style={{ color: "rgba(255,255,255,0.65)", fontFamily: "var(--font-inter)" }}
           >
-            Un continent à transformer. Des missions à fort impact. Une équipe qui ne se satisfait pas du bon.
+            {t.hero.subtitle}
           </motion.p>
 
           <motion.div
@@ -177,14 +337,14 @@ export default function CarrieresPage() {
               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-semibold transition-all duration-200 hover:brightness-110"
               style={{ backgroundColor: GOLD, color: DARK, fontFamily: "var(--font-inter)" }}
             >
-              Postuler <ArrowRight size={15} />
+              {t.hero.cta1} <ArrowRight size={15} />
             </a>
             <a
               href="#pourquoi"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-medium border transition-colors hover:bg-white/5"
               style={{ borderColor: "rgba(255,255,255,0.2)", color: WHITE, fontFamily: "var(--font-inter)" }}
             >
-              Découvrir la culture GIRA
+              {t.hero.cta2}
             </a>
           </motion.div>
         </motion.div>
@@ -206,14 +366,14 @@ export default function CarrieresPage() {
               className="text-xs font-semibold uppercase tracking-[0.25em] mb-8"
               style={{ color: GOLD, fontFamily: "var(--font-inter)" }}
             >
-              Notre conviction
+              {t.manifeste.label}
             </p>
             <h2
               className="font-black leading-tight text-white"
               style={{ fontSize: "clamp(2.2rem, 5vw, 4.5rem)", fontFamily: "var(--font-montserrat)" }}
             >
-              L&apos;Afrique n&apos;a pas besoin de plus de rapports.{" "}
-              <span style={{ color: GOLD }}>Elle a besoin d&apos;exécution.</span>
+              {t.manifeste.headline1}
+              <span style={{ color: GOLD }}>{t.manifeste.headline2}</span>
             </h2>
             <div className="mt-10 w-12 h-[2px]" style={{ backgroundColor: GOLD }} />
           </motion.div>
@@ -234,18 +394,18 @@ export default function CarrieresPage() {
             className="mb-16 md:mb-20"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-5" style={{ color: GOLD, fontFamily: "var(--font-inter)" }}>
-              Pourquoi nous rejoindre
+              {t.pourquoi.label}
             </p>
             <h2
               className="font-black leading-tight max-w-2xl"
               style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", color: DARK, fontFamily: "var(--font-montserrat)" }}
             >
-              Trois raisons qui font la différence
+              {t.pourquoi.title}
             </h2>
           </motion.div>
 
           <div className="border-t border-neutral-200">
-            {raisons.map((r, i) => (
+            {t.raisons.map((r, i) => (
               <motion.div
                 key={r.label}
                 initial={{ opacity: 0, y: 16 }}
@@ -283,18 +443,18 @@ export default function CarrieresPage() {
             className="mb-16 md:mb-20"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-5" style={{ color: GOLD, fontFamily: "var(--font-inter)" }}>
-              Nos opportunités
+              {t.profils.label}
             </p>
             <h2
               className="font-black leading-tight text-white max-w-xl"
               style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontFamily: "var(--font-montserrat)" }}
             >
-              Profils recherchés
+              {t.profils.title}
             </h2>
           </motion.div>
 
           <div className="border-t" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-            {profils.map((p, i) => (
+            {t.profils.list.map((p, i) => (
               <motion.div
                 key={p.titre}
                 initial={{ opacity: 0 }}
@@ -332,7 +492,7 @@ export default function CarrieresPage() {
               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-semibold transition-all duration-200 hover:brightness-110"
               style={{ backgroundColor: GOLD, color: DARK, fontFamily: "var(--font-inter)" }}
             >
-              Postuler maintenant <ArrowRight size={15} />
+              {t.profils.cta} <ArrowRight size={15} />
             </a>
           </motion.div>
         </div>
@@ -354,20 +514,20 @@ export default function CarrieresPage() {
               className="lg:sticky lg:top-28"
             >
               <p className="text-xs font-semibold uppercase tracking-[0.25em] mb-5" style={{ color: GOLD, fontFamily: "var(--font-inter)" }}>
-                Candidature
+                {t.form.labelSection}
               </p>
               <h2
                 className="font-black leading-tight mb-6"
                 style={{ fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: DARK, fontFamily: "var(--font-montserrat)" }}
               >
-                Candidature spontanée
+                {t.form.title}
               </h2>
               <div className="w-10 h-[2px] mb-8" style={{ backgroundColor: GOLD }} />
               <p className="text-sm md:text-base leading-relaxed mb-6" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>
-                Vous ne trouvez pas le profil idéal ? Envoyez-nous votre dossier. Notre équipe RH étudie chaque candidature avec attention et revient vers vous sous 5 jours ouvrés.
+                {t.form.body}
               </p>
               <p className="text-sm" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>
-                Vous pouvez aussi envoyer votre CV à{" "}
+                {t.form.emailIntro}{" "}
                 <a href="mailto:recrutement@gira-cf.com" className="font-semibold hover:underline" style={{ color: GOLD }}>
                   recrutement@gira-cf.com
                 </a>
@@ -392,10 +552,10 @@ export default function CarrieresPage() {
                   >
                     <div className="w-10 h-[2px] mb-6" style={{ backgroundColor: GOLD }} />
                     <h3 className="text-xl font-black mb-3" style={{ color: DARK, fontFamily: "var(--font-montserrat)" }}>
-                      Candidature reçue.
+                      {t.form.success.title}
                     </h3>
                     <p className="text-sm leading-relaxed" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>
-                      Notre équipe RH vous recontactera sous 5 jours ouvrés. Merci de l&apos;intérêt que vous portez à GIRA.
+                      {t.form.success.body}
                     </p>
                   </motion.div>
                 ) : (
@@ -409,8 +569,8 @@ export default function CarrieresPage() {
                     {/* Prénom + Nom */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       {[
-                        { field: "firstName", label: "Prénom *", placeholder: "Votre prénom" },
-                        { field: "lastName",  label: "Nom *",    placeholder: "Votre nom" },
+                        { field: "firstName", label: t.form.fields.firstName.label, placeholder: t.form.fields.firstName.placeholder },
+                        { field: "lastName",  label: t.form.fields.lastName.label,  placeholder: t.form.fields.lastName.placeholder },
                       ].map(({ field, label, placeholder }) => (
                         <div key={field}>
                           <label className="block text-xs font-medium mb-2" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>{label}</label>
@@ -431,12 +591,12 @@ export default function CarrieresPage() {
                     {/* Email + Téléphone */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
-                        <label className="block text-xs font-medium mb-2" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>Email *</label>
+                        <label className="block text-xs font-medium mb-2" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>{t.form.fields.email.label}</label>
                         <input
                           type="email"
                           value={form.email}
                           onChange={e => update("email", e.target.value)}
-                          placeholder="vous@exemple.com"
+                          placeholder={t.form.fields.email.placeholder}
                           style={inputBase}
                           onFocus={e  => (e.target.style.borderColor = GOLD)}
                           onBlur={e   => (e.target.style.borderColor = errors.email ? "#dc2626" : "#E0E0E0")}
@@ -444,12 +604,12 @@ export default function CarrieresPage() {
                         {errors.email && <p className="text-xs mt-1" style={{ color: "#dc2626", fontFamily: "var(--font-inter)" }}>{errors.email}</p>}
                       </div>
                       <div>
-                        <label className="block text-xs font-medium mb-2" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>Téléphone (optionnel)</label>
+                        <label className="block text-xs font-medium mb-2" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>{t.form.fields.phone.label}</label>
                         <input
                           type="tel"
                           value={form.phone}
                           onChange={e => update("phone", e.target.value)}
-                          placeholder="+33 6 00 00 00 00"
+                          placeholder={t.form.fields.phone.placeholder}
                           style={inputBase}
                           onFocus={e  => (e.target.style.borderColor = GOLD)}
                           onBlur={e   => (e.target.style.borderColor = "#E0E0E0")}
@@ -459,7 +619,7 @@ export default function CarrieresPage() {
 
                     {/* Domaine */}
                     <div>
-                      <label className="block text-xs font-medium mb-2" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>Domaine d&apos;expertise *</label>
+                      <label className="block text-xs font-medium mb-2" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>{t.form.fields.domaine.label}</label>
                       <select
                         value={form.poste}
                         onChange={e => update("poste", e.target.value)}
@@ -467,7 +627,7 @@ export default function CarrieresPage() {
                         onFocus={e  => (e.target.style.borderColor = GOLD)}
                         onBlur={e   => (e.target.style.borderColor = errors.poste ? "#dc2626" : "#E0E0E0")}
                       >
-                        <option value="">Sélectionner un domaine</option>
+                        <option value="">{t.form.fields.domaine.placeholder}</option>
                         {postes.map(p => <option key={p} value={p}>{p}</option>)}
                       </select>
                       {errors.poste && <p className="text-xs mt-1" style={{ color: "#dc2626", fontFamily: "var(--font-inter)" }}>{errors.poste}</p>}
@@ -475,12 +635,12 @@ export default function CarrieresPage() {
 
                     {/* Message */}
                     <div>
-                      <label className="block text-xs font-medium mb-2" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>Message & Motivation *</label>
+                      <label className="block text-xs font-medium mb-2" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>{t.form.fields.message.label}</label>
                       <textarea
                         value={form.message}
                         onChange={e => update("message", e.target.value)}
                         rows={5}
-                        placeholder="Décrivez votre parcours, vos motivations et ce que vous apporteriez à GIRA..."
+                        placeholder={t.form.fields.message.placeholder}
                         style={{ ...inputBase, resize: "none" }}
                         onFocus={e  => (e.target.style.borderColor = GOLD)}
                         onBlur={e   => (e.target.style.borderColor = errors.message ? "#dc2626" : "#E0E0E0")}
@@ -499,8 +659,8 @@ export default function CarrieresPage() {
                         style={{ accentColor: GOLD }}
                       />
                       <label htmlFor="rgpd-car" className="text-xs leading-relaxed" style={{ color: BODY, fontFamily: "var(--font-inter)" }}>
-                        J&apos;accepte que GIRA traite mes données conformément à sa{" "}
-                        <Link href="/politique-confidentialite" className="underline" style={{ color: GOLD }}>politique de confidentialité</Link>. *
+                        {t.form.rgpd.text}{" "}
+                        <Link href="/politique-confidentialite" className="underline" style={{ color: GOLD }}>{t.form.rgpd.link}</Link>. *
                       </label>
                     </div>
                     {errors.rgpd && <p className="text-xs" style={{ color: "#dc2626", fontFamily: "var(--font-inter)" }}>{errors.rgpd}</p>}
@@ -515,10 +675,10 @@ export default function CarrieresPage() {
                       {submitting ? (
                         <>
                           <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                          Envoi en cours…
+                          {t.form.submitting}
                         </>
                       ) : (
-                        <>Envoyer ma candidature <ArrowRight size={15} /></>
+                        <>{t.form.submit} <ArrowRight size={15} /></>
                       )}
                     </button>
                   </motion.form>
@@ -540,14 +700,14 @@ export default function CarrieresPage() {
               className="text-xs font-semibold uppercase tracking-[0.25em] mb-6"
               style={{ color: GOLD, fontFamily: "var(--font-inter)" }}
             >
-              Des questions ?
+              {t.cta.label}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
               className="font-black text-white leading-tight mb-10"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)", fontFamily: "var(--font-montserrat)" }}
             >
-              Notre équipe répond à toutes vos questions sur les opportunités chez GIRA.
+              {t.cta.title}
             </motion.h2>
             <motion.div
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
@@ -558,7 +718,7 @@ export default function CarrieresPage() {
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-semibold transition-all duration-200 hover:brightness-110"
                 style={{ backgroundColor: GOLD, color: DARK, fontFamily: "var(--font-inter)" }}
               >
-                Nous contacter <ArrowRight size={15} />
+                {t.cta.contact} <ArrowRight size={15} />
               </Link>
               <a
                 href="mailto:recrutement@gira-cf.com"

@@ -2,11 +2,37 @@
 
 import Image from "next/image";
 import { Link, usePathname } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { Linkedin, Twitter, Facebook, Instagram, Youtube, ArrowRight } from "lucide-react";
 import { GIRA } from "@/lib/constants";
 
 const G = "#C9A84C";
 
+/* ── Inline statement data (complex multi-span text, Pattern A) ── */
+const STATEMENT_DATA = {
+  fr: {
+    statLine1: "Nous ne gérons pas",
+    statLine2: "des projets.",
+    statLine3: "Nous les",
+    statLine4: "exécutons.",
+    tagline: "Nous structurons, finançons et exécutons des projets qui transforment durablement l'Afrique.",
+    devLine1: "La technologie au service",
+    devLine2: "de ",
+    devLine3: "l'Afrique.",
+    devSub: "GIRA Dev conçoit les plateformes, systèmes et solutions numériques qui accélèrent la transformation du continent.",
+  },
+  en: {
+    statLine1: "We don't manage",
+    statLine2: "projects.",
+    statLine3: "We",
+    statLine4: "execute them.",
+    tagline: "We structure, finance and execute projects that sustainably transform Africa.",
+    devLine1: "Technology in service",
+    devLine2: "of ",
+    devLine3: "Africa.",
+    devSub: "GIRA Dev designs the platforms, systems and digital solutions that accelerate the continent's transformation.",
+  },
+} as const;
 
 const socials = [
   { label: "LinkedIn", href: GIRA.linkedin, Icon: Linkedin },
@@ -16,16 +42,33 @@ const socials = [
   { label: "YouTube", href: "https://youtube.com/@giracabinet", Icon: Youtube },
 ];
 
-const legal = [
-  { label: "Mentions légales", href: "/mentions-legales" },
-  { label: "RGPD", href: "/rgpd" },
-  { label: "Confidentialité", href: "/politique-confidentialite" },
-  { label: "Plan du site", href: "/plan-du-site" },
-];
-
 export default function Footer() {
   const pathname = usePathname();
   const isGiraDevPage = pathname === "/x";
+  const locale = useLocale() as "fr" | "en";
+  const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
+
+  const stmts = STATEMENT_DATA[locale];
+
+  const navLinks = [
+    { label: tNav("about"), href: "/a-propos" },
+    { label: tNav("services"), href: "/services" },
+    { label: tNav("sectors"), href: "/secteurs" },
+    { label: tNav("pnd"), href: "/pnd-rca-tri" },
+    { label: tNav("network"), href: "/reseau-diaspora" },
+    { label: tNav("careers"), href: "/carrieres" },
+    { label: tNav("news"), href: "/actualites" },
+    { label: "Contact", href: "/contact" },
+    { label: "GIRA Dev", href: "/x" },
+  ];
+
+  const legalLinks = [
+    { label: t("legal"), href: "/mentions-legales" },
+    { label: t("gdpr"), href: "/rgpd" },
+    { label: t("privacy"), href: "/politique-confidentialite" },
+    { label: t("planDuSite"), href: "/plan-du-site" },
+  ];
 
   return (
     <footer className="relative overflow-hidden" style={{ backgroundColor: "#0D0D0D" }}>
@@ -46,7 +89,6 @@ export default function Footer() {
         <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-24 py-14 md:py-16">
           {/* Top row: CTA only */}
           <div className="flex items-start justify-end mb-10 md:mb-12">
-            {/* CTA button */}
             <Link
               href="/contact"
               className="hidden sm:inline-flex items-center gap-2.5 px-5 py-3 text-xs font-semibold uppercase tracking-widest border transition-all duration-200 group"
@@ -66,7 +108,7 @@ export default function Footer() {
                 el.style.color = G;
               }}
             >
-              Initier un mandat
+              {t("cta")}
               <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -82,7 +124,7 @@ export default function Footer() {
                     fontSize: "clamp(2.2rem, 5.5vw, 5rem)",
                   }}
                 >
-                  La technologie au service
+                  {stmts.devLine1}
                   <br />
                   <span
                     style={{
@@ -90,9 +132,9 @@ export default function Footer() {
                       WebkitTextStroke: `1.5px ${G}`,
                     }}
                   >
-                    de{" "}
+                    {stmts.devLine2}
                   </span>
-                  <span style={{ color: G }}>l&apos;Afrique.</span>
+                  <span style={{ color: G }}>{stmts.devLine3}</span>
                 </p>
                 <p
                   className="mt-5 text-sm md:text-base max-w-lg"
@@ -102,7 +144,7 @@ export default function Footer() {
                     lineHeight: 1.7,
                   }}
                 >
-                  GIRA Dev conçoit les plateformes, systèmes et solutions numériques qui accélèrent la transformation du continent.
+                  {stmts.devSub}
                 </p>
               </>
             ) : (
@@ -114,19 +156,19 @@ export default function Footer() {
                     fontSize: "clamp(2.2rem, 5.5vw, 5rem)",
                   }}
                 >
-                  Nous ne gérons pas
+                  {stmts.statLine1}
                   <br />
-                  des projets.{" "}
+                  {stmts.statLine2}{" "}
                   <span
                     style={{
                       color: "transparent",
                       WebkitTextStroke: `1.5px ${G}`,
                     }}
                   >
-                    Nous les
+                    {stmts.statLine3}
                   </span>
                   <br className="hidden sm:block" />
-                  <span style={{ color: G }}> exécutons.</span>
+                  <span style={{ color: G }}> {stmts.statLine4}</span>
                 </p>
                 <p
                   className="mt-5 text-sm md:text-base max-w-lg"
@@ -136,7 +178,7 @@ export default function Footer() {
                     lineHeight: 1.7,
                   }}
                 >
-                  {GIRA.tagline}
+                  {stmts.tagline}
                 </p>
               </>
             )}
@@ -147,7 +189,7 @@ export default function Footer() {
               className="sm:hidden inline-flex items-center gap-2 mt-6 text-sm font-semibold"
               style={{ color: G, fontFamily: "var(--font-inter)" }}
             >
-              Initier un mandat
+              {t("cta")}
               <ArrowRight size={14} />
             </Link>
           </div>
@@ -159,7 +201,7 @@ export default function Footer() {
         className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-24 pt-10 pb-10 md:pt-14 md:pb-12"
       >
 
-        {/* Row 1 : Logo + FOLLOW US + social icons */}
+        {/* Row 1 : Logo + FOLLOW GIRA + social icons */}
         <div className="flex items-center justify-between mb-8 md:mb-10">
           <Link href={isGiraDevPage ? "/x" : "/"} className="inline-block shrink-0">
             {isGiraDevPage ? (
@@ -205,7 +247,7 @@ export default function Footer() {
               className="text-[9px] uppercase tracking-[0.28em] font-semibold hidden sm:block"
               style={{ color: "rgba(255,255,255,0.22)", fontFamily: "var(--font-inter)" }}
             >
-              Suivre GIRA
+              {t("followGira")}
             </span>
             {socials.map((s) => {
               const Icon = s.Icon;
@@ -240,17 +282,7 @@ export default function Footer() {
 
         {/* Row 2 : Main nav links — BCG-style uppercase */}
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-6">
-          {[
-            { label: "À propos", href: "/a-propos" },
-            { label: "Services", href: "/services" },
-            { label: "Secteurs", href: "/secteurs" },
-            { label: "PND & TRI", href: "/pnd-rca-tri" },
-            { label: "Réseau", href: "/reseau-diaspora" },
-            { label: "Carrières", href: "/carrieres" },
-            { label: "Actualités", href: "/actualites" },
-            { label: "Contact", href: "/contact" },
-            { label: "GIRA Dev", href: "/x" },
-          ].map((l) => (
+          {navLinks.map((l) => (
             <Link
               key={l.href}
               href={l.href}
@@ -282,7 +314,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           {/* Legal */}
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            {legal.map((l) => (
+            {legalLinks.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}

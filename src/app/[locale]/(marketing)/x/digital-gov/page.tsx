@@ -1,43 +1,114 @@
 "use client";
 
+import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Landmark, CheckCircle2, ChevronRight } from "lucide-react";
 
-const SIBLINGS = [
-  { label: "Data & IA", sub: "Systèmes intelligents", href: "/x/data-ia" },
-  { label: "Infrastructure Tech", sub: "IoT & supervision", href: "/x/infrastructure" },
-  { label: "Finance & Impact", sub: "ESG & investissements", href: "/x/finance-impact" },
-];
-
-const POINTS = [
-  "Portails institutionnels multilingues pour États et ministères",
-  "Systèmes d'identité numérique citoyenne sécurisés",
-  "Plateformes e-services : état civil, fiscalité, permis en ligne",
-  "Intranets gouvernementaux et solutions de communication sécurisée",
-  "Formation et transfert de compétences aux agents de l'État",
-  "Conformité RGPD et standards internationaux de sécurité",
-];
-
-const USECASES = [
-  {
-    titre: "Portail institutionnel ministériel",
-    desc: "Refonte complète du portail web d'un ministère africain : accessibilité mobile, multilingue (français, anglais, langue locale), formulaires en ligne.",
-    tag: "Gouvernance",
+/* ── Locale-keyed data ────────────────────────────────── */
+const PAGE_DATA = {
+  fr: {
+    siblings: [
+      { label: "Data & IA", sub: "Systèmes intelligents", href: "/x/data-ia" },
+      { label: "Infrastructure Tech", sub: "IoT & supervision", href: "/x/infrastructure" },
+      { label: "Finance & Impact", sub: "ESG & investissements", href: "/x/finance-impact" },
+    ],
+    points: [
+      "Portails institutionnels multilingues pour États et ministères",
+      "Systèmes d'identité numérique citoyenne sécurisés",
+      "Plateformes e-services : état civil, fiscalité, permis en ligne",
+      "Intranets gouvernementaux et solutions de communication sécurisée",
+      "Formation et transfert de compétences aux agents de l'État",
+      "Conformité RGPD et standards internationaux de sécurité",
+    ],
+    usecases: [
+      {
+        titre: "Portail institutionnel ministériel",
+        desc: "Refonte complète du portail web d'un ministère africain : accessibilité mobile, multilingue (français, anglais, langue locale), formulaires en ligne.",
+        tag: "Gouvernance",
+      },
+      {
+        titre: "Plateforme e-services citoyens",
+        desc: "Guichet numérique unique permettant aux citoyens d'accéder aux services publics essentiels depuis leur téléphone, sans déplacement.",
+        tag: "e-Services",
+      },
+      {
+        titre: "Système d'identité numérique",
+        desc: "Architecture d'identité numérique pour un pays de 5M d'habitants, avec intégration des bases de données d'état civil existantes.",
+        tag: "Identité",
+      },
+    ],
+    hero: {
+      breadcrumb: "Digital Gov & e-Services",
+      domainLabel: "GIRA Dev · Domaine 02",
+      titleLine1: "Digital Gov",
+      titleEm: "& e-Services",
+      subtitle:
+        "Portails gouvernementaux, e-services publics, systèmes d'identité numérique. Nous accompagnons les États dans leur transformation digitale, de la conception à l'opération.",
+      ctaPrimary: "Discutons de votre projet",
+      ctaSecondary: "Retour GIRA Dev",
+    },
+    sections: {
+      whatWeDo: "Ce que nous faisons",
+      concreteApps: "Applications concrètes",
+      usecasesTitle: "Cas d'usage en Afrique",
+      otherDomains: "Autres domaines GIRA Dev",
+    },
   },
-  {
-    titre: "Plateforme e-services citoyens",
-    desc: "Guichet numérique unique permettant aux citoyens d'accéder aux services publics essentiels depuis leur téléphone, sans déplacement.",
-    tag: "e-Services",
+  en: {
+    siblings: [
+      { label: "Data & AI", sub: "Intelligent systems", href: "/x/data-ia" },
+      { label: "Tech Infrastructure", sub: "IoT & supervision", href: "/x/infrastructure" },
+      { label: "Finance & Impact", sub: "ESG & investments", href: "/x/finance-impact" },
+    ],
+    points: [
+      "Multilingual institutional portals for states and ministries",
+      "Secure citizen digital identity systems",
+      "e-Services platforms: civil registration, taxation, online permits",
+      "Government intranets and secure communication solutions",
+      "Training and skills transfer to civil servants",
+      "GDPR compliance and international security standards",
+    ],
+    usecases: [
+      {
+        titre: "Ministerial institutional portal",
+        desc: "Complete redesign of an African ministry's web portal: mobile accessibility, multilingual (French, English, local language), online forms.",
+        tag: "Governance",
+      },
+      {
+        titre: "Citizen e-services platform",
+        desc: "Single digital counter allowing citizens to access essential public services from their phone, without travel.",
+        tag: "e-Services",
+      },
+      {
+        titre: "Digital identity system",
+        desc: "Digital identity architecture for a country of 5M inhabitants, with integration of existing civil registration databases.",
+        tag: "Identity",
+      },
+    ],
+    hero: {
+      breadcrumb: "Digital Gov & e-Services",
+      domainLabel: "GIRA Dev · Domain 02",
+      titleLine1: "Digital Gov",
+      titleEm: "& e-Services",
+      subtitle:
+        "Government portals, public e-services, digital identity systems. We support governments in their digital transformation, from design to operation.",
+      ctaPrimary: "Discuss your project",
+      ctaSecondary: "Back to GIRA Dev",
+    },
+    sections: {
+      whatWeDo: "What we do",
+      concreteApps: "Concrete applications",
+      usecasesTitle: "Use cases in Africa",
+      otherDomains: "Other GIRA Dev domains",
+    },
   },
-  {
-    titre: "Système d'identité numérique",
-    desc: "Architecture d'identité numérique pour un pays de 5M d'habitants, avec intégration des bases de données d'état civil existantes.",
-    tag: "Identité",
-  },
-];
+} as const;
 
 export default function DigitalGovPage() {
+  const locale = useLocale() as "fr" | "en";
+  const d = PAGE_DATA[locale];
+
   return (
     <div style={{ backgroundColor: "#0D0D0D", minHeight: "100vh" }}>
 
@@ -61,7 +132,7 @@ export default function DigitalGovPage() {
             </Link>
             <ChevronRight size={12} style={{ color: "rgba(255,255,255,0.2)" }} />
             <span className="text-xs uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-inter)" }}>
-              Digital Gov & e-Services
+              {d.hero.breadcrumb}
             </span>
           </motion.nav>
 
@@ -84,7 +155,7 @@ export default function DigitalGovPage() {
                 className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-4"
                 style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
               >
-                GIRA Dev · Domaine 02
+                {d.hero.domainLabel}
               </motion.span>
 
               <motion.h1
@@ -94,7 +165,7 @@ export default function DigitalGovPage() {
                 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white mb-6"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Digital Gov<br /><em style={{ color: "#C9A84C" }}>&amp; e-Services</em>
+                {d.hero.titleLine1}<br /><em style={{ color: "#C9A84C" }}>{d.hero.titleEm}</em>
               </motion.h1>
 
               <motion.p
@@ -104,7 +175,7 @@ export default function DigitalGovPage() {
                 className="text-base md:text-lg leading-relaxed mb-10"
                 style={{ color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-inter)", maxWidth: "480px" }}
               >
-                Portails gouvernementaux, e-services publics, systèmes d'identité numérique. Nous accompagnons les États dans leur transformation digitale, de la conception à l'opération.
+                {d.hero.subtitle}
               </motion.p>
 
               <motion.div
@@ -117,14 +188,14 @@ export default function DigitalGovPage() {
                   className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold rounded-full transition-all hover:opacity-90"
                   style={{ backgroundColor: "#C9A84C", color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
                 >
-                  Discutons de votre projet
+                  {d.hero.ctaPrimary}
                   <ArrowRight size={15} />
                 </Link>
                 <Link href="/x"
                   className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full transition-all hover:opacity-70"
                   style={{ border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontFamily: "var(--font-inter)" }}
                 >
-                  Retour GIRA Dev
+                  {d.hero.ctaSecondary}
                 </Link>
               </motion.div>
             </div>
@@ -135,10 +206,10 @@ export default function DigitalGovPage() {
               transition={{ duration: 0.7, delay: 0.15 }}
             >
               <p className="text-xs uppercase tracking-widest font-bold mb-6" style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-inter)" }}>
-                Ce que nous faisons
+                {d.sections.whatWeDo}
               </p>
               <ul className="space-y-4">
-                {POINTS.map((pt, i) => (
+                {d.points.map((pt, i) => (
                   <motion.li
                     key={i}
                     initial={{ opacity: 0, x: 16 }}
@@ -161,11 +232,15 @@ export default function DigitalGovPage() {
       <section className="py-20 md:py-28" style={{ backgroundColor: "#111111" }}>
         <div className="max-w-screen-xl mx-auto px-8 md:px-16 lg:px-24">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-14">
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-3" style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}>Applications concrètes</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>Cas d'usage en Afrique</h2>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-3" style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}>
+              {d.sections.concreteApps}
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>
+              {d.sections.usecasesTitle}
+            </h2>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-6">
-            {USECASES.map((u, i) => (
+            {d.usecases.map((u, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="p-8 rounded-2xl" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
                 <span className="inline-block px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md mb-5"
@@ -181,9 +256,11 @@ export default function DigitalGovPage() {
       {/* ── NAVIGATION SIBLINGS ──────────────────────────── */}
       <section className="py-16 md:py-20" style={{ backgroundColor: "#0D0D0D", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div className="max-w-screen-xl mx-auto px-8 md:px-16 lg:px-24">
-          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "var(--font-inter)" }}>Autres domaines GIRA Dev</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "var(--font-inter)" }}>
+            {d.sections.otherDomains}
+          </p>
           <div className="grid sm:grid-cols-3 gap-4">
-            {SIBLINGS.map((s) => (
+            {d.siblings.map((s) => (
               <Link key={s.href} href={s.href}
                 className="group flex items-center justify-between p-5 rounded-2xl transition-all duration-200 hover:border-[rgba(201,168,76,0.3)]"
                 style={{ border: "1px solid rgba(255,255,255,0.06)", backgroundColor: "rgba(255,255,255,0.02)" }}>

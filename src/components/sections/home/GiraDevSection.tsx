@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRouter } from "@/i18n/navigation";
+import { useLocale } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -10,9 +11,28 @@ import { ArrowRight } from "lucide-react";
    Full-width cinematic video block with parallax
 ═══════════════════════════════════════════════════════════════ */
 
+const SECTION_DATA = {
+  fr: {
+    badge: "GIRA Dev — Unité Tech & Innovation",
+    titleLine1: "Nous Bâtissons",
+    titleLine2: "le Futur",
+    titleLine3: "de l'Afrique.",
+    button: "Découvrir GIRA Dev",
+  },
+  en: {
+    badge: "GIRA Dev — Tech & Innovation Unit",
+    titleLine1: "We Build",
+    titleLine2: "the Future",
+    titleLine3: "of Africa.",
+    button: "Discover GIRA Dev",
+  },
+} as const;
+
 export default function GiraDevSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const locale = useLocale() as "fr" | "en";
+  const d = SECTION_DATA[locale];
 
   function handleNavigate() {
     // Force scroll to absolute top before navigating
@@ -94,7 +114,7 @@ export default function GiraDevSection() {
               fontFamily: "var(--font-inter)",
             }}
           >
-            GIRA Dev — Unité Tech &amp; Innovation
+            {d.badge}
           </span>
         </motion.div>
 
@@ -107,13 +127,13 @@ export default function GiraDevSection() {
           className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.06] tracking-tight text-white max-w-3xl"
           style={{ fontFamily: "var(--font-playfair)" }}
         >
-          Nous Bâtissons
+          {d.titleLine1}
           <br />
           <em className="not-italic" style={{ color: "#C9A84C" }}>
-            le Futur
+            {d.titleLine2}
           </em>
           <br />
-          de l&apos;Afrique.
+          {d.titleLine3}
         </motion.h2>
 
         {/* CTA Button */}
@@ -133,7 +153,7 @@ export default function GiraDevSection() {
               fontFamily: "var(--font-montserrat)",
             }}
           >
-            Découvrir GIRA Dev
+            {d.button}
             <ArrowRight
               size={16}
               className="transition-transform duration-300 group-hover:translate-x-1"

@@ -28,7 +28,10 @@
     "copyright": "© 2026 GIRA — Tous droits réservés",
     "addressLabel": "128, rue de la Boétie\n75008 Paris — France",
     "followUs": "Suivez-nous",
-    "contactUs": "Nous contacter"
+    "contactUs": "Nous contacter",
+    "cta": "Initier un mandat",
+    "planDuSite": "Plan du site",
+    "followGira": "Suivre GIRA"
   },
   "home": {
     "hero": {

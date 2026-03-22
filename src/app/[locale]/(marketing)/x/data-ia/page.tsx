@@ -1,46 +1,117 @@
 "use client";
 
+import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Brain, CheckCircle2, ChevronRight } from "lucide-react";
-import type { Metadata } from "next";
 
-/* ── Siblings navigation ─────────────────────────────── */
-const SIBLINGS = [
-  { label: "Digital Gov", sub: "e-Services publics", href: "/x/digital-gov" },
-  { label: "Infrastructure Tech", sub: "IoT & supervision", href: "/x/infrastructure" },
-  { label: "Finance & Impact", sub: "ESG & investissements", href: "/x/finance-impact" },
-];
-
-const POINTS = [
-  "Modèles de machine learning adaptés aux données fragmentées des marchés africains",
-  "Tableaux de bord analytiques temps réel pour ministères et bailleurs",
-  "Automatisation des rapports de suivi (IDA, BAD, AFD)",
-  "Prédiction de risques sur les projets d'infrastructure",
-  "Systèmes de collecte terrain via mobile (zones sans connectivité)",
-  "Traitement du langage naturel en français et langues locales",
-];
-
-const USECASES = [
-  {
-    titre: "Pilotage de portefeuille PND",
-    desc: "Dashboard de suivi en temps réel des 543 projets du PND-RCA, avec alertes automatiques sur les indicateurs critiques.",
-    tag: "Gouvernance",
+/* ── Locale-keyed data ────────────────────────────────── */
+const PAGE_DATA = {
+  fr: {
+    siblings: [
+      { label: "Digital Gov", sub: "e-Services publics", href: "/x/digital-gov" },
+      { label: "Infrastructure Tech", sub: "IoT & supervision", href: "/x/infrastructure" },
+      { label: "Finance & Impact", sub: "ESG & investissements", href: "/x/finance-impact" },
+    ],
+    points: [
+      "Modèles de machine learning adaptés aux données fragmentées des marchés africains",
+      "Tableaux de bord analytiques temps réel pour ministères et bailleurs",
+      "Automatisation des rapports de suivi (IDA, BAD, AFD)",
+      "Prédiction de risques sur les projets d'infrastructure",
+      "Systèmes de collecte terrain via mobile (zones sans connectivité)",
+      "Traitement du langage naturel en français et langues locales",
+    ],
+    usecases: [
+      {
+        titre: "Pilotage de portefeuille PND",
+        desc: "Dashboard de suivi en temps réel des 543 projets du PND-RCA, avec alertes automatiques sur les indicateurs critiques.",
+        tag: "Gouvernance",
+      },
+      {
+        titre: "Analyse prédictive eau & énergie",
+        desc: "Modèles IA pour anticiper les ruptures d'approvisionnement et optimiser la distribution dans les zones périurbaines.",
+        tag: "Infrastructure",
+      },
+      {
+        titre: "Reporting ESG automatisé",
+        desc: "Agrégation et mise en forme automatique des données ESG pour les investisseurs institutionnels et fonds d'impact.",
+        tag: "Finance",
+      },
+    ],
+    hero: {
+      breadcrumb: "Data & Intelligence Artificielle",
+      domainLabel: "GIRA Dev · Domaine 01",
+      titleLine1: "Data &",
+      titleEm: "Intelligence",
+      titleLine3: "Artificielle",
+      subtitle:
+        "Nous concevons des systèmes d'intelligence artificielle et d'analyse de la donnée pour les institutions africaines. De la collecte terrain à la décision stratégique, chaque information compte.",
+      ctaPrimary: "Discutons de votre projet",
+      ctaSecondary: "Retour GIRA Dev",
+    },
+    sections: {
+      whatWeDo: "Ce que nous faisons",
+      concreteApps: "Applications concrètes",
+      usecasesTitle: "Cas d'usage en Afrique",
+      otherDomains: "Autres domaines GIRA Dev",
+    },
   },
-  {
-    titre: "Analyse prédictive eau & énergie",
-    desc: "Modèles IA pour anticiper les ruptures d'approvisionnement et optimiser la distribution dans les zones périurbaines.",
-    tag: "Infrastructure",
+  en: {
+    siblings: [
+      { label: "Digital Gov", sub: "Public e-services", href: "/x/digital-gov" },
+      { label: "Tech Infrastructure", sub: "IoT & supervision", href: "/x/infrastructure" },
+      { label: "Finance & Impact", sub: "ESG & investments", href: "/x/finance-impact" },
+    ],
+    points: [
+      "Machine learning models adapted to fragmented data from African markets",
+      "Real-time analytical dashboards for ministries and donors",
+      "Automated monitoring reports (IDA, AfDB, AFD)",
+      "Risk prediction for infrastructure projects",
+      "Field data collection via mobile (areas without connectivity)",
+      "Natural language processing in French and local languages",
+    ],
+    usecases: [
+      {
+        titre: "NDP Portfolio Management",
+        desc: "Real-time monitoring dashboard for the 543 projects of the NDP-CAR, with automatic alerts on critical indicators.",
+        tag: "Governance",
+      },
+      {
+        titre: "Predictive water & energy analytics",
+        desc: "AI models to anticipate supply disruptions and optimize distribution in peri-urban areas.",
+        tag: "Infrastructure",
+      },
+      {
+        titre: "Automated ESG reporting",
+        desc: "Automatic aggregation and formatting of ESG data for institutional investors and impact funds.",
+        tag: "Finance",
+      },
+    ],
+    hero: {
+      breadcrumb: "Data & Artificial Intelligence",
+      domainLabel: "GIRA Dev · Domain 01",
+      titleLine1: "Data &",
+      titleEm: "Artificial",
+      titleLine3: "Intelligence",
+      subtitle:
+        "We design artificial intelligence and data analytics systems for African institutions. From field collection to strategic decision-making, every piece of information counts.",
+      ctaPrimary: "Discuss your project",
+      ctaSecondary: "Back to GIRA Dev",
+    },
+    sections: {
+      whatWeDo: "What we do",
+      concreteApps: "Concrete applications",
+      usecasesTitle: "Use cases in Africa",
+      otherDomains: "Other GIRA Dev domains",
+    },
   },
-  {
-    titre: "Reporting ESG automatisé",
-    desc: "Agrégation et mise en forme automatique des données ESG pour les investisseurs institutionnels et fonds d'impact.",
-    tag: "Finance",
-  },
-];
+} as const;
 
 /* ── Page ─────────────────────────────────────────────── */
 export default function DataIAPage() {
+  const locale = useLocale() as "fr" | "en";
+  const d = PAGE_DATA[locale];
+
   return (
     <div style={{ backgroundColor: "#0D0D0D", minHeight: "100vh" }}>
 
@@ -66,7 +137,7 @@ export default function DataIAPage() {
             </Link>
             <ChevronRight size={12} style={{ color: "rgba(255,255,255,0.2)" }} />
             <span className="text-xs uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-inter)" }}>
-              Data & Intelligence Artificielle
+              {d.hero.breadcrumb}
             </span>
           </motion.nav>
 
@@ -90,7 +161,7 @@ export default function DataIAPage() {
                 className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-4"
                 style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
               >
-                GIRA Dev · Domaine 01
+                {d.hero.domainLabel}
               </motion.span>
 
               <motion.h1
@@ -100,7 +171,7 @@ export default function DataIAPage() {
                 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white mb-6"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Data &<br /><em style={{ color: "#C9A84C" }}>Intelligence</em><br />Artificielle
+                {d.hero.titleLine1}<br /><em style={{ color: "#C9A84C" }}>{d.hero.titleEm}</em><br />{d.hero.titleLine3}
               </motion.h1>
 
               <motion.p
@@ -110,7 +181,7 @@ export default function DataIAPage() {
                 className="text-base md:text-lg leading-relaxed mb-10"
                 style={{ color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-inter)", maxWidth: "480px" }}
               >
-                Nous concevons des systèmes d'intelligence artificielle et d'analyse de la donnée pour les institutions africaines. De la collecte terrain à la décision stratégique, chaque information compte.
+                {d.hero.subtitle}
               </motion.p>
 
               <motion.div
@@ -123,14 +194,14 @@ export default function DataIAPage() {
                   className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold rounded-full transition-all hover:opacity-90"
                   style={{ backgroundColor: "#C9A84C", color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
                 >
-                  Discutons de votre projet
+                  {d.hero.ctaPrimary}
                   <ArrowRight size={15} />
                 </Link>
                 <Link href="/x"
                   className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full transition-all hover:opacity-70"
                   style={{ border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontFamily: "var(--font-inter)" }}
                 >
-                  Retour GIRA Dev
+                  {d.hero.ctaSecondary}
                 </Link>
               </motion.div>
             </div>
@@ -142,10 +213,10 @@ export default function DataIAPage() {
               transition={{ duration: 0.7, delay: 0.15 }}
             >
               <p className="text-xs uppercase tracking-widest font-bold mb-6" style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-inter)" }}>
-                Ce que nous faisons
+                {d.sections.whatWeDo}
               </p>
               <ul className="space-y-4">
-                {POINTS.map((pt, i) => (
+                {d.points.map((pt, i) => (
                   <motion.li
                     key={i}
                     initial={{ opacity: 0, x: 16 }}
@@ -174,15 +245,15 @@ export default function DataIAPage() {
             className="mb-14"
           >
             <span className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-3" style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}>
-              Applications concrètes
+              {d.sections.concreteApps}
             </span>
             <h2 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>
-              Cas d'usage en Afrique
+              {d.sections.usecasesTitle}
             </h2>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {USECASES.map((u, i) => (
+            {d.usecases.map((u, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 24 }}
@@ -208,10 +279,10 @@ export default function DataIAPage() {
       <section className="py-16 md:py-20" style={{ backgroundColor: "#0D0D0D", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div className="max-w-screen-xl mx-auto px-8 md:px-16 lg:px-24">
           <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "var(--font-inter)" }}>
-            Autres domaines GIRA Dev
+            {d.sections.otherDomains}
           </p>
           <div className="grid sm:grid-cols-3 gap-4">
-            {SIBLINGS.map((s) => (
+            {d.siblings.map((s) => (
               <Link key={s.href} href={s.href}
                 className="group flex items-center justify-between p-5 rounded-2xl transition-all duration-200 hover:border-[rgba(201,168,76,0.3)]"
                 style={{ border: "1px solid rgba(255,255,255,0.06)", backgroundColor: "rgba(255,255,255,0.02)" }}

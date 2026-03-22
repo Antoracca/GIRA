@@ -1,43 +1,114 @@
 "use client";
 
+import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Server, CheckCircle2, ChevronRight } from "lucide-react";
 
-const SIBLINGS = [
-  { label: "Data & IA", sub: "Systèmes intelligents", href: "/x/data-ia" },
-  { label: "Digital Gov", sub: "e-Services publics", href: "/x/digital-gov" },
-  { label: "Finance & Impact", sub: "ESG & investissements", href: "/x/finance-impact" },
-];
-
-const POINTS = [
-  "Déploiement de capteurs IoT sur les chantiers d'eau, d'énergie et de transport",
-  "Supervision en temps réel des infrastructures critiques",
-  "Connectivité satellite (Starlink) pour les zones rurales et isolées",
-  "Tableaux de bord de pilotage pour maîtres d'ouvrage et bailleurs",
-  "Systèmes d'alerte précoce sur les défaillances techniques",
-  "Architecture résiliente et redondante pour environnements contraints",
-];
-
-const USECASES = [
-  {
-    titre: "Supervision de chantier hydroélectrique",
-    desc: "Déploiement de 120 capteurs IoT sur un barrage en construction, avec remontée des données en temps réel vers le tableau de bord des ingénieurs et du bailleur.",
-    tag: "Énergie",
+/* ── Locale-keyed data ────────────────────────────────── */
+const PAGE_DATA = {
+  fr: {
+    siblings: [
+      { label: "Data & IA", sub: "Systèmes intelligents", href: "/x/data-ia" },
+      { label: "Digital Gov", sub: "e-Services publics", href: "/x/digital-gov" },
+      { label: "Finance & Impact", sub: "ESG & investissements", href: "/x/finance-impact" },
+    ],
+    points: [
+      "Déploiement de capteurs IoT sur les chantiers d'eau, d'énergie et de transport",
+      "Supervision en temps réel des infrastructures critiques",
+      "Connectivité satellite (Starlink) pour les zones rurales et isolées",
+      "Tableaux de bord de pilotage pour maîtres d'ouvrage et bailleurs",
+      "Systèmes d'alerte précoce sur les défaillances techniques",
+      "Architecture résiliente et redondante pour environnements contraints",
+    ],
+    usecases: [
+      {
+        titre: "Supervision de chantier hydroélectrique",
+        desc: "Déploiement de 120 capteurs IoT sur un barrage en construction, avec remontée des données en temps réel vers le tableau de bord des ingénieurs et du bailleur.",
+        tag: "Énergie",
+      },
+      {
+        titre: "Connectivité rurale Starlink",
+        desc: "Infrastructure de points relais WiFi communautaires dans 40 villages isolés, avec modèle économique de paiement à la minute via mobile money.",
+        tag: "Connectivité",
+      },
+      {
+        titre: "Monitoring réseau d'eau potable",
+        desc: "Capteurs de débit et de qualité de l'eau sur un réseau de 200 km, avec alertes automatiques en cas de fuite ou de contamination.",
+        tag: "Eau",
+      },
+    ],
+    hero: {
+      breadcrumb: "Infrastructure Tech & IoT",
+      domainLabel: "GIRA Dev · Domaine 03",
+      titleLine1: "Infrastructure",
+      titleEm: "Tech & IoT",
+      subtitle:
+        "Supervision des chantiers, IoT sur les projets d'eau et d'énergie, connectivité en zones reculées. Nous posons les fondations numériques des infrastructures de demain.",
+      ctaPrimary: "Discutons de votre projet",
+      ctaSecondary: "Retour GIRA Dev",
+    },
+    sections: {
+      whatWeDo: "Ce que nous faisons",
+      concreteApps: "Applications concrètes",
+      usecasesTitle: "Cas d'usage en Afrique",
+      otherDomains: "Autres domaines GIRA Dev",
+    },
   },
-  {
-    titre: "Connectivité rurale Starlink",
-    desc: "Infrastructure de points relais WiFi communautaires dans 40 villages isolés, avec modèle économique de paiement à la minute via mobile money.",
-    tag: "Connectivité",
+  en: {
+    siblings: [
+      { label: "Data & AI", sub: "Intelligent systems", href: "/x/data-ia" },
+      { label: "Digital Gov", sub: "Public e-services", href: "/x/digital-gov" },
+      { label: "Finance & Impact", sub: "ESG & investments", href: "/x/finance-impact" },
+    ],
+    points: [
+      "IoT sensor deployment on water, energy and transport construction sites",
+      "Real-time supervision of critical infrastructure",
+      "Satellite connectivity (Starlink) for rural and remote areas",
+      "Steering dashboards for project owners and donors",
+      "Early warning systems for technical failures",
+      "Resilient and redundant architecture for constrained environments",
+    ],
+    usecases: [
+      {
+        titre: "Hydroelectric construction site supervision",
+        desc: "Deployment of 120 IoT sensors on a dam under construction, with real-time data feed to the engineers' and donor's dashboard.",
+        tag: "Energy",
+      },
+      {
+        titre: "Rural Starlink connectivity",
+        desc: "Community WiFi relay infrastructure in 40 isolated villages, with a pay-per-minute economic model via mobile money.",
+        tag: "Connectivity",
+      },
+      {
+        titre: "Drinking water network monitoring",
+        desc: "Flow and water quality sensors on a 200 km network, with automatic alerts in case of leakage or contamination.",
+        tag: "Water",
+      },
+    ],
+    hero: {
+      breadcrumb: "Tech Infrastructure & IoT",
+      domainLabel: "GIRA Dev · Domain 03",
+      titleLine1: "Infrastructure",
+      titleEm: "Tech & IoT",
+      subtitle:
+        "Construction site supervision, IoT on water and energy projects, connectivity in remote areas. We lay the digital foundations of tomorrow's infrastructure.",
+      ctaPrimary: "Discuss your project",
+      ctaSecondary: "Back to GIRA Dev",
+    },
+    sections: {
+      whatWeDo: "What we do",
+      concreteApps: "Concrete applications",
+      usecasesTitle: "Use cases in Africa",
+      otherDomains: "Other GIRA Dev domains",
+    },
   },
-  {
-    titre: "Monitoring réseau d'eau potable",
-    desc: "Capteurs de débit et de qualité de l'eau sur un réseau de 200 km, avec alertes automatiques en cas de fuite ou de contamination.",
-    tag: "Eau",
-  },
-];
+} as const;
 
 export default function InfrastructurePage() {
+  const locale = useLocale() as "fr" | "en";
+  const d = PAGE_DATA[locale];
+
   return (
     <div style={{ backgroundColor: "#0D0D0D", minHeight: "100vh" }}>
 
@@ -61,7 +132,7 @@ export default function InfrastructurePage() {
             </Link>
             <ChevronRight size={12} style={{ color: "rgba(255,255,255,0.2)" }} />
             <span className="text-xs uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-inter)" }}>
-              Infrastructure Tech & IoT
+              {d.hero.breadcrumb}
             </span>
           </motion.nav>
 
@@ -84,7 +155,7 @@ export default function InfrastructurePage() {
                 className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-4"
                 style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
               >
-                GIRA Dev · Domaine 03
+                {d.hero.domainLabel}
               </motion.span>
 
               <motion.h1
@@ -94,7 +165,7 @@ export default function InfrastructurePage() {
                 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white mb-6"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Infrastructure<br /><em style={{ color: "#C9A84C" }}>Tech & IoT</em>
+                {d.hero.titleLine1}<br /><em style={{ color: "#C9A84C" }}>{d.hero.titleEm}</em>
               </motion.h1>
 
               <motion.p
@@ -104,7 +175,7 @@ export default function InfrastructurePage() {
                 className="text-base md:text-lg leading-relaxed mb-10"
                 style={{ color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-inter)", maxWidth: "480px" }}
               >
-                Supervision des chantiers, IoT sur les projets d'eau et d'énergie, connectivité en zones reculées. Nous posons les fondations numériques des infrastructures de demain.
+                {d.hero.subtitle}
               </motion.p>
 
               <motion.div
@@ -117,14 +188,14 @@ export default function InfrastructurePage() {
                   className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold rounded-full transition-all hover:opacity-90"
                   style={{ backgroundColor: "#C9A84C", color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
                 >
-                  Discutons de votre projet
+                  {d.hero.ctaPrimary}
                   <ArrowRight size={15} />
                 </Link>
                 <Link href="/x"
                   className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full transition-all hover:opacity-70"
                   style={{ border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontFamily: "var(--font-inter)" }}
                 >
-                  Retour GIRA Dev
+                  {d.hero.ctaSecondary}
                 </Link>
               </motion.div>
             </div>
@@ -135,10 +206,10 @@ export default function InfrastructurePage() {
               transition={{ duration: 0.7, delay: 0.15 }}
             >
               <p className="text-xs uppercase tracking-widest font-bold mb-6" style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-inter)" }}>
-                Ce que nous faisons
+                {d.sections.whatWeDo}
               </p>
               <ul className="space-y-4">
-                {POINTS.map((pt, i) => (
+                {d.points.map((pt, i) => (
                   <motion.li key={i} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.07 }}
                     className="flex items-start gap-3 text-sm leading-relaxed"
                     style={{ color: "rgba(255,255,255,0.65)", fontFamily: "var(--font-inter)" }}>
@@ -156,11 +227,15 @@ export default function InfrastructurePage() {
       <section className="py-20 md:py-28" style={{ backgroundColor: "#111111" }}>
         <div className="max-w-screen-xl mx-auto px-8 md:px-16 lg:px-24">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-14">
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-3" style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}>Applications concrètes</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>Cas d'usage en Afrique</h2>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-3" style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}>
+              {d.sections.concreteApps}
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>
+              {d.sections.usecasesTitle}
+            </h2>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-6">
-            {USECASES.map((u, i) => (
+            {d.usecases.map((u, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="p-8 rounded-2xl" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
                 <span className="inline-block px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md mb-5"
@@ -176,9 +251,11 @@ export default function InfrastructurePage() {
       {/* ── NAVIGATION SIBLINGS ──────────────────────────── */}
       <section className="py-16 md:py-20" style={{ backgroundColor: "#0D0D0D", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div className="max-w-screen-xl mx-auto px-8 md:px-16 lg:px-24">
-          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "var(--font-inter)" }}>Autres domaines GIRA Dev</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "var(--font-inter)" }}>
+            {d.sections.otherDomains}
+          </p>
           <div className="grid sm:grid-cols-3 gap-4">
-            {SIBLINGS.map((s) => (
+            {d.siblings.map((s) => (
               <Link key={s.href} href={s.href}
                 className="group flex items-center justify-between p-5 rounded-2xl transition-all duration-200 hover:border-[rgba(201,168,76,0.3)]"
                 style={{ border: "1px solid rgba(255,255,255,0.06)", backgroundColor: "rgba(255,255,255,0.02)" }}>

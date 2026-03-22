@@ -2,10 +2,142 @@
 
 import { useState } from "react";
 import { Mail, ArrowRight, Bell, FileText, BarChart2, Calendar } from "lucide-react";
+import { useLocale } from "next-intl";
+
+/* ─── i18n Data ─── */
+
+const ACTUALITES_DATA = {
+  fr: {
+    hero: {
+      title: "Actualités & Publications",
+      subtitle:
+        "Analyses sectorielles, perspectives stratégiques et retours d\u2019expérience de l\u2019équipe GIRA sur le développement et le financement de projets en Afrique.",
+    },
+    comingSoon: {
+      title: "Bientôt disponible",
+      body: "Notre équipe éditoriale prépare les premières publications GIRA. Analyses, études de cas et perspectives sur le financement et l\u2019exécution de projets structurants en Afrique seront disponibles prochainement.",
+      programme: "Au programme",
+      items: [
+        {
+          icon: "BarChart2" as const,
+          titre: "Analyses sectorielles",
+          desc: "Décryptages approfondis des dynamiques de financement, de gouvernance et d\u2019exécution dans les secteurs eau, énergie, santé, agriculture et infrastructures en Afrique.",
+        },
+        {
+          icon: "FileText" as const,
+          titre: "Publications & études de cas",
+          desc: "Retours d\u2019expérience sur les mandats GIRA, méthodologies de structuration de projets et enseignements tirés des programmes PND accompagnés.",
+        },
+        {
+          icon: "Calendar" as const,
+          titre: "Événements & actualités",
+          desc: "Compte-rendus des tables rondes d\u2019investisseurs, forums de développement et missions institutionnelles auxquels GIRA participe à Paris, Casablanca et sur le continent africain.",
+        },
+      ],
+    },
+    notification: {
+      label: "Être notifié",
+      body: "Laissez votre email pour être informé dès la publication du premier article. Aucune sollicitation commerciale.",
+      emailPlaceholder: "votre@email.com",
+      button: "M\u2019alerter",
+    },
+    newsletter: {
+      label: "Newsletter GIRA",
+      title: "Recevoir nos analyses par email",
+      subtitle:
+        "Perspectives stratégiques, publications et actualités sur le financement et l\u2019exécution de projets en Afrique — sans publicité, sans spam.",
+      guarantees: [
+        "Données protégées — conformité RGPD",
+        "Désinscription en un clic",
+        "Aucun partenaire publicitaire",
+      ],
+    },
+    newsletterForm: {
+      firstNamePlaceholder: "Votre prénom",
+      orgPlaceholder: "Organisation",
+      emailPlaceholder: "votre@email.com",
+      submitButton: "S\u2019inscrire à la newsletter",
+      footerNote: "Pas de spam · Désinscription en un clic · Données protégées (RGPD)",
+      successTitle: "Merci pour votre inscription",
+      successBody: "Vous recevrez nos premières publications dès leur parution.",
+    },
+  },
+  en: {
+    hero: {
+      title: "News & Publications",
+      subtitle:
+        "Sector analyses, strategic perspectives and feedback from the GIRA team on development and project financing in Africa.",
+    },
+    comingSoon: {
+      title: "Coming soon",
+      body: "Our editorial team is preparing the first GIRA publications. Analyses, case studies and perspectives on the financing and execution of structuring projects in Africa will be available shortly.",
+      programme: "Coming up",
+      items: [
+        {
+          icon: "BarChart2" as const,
+          titre: "Sector analyses",
+          desc: "In-depth breakdowns of financing, governance and execution dynamics in the water, energy, health, agriculture and infrastructure sectors in Africa.",
+        },
+        {
+          icon: "FileText" as const,
+          titre: "Publications & case studies",
+          desc: "Feedback on GIRA mandates, project structuring methodologies and lessons learned from accompanied NDP programs.",
+        },
+        {
+          icon: "Calendar" as const,
+          titre: "Events & news",
+          desc: "Reports from investor roundtables, development forums and institutional missions in which GIRA participates in Paris, Casablanca and across the African continent.",
+        },
+      ],
+    },
+    notification: {
+      label: "Get notified",
+      body: "Leave your email to be informed as soon as the first article is published. No commercial solicitations.",
+      emailPlaceholder: "your@email.com",
+      button: "Notify me",
+    },
+    newsletter: {
+      label: "GIRA Newsletter",
+      title: "Receive our analyses by email",
+      subtitle:
+        "Strategic perspectives, publications and news on project financing and execution in Africa — no advertising, no spam.",
+      guarantees: [
+        "Protected data — GDPR compliance",
+        "Unsubscribe in one click",
+        "No advertising partners",
+      ],
+    },
+    newsletterForm: {
+      firstNamePlaceholder: "Your first name",
+      orgPlaceholder: "Organization",
+      emailPlaceholder: "your@email.com",
+      submitButton: "Subscribe to the newsletter",
+      footerNote: "No spam · Unsubscribe in one click · Protected data (GDPR)",
+      successTitle: "Thank you for subscribing",
+      successBody: "You will receive our first publications as soon as they are released.",
+    },
+  },
+} as const;
+
+const ICON_MAP = {
+  BarChart2,
+  FileText,
+  Calendar,
+} as const;
 
 /* ─────────────────────────── Newsletter Form ─────────────────────────── */
 
-function NewsletterForm() {
+interface NewsletterFormStrings {
+  firstNamePlaceholder: string;
+  orgPlaceholder: string;
+  emailPlaceholder: string;
+  submitButton: string;
+  footerNote: string;
+  successTitle: string;
+  successBody: string;
+}
+
+function NewsletterForm({ t }: { t: NewsletterFormStrings }) {
   const [submitted, setSubmitted] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
@@ -25,10 +157,10 @@ function NewsletterForm() {
         <p
           className="font-montserrat text-lg font-semibold text-white mb-2"
         >
-          Merci pour votre inscription
+          {t.successTitle}
         </p>
         <p className="font-inter text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
-          Vous recevrez nos premières publications dès leur parution.
+          {t.successBody}
         </p>
       </div>
     );
@@ -40,7 +172,7 @@ function NewsletterForm() {
       <div className="flex flex-col sm:flex-row gap-3 mb-3">
         <input
           type="text"
-          placeholder="Votre prénom"
+          placeholder={t.firstNamePlaceholder}
           className="w-full sm:flex-1 px-4 py-3.5 rounded-xl text-sm outline-none transition-all"
           style={{
             backgroundColor: "rgba(255,255,255,0.05)",
@@ -52,7 +184,7 @@ function NewsletterForm() {
         />
         <input
           type="text"
-          placeholder="Organisation"
+          placeholder={t.orgPlaceholder}
           className="w-full sm:flex-1 px-4 py-3.5 rounded-xl text-sm outline-none transition-all"
           style={{
             backgroundColor: "rgba(255,255,255,0.05)",
@@ -67,7 +199,7 @@ function NewsletterForm() {
       {/* Email */}
       <input
         type="email"
-        placeholder="votre@email.com"
+        placeholder={t.emailPlaceholder}
         required
         className="w-full px-4 py-3.5 rounded-xl text-sm outline-none mb-3"
         style={{
@@ -90,14 +222,14 @@ function NewsletterForm() {
         }}
       >
         <Mail size={15} />
-        S&apos;inscrire à la newsletter
+        {t.submitButton}
       </button>
 
       <p
         className="text-xs text-center mt-3"
         style={{ color: "rgba(255,255,255,0.28)", fontFamily: "var(--font-inter)" }}
       >
-        Pas de spam · Désinscription en un clic · Données protégées (RGPD)
+        {t.footerNote}
       </p>
     </form>
   );
@@ -106,6 +238,9 @@ function NewsletterForm() {
 /* ─────────────────────────── Page ─────────────────────────── */
 
 export default function ActualitesPage() {
+  const locale = useLocale() as "fr" | "en";
+  const t = ACTUALITES_DATA[locale];
+
   return (
     <>
       {/* ── HERO ── */}
@@ -114,15 +249,13 @@ export default function ActualitesPage() {
           <h1
             className="font-montserrat text-[2.5rem] md:text-[3.5rem] font-light tracking-tight text-[#1A1A1A] leading-[1.1] mb-6"
           >
-            Actualités &amp; Publications
+            {t.hero.title}
           </h1>
           <p
             className="font-inter text-base md:text-lg leading-relaxed max-w-[580px]"
             style={{ color: "#777" }}
           >
-            Analyses sectorielles, perspectives stratégiques et retours
-            d&apos;expérience de l&apos;équipe GIRA sur le développement et le
-            financement de projets en Afrique.
+            {t.hero.subtitle}
           </p>
         </div>
       </div>
@@ -136,16 +269,13 @@ export default function ActualitesPage() {
             <h2
               className="font-montserrat text-[1.75rem] md:text-[2.1rem] font-light tracking-tight text-[#1A1A1A] mb-4 leading-[1.2]"
             >
-              Bientôt disponible
+              {t.comingSoon.title}
             </h2>
             <p
               className="font-inter text-[15px] md:text-base leading-[1.9] max-w-[560px]"
               style={{ color: "#666" }}
             >
-              Notre équipe éditoriale prépare les premières publications GIRA.
-              Analyses, études de cas et perspectives sur le financement et
-              l&apos;exécution de projets structurants en Afrique seront
-              disponibles prochainement.
+              {t.comingSoon.body}
             </p>
           </div>
 
@@ -157,52 +287,39 @@ export default function ActualitesPage() {
               className="font-montserrat text-sm font-semibold uppercase tracking-widest mb-10"
               style={{ color: "#999" }}
             >
-              Au programme
+              {t.comingSoon.programme}
             </p>
 
             <div className="space-y-10">
-              {[
-                {
-                  Icon: BarChart2,
-                  titre: "Analyses sectorielles",
-                  desc: "Décryptages approfondis des dynamiques de financement, de gouvernance et d'exécution dans les secteurs eau, énergie, santé, agriculture et infrastructures en Afrique.",
-                },
-                {
-                  Icon: FileText,
-                  titre: "Publications & études de cas",
-                  desc: "Retours d'expérience sur les mandats GIRA, méthodologies de structuration de projets et enseignements tirés des programmes PND accompagnés.",
-                },
-                {
-                  Icon: Calendar,
-                  titre: "Événements & actualités",
-                  desc: "Compte-rendus des tables rondes d'investisseurs, forums de développement et missions institutionnelles auxquels GIRA participe à Paris, Casablanca et sur le continent africain.",
-                },
-              ].map(({ Icon, titre, desc }) => (
-                <div
-                  key={titre}
-                  className="flex gap-6 items-start"
-                >
+              {t.comingSoon.items.map(({ icon, titre, desc }) => {
+                const Icon = ICON_MAP[icon];
+                return (
                   <div
-                    className="shrink-0 mt-1 w-10 h-10 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: "#F5F5F0" }}
+                    key={titre}
+                    className="flex gap-6 items-start"
                   >
-                    <Icon size={18} style={{ color: "#C9A84C" }} />
-                  </div>
-                  <div>
-                    <h3
-                      className="font-montserrat text-base font-semibold text-[#1A1A1A] mb-2"
+                    <div
+                      className="shrink-0 mt-1 w-10 h-10 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: "#F5F5F0" }}
                     >
-                      {titre}
-                    </h3>
-                    <p
-                      className="font-inter text-[15px] leading-[1.85]"
-                      style={{ color: "#666" }}
-                    >
-                      {desc}
-                    </p>
+                      <Icon size={18} style={{ color: "#C9A84C" }} />
+                    </div>
+                    <div>
+                      <h3
+                        className="font-montserrat text-base font-semibold text-[#1A1A1A] mb-2"
+                      >
+                        {titre}
+                      </h3>
+                      <p
+                        className="font-inter text-[15px] leading-[1.85]"
+                        style={{ color: "#666" }}
+                      >
+                        {desc}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -216,15 +333,14 @@ export default function ActualitesPage() {
                 className="font-montserrat text-sm font-semibold uppercase tracking-widest"
                 style={{ color: "#999" }}
               >
-                Être notifié
+                {t.notification.label}
               </span>
             </div>
             <p
               className="font-inter text-[15px] leading-[1.85] mb-6"
               style={{ color: "#666" }}
             >
-              Laissez votre email pour être informé dès la publication du
-              premier article. Aucune sollicitation commerciale.
+              {t.notification.body}
             </p>
             {/* Mini inline form — juste email sur cette section */}
             <form
@@ -233,7 +349,7 @@ export default function ActualitesPage() {
             >
               <input
                 type="email"
-                placeholder="votre@email.com"
+                placeholder={t.notification.emailPlaceholder}
                 required
                 className="w-full flex-1 px-4 py-3.5 rounded-xl text-sm outline-none"
                 style={{
@@ -253,7 +369,7 @@ export default function ActualitesPage() {
                   fontFamily: "var(--font-montserrat)",
                 }}
               >
-                M&apos;alerter
+                {t.notification.button}
                 <ArrowRight size={14} />
               </button>
             </form>
@@ -272,35 +388,29 @@ export default function ActualitesPage() {
               className="font-inter text-xs uppercase tracking-widest block mb-4"
               style={{ color: "#C9A84C" }}
             >
-              Newsletter GIRA
+              {t.newsletter.label}
             </span>
             <h2
               className="font-montserrat text-[1.75rem] md:text-[2.25rem] font-semibold text-white leading-tight mb-4"
             >
-              Recevoir nos analyses par email
+              {t.newsletter.title}
             </h2>
             <p
               className="font-inter text-[15px] leading-[1.85] max-w-[500px]"
               style={{ color: "rgba(255,255,255,0.45)" }}
             >
-              Perspectives stratégiques, publications et actualités sur le
-              financement et l&apos;exécution de projets en Afrique —
-              sans publicité, sans spam.
+              {t.newsletter.subtitle}
             </p>
           </div>
 
           {/* Form */}
           <div className="max-w-[520px]">
-            <NewsletterForm />
+            <NewsletterForm t={t.newsletterForm} />
           </div>
 
           {/* Garanties */}
           <div className="flex flex-wrap gap-x-8 gap-y-2 mt-10 pt-10 border-t border-white/10">
-            {[
-              "Données protégées — conformité RGPD",
-              "Désinscription en un clic",
-              "Aucun partenaire publicitaire",
-            ].map((item) => (
+            {t.newsletter.guarantees.map((item) => (
               <span
                 key={item}
                 className="font-inter text-xs"

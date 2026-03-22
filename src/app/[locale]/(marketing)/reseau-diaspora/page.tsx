@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { useLocale } from "next-intl";
 import { ArrowRight, MapPin } from "lucide-react";
 
 /* ─── Types ─── */
@@ -16,86 +16,150 @@ interface Expert {
   domaine: string;
 }
 
-/* ─── Data ─── */
-const experts: Expert[] = [
-  {
-    initials: "AD",
-    nom: "Dr. Amara Diallo",
-    role: "Expert IA & Data",
-    ville: "Paris",
-    pays: "France",
-    domaine: "Technologie",
-  },
-  {
-    initials: "FN",
-    nom: "Fatou Ndiaye",
-    role: "Consultante Fintech",
-    ville: "Londres",
-    pays: "Royaume-Uni",
-    domaine: "Finance",
-  },
-  {
-    initials: "JK",
-    nom: "Jean-Baptiste Koffi",
-    role: "Architecte Solutions",
-    ville: "Casablanca",
-    pays: "Maroc",
-    domaine: "Technologie",
-  },
-  {
-    initials: "AB",
-    nom: "Dr. Aïssatou Bah",
-    role: "Spécialiste Santé Digitale",
-    ville: "Genève",
-    pays: "Suisse",
-    domaine: "Santé",
-  },
-  {
-    initials: "TM",
-    nom: "Thierry Mbeki",
-    role: "Expert Gouvernance",
-    ville: "Bruxelles",
-    pays: "Belgique",
-    domaine: "Gouvernance",
-  },
-  {
-    initials: "MT",
-    nom: "Mariama Touré",
-    role: "Développeuse Full-Stack",
-    ville: "Berlin",
-    pays: "Allemagne",
-    domaine: "Technologie",
-  },
-  {
-    initials: "PE",
-    nom: "Patrick Essomba",
-    role: "Analyste Financier",
-    ville: "New York",
-    pays: "États-Unis",
-    domaine: "Finance",
-  },
-  {
-    initials: "GO",
-    nom: "Dr. Grace Okafor",
-    role: "Experte Cybersécurité",
-    ville: "Toronto",
-    pays: "Canada",
-    domaine: "Technologie",
-  },
-];
+/* ─── Locale-keyed data ─── */
 
-const domaineOptions = ["Tous", "Technologie", "Finance", "Gouvernance", "Santé"];
+const EXPERTS_DATA: Record<"fr" | "en", Expert[]> = {
+  fr: [
+    { initials: "AD", nom: "Dr. Amara Diallo",      role: "Expert IA & Data",           ville: "Paris",    pays: "France",        domaine: "Technologie" },
+    { initials: "FN", nom: "Fatou Ndiaye",           role: "Consultante Fintech",        ville: "Londres",  pays: "Royaume-Uni",   domaine: "Finance" },
+    { initials: "JK", nom: "Jean-Baptiste Koffi",    role: "Architecte Solutions",       ville: "Casablanca", pays: "Maroc",       domaine: "Technologie" },
+    { initials: "AB", nom: "Dr. Aïssatou Bah",       role: "Spécialiste Santé Digitale", ville: "Genève",   pays: "Suisse",        domaine: "Santé" },
+    { initials: "TM", nom: "Thierry Mbeki",          role: "Expert Gouvernance",         ville: "Bruxelles", pays: "Belgique",     domaine: "Gouvernance" },
+    { initials: "MT", nom: "Mariama Touré",          role: "Développeuse Full-Stack",    ville: "Berlin",   pays: "Allemagne",     domaine: "Technologie" },
+    { initials: "PE", nom: "Patrick Essomba",        role: "Analyste Financier",         ville: "New York", pays: "États-Unis",    domaine: "Finance" },
+    { initials: "GO", nom: "Dr. Grace Okafor",       role: "Experte Cybersécurité",      ville: "Toronto",  pays: "Canada",        domaine: "Technologie" },
+  ],
+  en: [
+    { initials: "AD", nom: "Dr. Amara Diallo",      role: "AI & Data Expert",            ville: "Paris",    pays: "France",        domaine: "Technology" },
+    { initials: "FN", nom: "Fatou Ndiaye",           role: "Fintech Consultant",         ville: "London",   pays: "UK",            domaine: "Finance" },
+    { initials: "JK", nom: "Jean-Baptiste Koffi",    role: "Solutions Architect",        ville: "Casablanca", pays: "Morocco",     domaine: "Technology" },
+    { initials: "AB", nom: "Dr. Aïssatou Bah",       role: "Digital Health Specialist",  ville: "Geneva",   pays: "Switzerland",   domaine: "Health" },
+    { initials: "TM", nom: "Thierry Mbeki",          role: "Governance Expert",          ville: "Brussels", pays: "Belgium",       domaine: "Governance" },
+    { initials: "MT", nom: "Mariama Touré",          role: "Full-Stack Developer",       ville: "Berlin",   pays: "Germany",       domaine: "Technology" },
+    { initials: "PE", nom: "Patrick Essomba",        role: "Financial Analyst",          ville: "New York", pays: "USA",           domaine: "Finance" },
+    { initials: "GO", nom: "Dr. Grace Okafor",       role: "Cybersecurity Expert",       ville: "Toronto",  pays: "Canada",        domaine: "Technology" },
+  ],
+};
 
-const diasporaStats = [
-  { value: "170M", label: "Africains de la diaspora dans le monde" },
-  { value: "95 Mds $", label: "Transferts annuels vers le continent" },
-  { value: "3x", label: "Plus que l'aide publique au développement" },
-];
+const RESEAU_DATA = {
+  fr: {
+    hero: {
+      badge: "Réseau & Diaspora",
+      h1: "Réseau & Diaspora",
+      subtitle: "La diaspora africaine comme levier stratégique de transformation.",
+    },
+    editorial: {
+      badge: "Un acteur stratégique sous-valorisé",
+      h2: "La diaspora africaine, moteur de la transformation",
+      para1: "Avec plus de 170 millions d'Africains vivant hors du continent, la diaspora représente un capital humain, financier et intellectuel d'une ampleur sans précédent. Chaque année, près de 95 milliards de dollars transitent depuis la diaspora vers l'Afrique — soit trois fois le montant de l'aide publique au développement.",
+      para2: "Au-delà des flux financiers, la diaspora incarne une expertise de pointe forgée dans les meilleurs établissements et entreprises du monde. GIRA a fait le choix stratégique de mobiliser ce réseau pour accélérer la transformation digitale et institutionnelle de l'Afrique.",
+      para3: "Notre réseau d'experts diaspora intervient en complémentarité des équipes locales. Apportant des compétences techniques rares, des connexions internationales et une vision du continent ancrée dans la réalité quotidienne.",
+    },
+    diasporaStats: [
+      { value: "170M", label: "Africains de la diaspora dans le monde" },
+      { value: "95 Mds $", label: "Transferts annuels vers le continent" },
+      { value: "3x", label: "Plus que l'aide publique au développement" },
+    ],
+    experts: {
+      badge: "Experts & Consultants",
+      h2: "Notre réseau d'experts",
+      domaineOptions: ["Tous", "Technologie", "Finance", "Gouvernance", "Santé"],
+      allKey: "Tous",
+    },
+    join: {
+      badge: "Candidature ouverte",
+      h2: "Rejoindre le réseau",
+      para1: "Vous êtes un expert de la diaspora africaine et souhaitez contribuer à des projets à fort impact sur le continent ? GIRA constitue en permanence un vivier d'experts dans les domaines de la technologie, la finance, la gouvernance, la santé et l'infrastructure.",
+      para2: "Intégrer notre réseau, c'est accéder à des missions à haute responsabilité, travailler avec des gouvernements et institutions internationales, et participer concrètement à la transformation de l'Afrique.",
+      form: {
+        nomLabel: "Nom complet",
+        emailLabel: "Adresse email",
+        paysLabel: "Pays de résidence",
+        domaineLabel: "Domaine d'expertise",
+        domainePlaceholder: "Sélectionner un domaine",
+        domaineOptions: [
+          { value: "Technologie", label: "Technologie & Numérique" },
+          { value: "Finance", label: "Finance & Investissement" },
+          { value: "Gouvernance", label: "Gouvernance & Institutions" },
+          { value: "Santé", label: "Santé & Sciences" },
+          { value: "Infrastructure", label: "Infrastructure & Énergie" },
+          { value: "Agriculture", label: "Agriculture & Environnement" },
+          { value: "Autre", label: "Autre" },
+        ],
+        messageLabel: "Votre parcours en quelques mots",
+        submitLabel: "Rejoindre le réseau",
+      },
+    },
+    cta: {
+      h2: "Prêt à contribuer à la transformation de l'Afrique ?",
+      para: "Rejoignez un réseau d'experts engagés sur des projets à fort impact institutionnel et sectoriel.",
+      btn: "Découvrir nos expertises",
+    },
+  },
+  en: {
+    hero: {
+      badge: "Network & Diaspora",
+      h1: "Network & Diaspora",
+      subtitle: "The African diaspora as a strategic lever for transformation.",
+    },
+    editorial: {
+      badge: "An undervalued strategic player",
+      h2: "The African diaspora, engine of transformation",
+      para1: "With more than 170 million Africans living outside the continent, the diaspora represents human, financial and intellectual capital of unprecedented scale. Each year, nearly $95 billion flows from the diaspora to Africa — three times the amount of official development aid.",
+      para2: "Beyond financial flows, the diaspora embodies cutting-edge expertise forged in the world's best institutions and companies. GIRA has made the strategic choice to mobilize this network to accelerate the digital and institutional transformation of Africa.",
+      para3: "Our diaspora expert network operates in complementarity with local teams. Bringing rare technical skills, international connections and a vision of the continent rooted in daily reality.",
+    },
+    diasporaStats: [
+      { value: "170M", label: "Africans in the diaspora worldwide" },
+      { value: "$95B", label: "Annual transfers to the continent" },
+      { value: "3x", label: "More than official development aid" },
+    ],
+    experts: {
+      badge: "Experts & Consultants",
+      h2: "Our expert network",
+      domaineOptions: ["All", "Technology", "Finance", "Governance", "Health"],
+      allKey: "All",
+    },
+    join: {
+      badge: "Open application",
+      h2: "Join the network",
+      para1: "Are you an expert from the African diaspora who wants to contribute to high-impact projects on the continent? GIRA continuously builds a pool of experts in technology, finance, governance, health and infrastructure.",
+      para2: "Joining our network means accessing high-responsibility missions, working with governments and international institutions, and actively participating in the transformation of Africa.",
+      form: {
+        nomLabel: "Full name",
+        emailLabel: "Email address",
+        paysLabel: "Country of residence",
+        domaineLabel: "Area of expertise",
+        domainePlaceholder: "Select a domain",
+        domaineOptions: [
+          { value: "Technology", label: "Technology & Digital" },
+          { value: "Finance", label: "Finance & Investment" },
+          { value: "Governance", label: "Governance & Institutions" },
+          { value: "Health", label: "Health & Sciences" },
+          { value: "Infrastructure", label: "Infrastructure & Energy" },
+          { value: "Agriculture", label: "Agriculture & Environment" },
+          { value: "Other", label: "Other" },
+        ],
+        messageLabel: "Your background in a few words",
+        submitLabel: "Join the network",
+      },
+    },
+    cta: {
+      h2: "Ready to contribute to Africa's transformation?",
+      para: "Join a network of committed experts working on high-impact institutional and sectoral projects.",
+      btn: "Discover our expertise",
+    },
+  },
+};
 
 /* ─── Page ─── */
 
 export default function ReseauDiasporaPage() {
-  const [filtre, setFiltre] = useState("Tous");
+  const locale = useLocale() as "fr" | "en";
+  const t = RESEAU_DATA[locale];
+  const experts = EXPERTS_DATA[locale];
+
+  const [filtre, setFiltre] = useState(t.experts.allKey);
   const [formData, setFormData] = useState({
     nom: "",
     email: "",
@@ -105,7 +169,9 @@ export default function ReseauDiasporaPage() {
   });
 
   const filtered =
-    filtre === "Tous" ? experts : experts.filter((e) => e.domaine === filtre);
+    filtre === t.experts.allKey
+      ? experts
+      : experts.filter((e) => e.domaine === filtre);
 
   function handleChange(
     e: React.ChangeEvent<
@@ -147,7 +213,7 @@ export default function ReseauDiasporaPage() {
             className="text-xs uppercase tracking-widest mb-4"
             style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
           >
-            Réseau & Diaspora
+            {t.hero.badge}
           </motion.p>
 
           <motion.h1
@@ -157,7 +223,7 @@ export default function ReseauDiasporaPage() {
             className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight max-w-3xl"
             style={{ fontFamily: "var(--font-montserrat)" }}
           >
-            Réseau & Diaspora
+            {t.hero.h1}
           </motion.h1>
 
           <motion.p
@@ -167,7 +233,7 @@ export default function ReseauDiasporaPage() {
             className="mt-4 text-base md:text-lg max-w-2xl leading-relaxed"
             style={{ color: "#E8D5A3", fontFamily: "var(--font-inter)" }}
           >
-            La diaspora africaine comme levier stratégique de transformation.
+            {t.hero.subtitle}
           </motion.p>
 
           <motion.div
@@ -201,43 +267,32 @@ export default function ReseauDiasporaPage() {
                 className="text-xs uppercase tracking-widest mb-3 font-medium"
                 style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
               >
-                Un acteur stratégique sous-valorisé
+                {t.editorial.badge}
               </p>
               <h2
                 className="text-3xl md:text-4xl font-bold leading-tight mb-6"
                 style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
               >
-                La diaspora africaine, moteur de la transformation
+                {t.editorial.h2}
               </h2>
               <div className="space-y-4">
                 <p
                   className="text-base leading-relaxed"
                   style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                 >
-                  Avec plus de 170 millions d'Africains vivant hors du continent,
-                  la diaspora représente un capital humain, financier et intellectuel
-                  d'une ampleur sans précédent. Chaque année, près de 95 milliards
-                  de dollars transitent depuis la diaspora vers l'Afrique —
-                  soit trois fois le montant de l'aide publique au développement.
+                  {t.editorial.para1}
                 </p>
                 <p
                   className="text-base leading-relaxed"
                   style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                 >
-                  Au-delà des flux financiers, la diaspora incarne une expertise
-                  de pointe forgée dans les meilleurs établissements et entreprises
-                  du monde. GIRA a fait le choix stratégique de mobiliser ce réseau
-                  pour accélérer la transformation digitale et institutionnelle de
-                  l'Afrique.
+                  {t.editorial.para2}
                 </p>
                 <p
                   className="text-base leading-relaxed"
                   style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                 >
-                  Notre réseau d'experts diaspora intervient en complémentarité
-                  des équipes locales. Apportant des compétences techniques rares,
-                  des connexions internationales et une vision du continent ancrée
-                  dans la réalité quotidienne.
+                  {t.editorial.para3}
                 </p>
               </div>
             </motion.div>
@@ -250,7 +305,7 @@ export default function ReseauDiasporaPage() {
               transition={{ duration: 0.6, delay: 0.15 }}
               className="space-y-4"
             >
-              {diasporaStats.map((stat, i) => (
+              {t.diasporaStats.map((stat, i) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, x: 20 }}
@@ -299,19 +354,19 @@ export default function ReseauDiasporaPage() {
               className="text-xs uppercase tracking-widest mb-3 font-medium"
               style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
             >
-              Experts & Consultants
+              {t.experts.badge}
             </p>
             <h2
               className="text-3xl md:text-4xl font-bold text-white leading-tight"
               style={{ fontFamily: "var(--font-montserrat)" }}
             >
-              Notre réseau d'experts
+              {t.experts.h2}
             </h2>
           </motion.div>
 
           {/* Filter tabs */}
           <div className="flex flex-wrap gap-2 mb-10">
-            {domaineOptions.map((d) => {
+            {t.experts.domaineOptions.map((d) => {
               const isActive = filtre === d;
               return (
                 <button
@@ -441,32 +496,25 @@ export default function ReseauDiasporaPage() {
                 className="text-xs uppercase tracking-widest mb-3 font-medium"
                 style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
               >
-                Candidature ouverte
+                {t.join.badge}
               </p>
               <h2
                 className="text-3xl md:text-4xl font-bold leading-tight mb-6"
                 style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
               >
-                Rejoindre le réseau
+                {t.join.h2}
               </h2>
               <p
                 className="text-base leading-relaxed mb-4"
                 style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
               >
-                Vous êtes un expert de la diaspora africaine et souhaitez
-                contribuer à des projets à fort impact sur le continent ?
-                GIRA constitue en permanence un vivier d'experts dans
-                les domaines de la technologie, la finance, la gouvernance,
-                la santé et l'infrastructure.
+                {t.join.para1}
               </p>
               <p
                 className="text-base leading-relaxed"
                 style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
               >
-                Intégrer notre réseau, c'est accéder à des missions à haute
-                responsabilité, travailler avec des gouvernements et institutions
-                internationales, et participer concrètement à la transformation
-                de l'Afrique.
+                {t.join.para2}
               </p>
             </motion.div>
 
@@ -488,7 +536,7 @@ export default function ReseauDiasporaPage() {
                     className="block text-xs uppercase tracking-wide font-medium mb-2"
                     style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                   >
-                    Nom complet
+                    {t.join.form.nomLabel}
                   </label>
                   <input
                     id="nom"
@@ -515,7 +563,7 @@ export default function ReseauDiasporaPage() {
                     className="block text-xs uppercase tracking-wide font-medium mb-2"
                     style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                   >
-                    Adresse email
+                    {t.join.form.emailLabel}
                   </label>
                   <input
                     id="email"
@@ -542,7 +590,7 @@ export default function ReseauDiasporaPage() {
                     className="block text-xs uppercase tracking-wide font-medium mb-2"
                     style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                   >
-                    Pays de résidence
+                    {t.join.form.paysLabel}
                   </label>
                   <input
                     id="pays"
@@ -569,7 +617,7 @@ export default function ReseauDiasporaPage() {
                     className="block text-xs uppercase tracking-wide font-medium mb-2"
                     style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                   >
-                    Domaine d'expertise
+                    {t.join.form.domaineLabel}
                   </label>
                   <select
                     id="domaine"
@@ -586,14 +634,10 @@ export default function ReseauDiasporaPage() {
                       fontSize: "16px",
                     }}
                   >
-                    <option value="">Sélectionner un domaine</option>
-                    <option value="Technologie">Technologie & Numérique</option>
-                    <option value="Finance">Finance & Investissement</option>
-                    <option value="Gouvernance">Gouvernance & Institutions</option>
-                    <option value="Santé">Santé & Sciences</option>
-                    <option value="Infrastructure">Infrastructure & Énergie</option>
-                    <option value="Agriculture">Agriculture & Environnement</option>
-                    <option value="Autre">Autre</option>
+                    <option value="">{t.join.form.domainePlaceholder}</option>
+                    {t.join.form.domaineOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -604,7 +648,7 @@ export default function ReseauDiasporaPage() {
                     className="block text-xs uppercase tracking-wide font-medium mb-2"
                     style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                   >
-                    Votre parcours en quelques mots
+                    {t.join.form.messageLabel}
                   </label>
                   <textarea
                     id="message"
@@ -632,7 +676,7 @@ export default function ReseauDiasporaPage() {
                     fontFamily: "var(--font-montserrat)",
                   }}
                 >
-                  Rejoindre le réseau
+                  {t.join.form.submitLabel}
                 </button>
               </form>
             </motion.div>
@@ -660,14 +704,13 @@ export default function ReseauDiasporaPage() {
               className="text-2xl md:text-4xl font-bold text-white mb-4"
               style={{ fontFamily: "var(--font-montserrat)" }}
             >
-              Prêt à contribuer à la transformation de l'Afrique ?
+              {t.cta.h2}
             </h2>
             <p
               className="text-base md:text-lg mb-10 max-w-xl mx-auto"
               style={{ color: "#E8D5A3", fontFamily: "var(--font-inter)" }}
             >
-              Rejoignez un réseau d'experts engagés sur des projets à fort
-              impact institutionnel et sectoriel.
+              {t.cta.para}
             </p>
             <Link
               href="/services"
@@ -678,7 +721,7 @@ export default function ReseauDiasporaPage() {
                 fontFamily: "var(--font-montserrat)",
               }}
             >
-              Découvrir nos expertises
+              {t.cta.btn}
               <ArrowRight
                 size={16}
                 className="transition-transform duration-200 group-hover:translate-x-1"

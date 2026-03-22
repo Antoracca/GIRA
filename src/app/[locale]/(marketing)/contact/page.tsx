@@ -2,22 +2,112 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
+import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ChevronRight, MapPin, Mail, Globe } from "lucide-react";
 
 /* ─────────────────────────────────────────
-   Data
+   i18n Data
 ───────────────────────────────────────── */
 
-const typesDemande = [
-  "Gouvernement",
-  "Institution internationale",
-  "Investisseur",
-  "Entreprise",
-  "ONG",
-  "Autre",
-];
+const PAGE_DATA = {
+  fr: {
+    breadcrumbHome: "Accueil",
+    heroTitle: "Contactez-nous",
+    heroSubtitle: "Notre équipe répond sous 24h ouvrées.",
+    formTitle: "Écrivez-nous",
+    formSubtitle: "Remplissez le formulaire ci-dessous. Notre équipe vous répondra dans les meilleurs délais.",
+    successTitle: "Message envoyé avec succès.",
+    successDesc: "Nos équipes ont bien reçu votre demande. Nous reviendrons vers vous sous 24h ouvrées avec une première analyse.",
+    labels: {
+      firstName: "Prénom *",
+      firstNamePh: "Votre prénom",
+      lastName: "Nom *",
+      lastNamePh: "Votre nom",
+      organisation: "Organisation *",
+      organisationPh: "Votre organisation",
+      fonction: "Fonction *",
+      fonctionPh: "Votre fonction",
+      pays: "Pays *",
+      paysPh: "Votre pays",
+      email: "Email *",
+      emailPh: "prenom@exemple.com",
+      phone: "Téléphone (optionnel)",
+      typeDemande: "Type de demande *",
+      typeSelect: "Sélectionner…",
+      message: "Message *",
+      messagePh: "Décrivez votre projet ou votre demande…",
+      rgpd: "J'accepte que GIRA traite mes données conformément à sa",
+      rgpdLink: "politique de confidentialité",
+      submit: "Envoyer",
+      submitting: "Envoi en cours…",
+    },
+    typesDemande: ["Gouvernement", "Institution internationale", "Investisseur", "Entreprise", "ONG", "Autre"],
+    errors: {
+      firstName: "Prénom requis (min. 2 caractères)",
+      lastName: "Nom requis (min. 2 caractères)",
+      organisation: "Organisation requise",
+      fonction: "Fonction requise",
+      pays: "Pays requis",
+      email: "Email invalide",
+      typeDemande: "Type de demande requis",
+      message: "Message trop court (20 caractères min.)",
+      rgpd: "Vous devez accepter la politique RGPD",
+    },
+    coords: "Nos coordonnées",
+    hq: "Siège — Paris",
+    offices: "Bureaux",
+    writeDirectly: "Ou écrivez-nous directement",
+  },
+  en: {
+    breadcrumbHome: "Home",
+    heroTitle: "Contact Us",
+    heroSubtitle: "Our team responds within 24 business hours.",
+    formTitle: "Write to Us",
+    formSubtitle: "Fill in the form below. Our team will respond as soon as possible.",
+    successTitle: "Message sent successfully.",
+    successDesc: "Our team has received your request. We will get back to you within 24 business hours with an initial analysis.",
+    labels: {
+      firstName: "First name *",
+      firstNamePh: "Your first name",
+      lastName: "Last name *",
+      lastNamePh: "Your last name",
+      organisation: "Organization *",
+      organisationPh: "Your organization",
+      fonction: "Position *",
+      fonctionPh: "Your position",
+      pays: "Country *",
+      paysPh: "Your country",
+      email: "Email *",
+      emailPh: "firstname@example.com",
+      phone: "Phone (optional)",
+      typeDemande: "Request type *",
+      typeSelect: "Select…",
+      message: "Message *",
+      messagePh: "Describe your project or request…",
+      rgpd: "I agree that GIRA processes my data in accordance with its",
+      rgpdLink: "privacy policy",
+      submit: "Send",
+      submitting: "Sending…",
+    },
+    typesDemande: ["Government", "International institution", "Investor", "Company", "NGO", "Other"],
+    errors: {
+      firstName: "First name required (min. 2 characters)",
+      lastName: "Last name required (min. 2 characters)",
+      organisation: "Organization required",
+      fonction: "Position required",
+      pays: "Country required",
+      email: "Invalid email",
+      typeDemande: "Request type required",
+      message: "Message too short (20 characters min.)",
+      rgpd: "You must accept the GDPR policy",
+    },
+    coords: "Our Contact Details",
+    hq: "HQ — Paris",
+    offices: "Offices",
+    writeDirectly: "Or write to us directly",
+  },
+} as const;
 
 /* ─────────────────────────────────────────
    Animation variant
@@ -54,6 +144,9 @@ const labelStyle: React.CSSProperties = {
 ───────────────────────────────────────── */
 
 export default function ContactPage() {
+  const locale = useLocale() as "fr" | "en";
+  const d = PAGE_DATA[locale];
+
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -79,18 +172,18 @@ export default function ContactPage() {
   function validate() {
     const e: Record<string, string> = {};
     if (!form.firstName.trim() || form.firstName.trim().length < 2)
-      e.firstName = "Prénom requis (min. 2 caractères)";
+      e.firstName = d.errors.firstName;
     if (!form.lastName.trim() || form.lastName.trim().length < 2)
-      e.lastName = "Nom requis (min. 2 caractères)";
-    if (!form.organisation.trim()) e.organisation = "Organisation requise";
-    if (!form.fonction.trim()) e.fonction = "Fonction requise";
-    if (!form.pays.trim()) e.pays = "Pays requis";
+      e.lastName = d.errors.lastName;
+    if (!form.organisation.trim()) e.organisation = d.errors.organisation;
+    if (!form.fonction.trim()) e.fonction = d.errors.fonction;
+    if (!form.pays.trim()) e.pays = d.errors.pays;
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      e.email = "Email invalide";
-    if (!form.typeDemande) e.typeDemande = "Type de demande requis";
+      e.email = d.errors.email;
+    if (!form.typeDemande) e.typeDemande = d.errors.typeDemande;
     if (!form.message.trim() || form.message.trim().length < 20)
-      e.message = "Message trop court (20 caractères min.)";
-    if (!form.rgpd) e.rgpd = "Vous devez accepter la politique RGPD";
+      e.message = d.errors.message;
+    if (!form.rgpd) e.rgpd = d.errors.rgpd;
     return e;
   }
 
@@ -133,8 +226,8 @@ export default function ContactPage() {
           {/* Breadcrumb */}
           <nav aria-label="Fil d'Ariane" className="flex items-center gap-1 mb-5">
             {[
-              { label: "Accueil", href: "/" },
-              { label: "Contact" },
+              { label: d.breadcrumbHome, href: "/" },
+              { label: d.heroTitle },
             ].map((item, i) => (
               <span key={i} className="flex items-center gap-1">
                 {i > 0 && (
@@ -167,7 +260,7 @@ export default function ContactPage() {
             className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight max-w-3xl"
             style={{ fontFamily: "var(--font-montserrat)" }}
           >
-            Contactez-nous
+            {d.heroTitle}
           </motion.h1>
 
           <motion.p
@@ -177,7 +270,7 @@ export default function ContactPage() {
             className="mt-4 text-base md:text-lg max-w-xl leading-relaxed"
             style={{ color: "#E8D5A3", fontFamily: "var(--font-inter)" }}
           >
-            Notre équipe répond sous 24h ouvrées.
+            {d.heroSubtitle}
           </motion.p>
 
           <motion.div
@@ -201,13 +294,13 @@ export default function ContactPage() {
                 className="text-2xl md:text-3xl font-bold mb-2"
                 style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
               >
-                Écrivez-nous
+                {d.formTitle}
               </h2>
               <p
                 className="text-sm mb-8"
                 style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
               >
-                Remplissez le formulaire ci-dessous. Notre équipe vous répondra dans les meilleurs délais.
+                {d.formSubtitle}
               </p>
 
               {submitted ? (
@@ -222,13 +315,13 @@ export default function ContactPage() {
                     className="text-base font-bold mb-2"
                     style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
                   >
-                    Message envoyé avec succès.
+                    {d.successTitle}
                   </p>
                   <p
                     className="text-sm"
                     style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                   >
-                    Nos équipes ont bien reçu votre demande. Nous reviendrons vers vous sous 24h ouvrées avec une première analyse.
+                    {d.successDesc}
                   </p>
                 </motion.div>
               ) : (
@@ -244,15 +337,15 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  {/* Prénom + Nom */}
+                  {/* First name + Last name */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label style={labelStyle}>Prénom *</label>
+                      <label style={labelStyle}>{d.labels.firstName}</label>
                       <input
                         type="text"
                         value={form.firstName}
                         onChange={(e) => update("firstName", e.target.value)}
-                        placeholder="Votre prénom"
+                        placeholder={d.labels.firstNamePh}
                         className={inputClass}
                         style={inputStyle}
                       />
@@ -263,12 +356,12 @@ export default function ContactPage() {
                       )}
                     </div>
                     <div>
-                      <label style={labelStyle}>Nom *</label>
+                      <label style={labelStyle}>{d.labels.lastName}</label>
                       <input
                         type="text"
                         value={form.lastName}
                         onChange={(e) => update("lastName", e.target.value)}
-                        placeholder="Votre nom"
+                        placeholder={d.labels.lastNamePh}
                         className={inputClass}
                         style={inputStyle}
                       />
@@ -283,12 +376,12 @@ export default function ContactPage() {
                   {/* Organisation + Fonction */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label style={labelStyle}>Organisation *</label>
+                      <label style={labelStyle}>{d.labels.organisation}</label>
                       <input
                         type="text"
                         value={form.organisation}
                         onChange={(e) => update("organisation", e.target.value)}
-                        placeholder="Votre organisation"
+                        placeholder={d.labels.organisationPh}
                         className={inputClass}
                         style={inputStyle}
                       />
@@ -299,12 +392,12 @@ export default function ContactPage() {
                       )}
                     </div>
                     <div>
-                      <label style={labelStyle}>Fonction *</label>
+                      <label style={labelStyle}>{d.labels.fonction}</label>
                       <input
                         type="text"
                         value={form.fonction}
                         onChange={(e) => update("fonction", e.target.value)}
-                        placeholder="Votre fonction"
+                        placeholder={d.labels.fonctionPh}
                         className={inputClass}
                         style={inputStyle}
                       />
@@ -319,12 +412,12 @@ export default function ContactPage() {
                   {/* Pays + Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label style={labelStyle}>Pays *</label>
+                      <label style={labelStyle}>{d.labels.pays}</label>
                       <input
                         type="text"
                         value={form.pays}
                         onChange={(e) => update("pays", e.target.value)}
-                        placeholder="Votre pays"
+                        placeholder={d.labels.paysPh}
                         className={inputClass}
                         style={inputStyle}
                       />
@@ -335,12 +428,12 @@ export default function ContactPage() {
                       )}
                     </div>
                     <div>
-                      <label style={labelStyle}>Email *</label>
+                      <label style={labelStyle}>{d.labels.email}</label>
                       <input
                         type="email"
                         value={form.email}
                         onChange={(e) => update("email", e.target.value)}
-                        placeholder="prenom@exemple.com"
+                        placeholder={d.labels.emailPh}
                         className={inputClass}
                         style={inputStyle}
                       />
@@ -352,9 +445,9 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Téléphone */}
+                  {/* Phone */}
                   <div>
-                    <label style={labelStyle}>Téléphone (optionnel)</label>
+                    <label style={labelStyle}>{d.labels.phone}</label>
                     <input
                       type="tel"
                       value={form.phone}
@@ -367,15 +460,15 @@ export default function ContactPage() {
 
                   {/* Type de demande */}
                   <div>
-                    <label style={labelStyle}>Type de demande *</label>
+                    <label style={labelStyle}>{d.labels.typeDemande}</label>
                     <select
                       value={form.typeDemande}
                       onChange={(e) => update("typeDemande", e.target.value)}
                       className={inputClass}
                       style={inputStyle}
                     >
-                      <option value="">Sélectionner…</option>
-                      {typesDemande.map((t) => (
+                      <option value="">{d.labels.typeSelect}</option>
+                      {d.typesDemande.map((t) => (
                         <option key={t} value={t}>
                           {t}
                         </option>
@@ -390,12 +483,12 @@ export default function ContactPage() {
 
                   {/* Message */}
                   <div>
-                    <label style={labelStyle}>Message *</label>
+                    <label style={labelStyle}>{d.labels.message}</label>
                     <textarea
                       value={form.message}
                       onChange={(e) => update("message", e.target.value)}
                       rows={4}
-                      placeholder="Décrivez votre projet ou votre demande…"
+                      placeholder={d.labels.messagePh}
                       className={inputClass}
                       style={{ ...inputStyle, resize: "none" }}
                     />
@@ -421,13 +514,13 @@ export default function ContactPage() {
                       className="text-xs leading-relaxed"
                       style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
                     >
-                      J'accepte que GIRA traite mes données conformément à sa{" "}
+                      {d.labels.rgpd}{" "}
                       <Link
                         href="/politique-confidentialite"
                         className="underline"
                         style={{ color: "#C9A84C" }}
                       >
-                        politique de confidentialité
+                        {d.labels.rgpdLink}
                       </Link>
                       . *
                     </label>
@@ -450,7 +543,7 @@ export default function ContactPage() {
                       minHeight: "44px",
                     }}
                   >
-                    {submitting ? "Envoi en cours…" : "Envoyer"}
+                    {submitting ? d.labels.submitting : d.labels.submit}
                   </button>
                 </form>
               )}
@@ -464,11 +557,11 @@ export default function ContactPage() {
                   className="text-lg font-bold mb-6"
                   style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
                 >
-                  Nos coordonnées
+                  {d.coords}
                 </h3>
 
                 <div className="space-y-6">
-                  {/* Siège Paris */}
+                  {/* HQ Paris */}
                   <div className="flex items-start gap-3">
                     <MapPin size={18} className="mt-0.5 shrink-0" style={{ color: "#C9A84C" }} />
                     <div>
@@ -476,7 +569,7 @@ export default function ContactPage() {
                         className="text-sm font-semibold mb-0.5"
                         style={{ color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
                       >
-                        Siège — Paris
+                        {d.hq}
                       </p>
                       <p
                         className="text-sm leading-relaxed"
@@ -509,7 +602,7 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Bureaux */}
+                  {/* Offices */}
                   <div className="flex items-start gap-3">
                     <Globe size={18} className="mt-0.5 shrink-0" style={{ color: "#C9A84C" }} />
                     <div>
@@ -517,7 +610,7 @@ export default function ContactPage() {
                         className="text-sm font-semibold mb-0.5"
                         style={{ color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
                       >
-                        Bureaux
+                        {d.offices}
                       </p>
                       <p
                         className="text-sm"
@@ -556,7 +649,7 @@ export default function ContactPage() {
               className="text-2xl md:text-3xl font-bold text-white mb-4"
               style={{ fontFamily: "var(--font-montserrat)" }}
             >
-              Ou écrivez-nous directement
+              {d.writeDirectly}
             </h2>
             <a
               href="mailto:contact@gira-cf.com"

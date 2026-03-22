@@ -1,43 +1,114 @@
 "use client";
 
+import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, LineChart, CheckCircle2, ChevronRight } from "lucide-react";
 
-const SIBLINGS = [
-  { label: "Data & IA", sub: "Systèmes intelligents", href: "/x/data-ia" },
-  { label: "Digital Gov", sub: "e-Services publics", href: "/x/digital-gov" },
-  { label: "Infrastructure Tech", sub: "IoT & supervision", href: "/x/infrastructure" },
-];
-
-const POINTS = [
-  "Reporting ESG automatisé pour investisseurs institutionnels et fonds d'impact",
-  "Plateformes de suivi et de traçabilité des investissements projet",
-  "Outils de mobilisation des bailleurs : prospectus numériques, fiches projets",
-  "Tableaux de bord financiers temps réel pour comités de pilotage",
-  "Modélisation de l'impact social et environnemental des projets",
-  "Conformité aux standards GRI, TCFD et cadres bailleurs (IDA, BAD, AFD)",
-];
-
-const USECASES = [
-  {
-    titre: "Plateforme de suivi PND",
-    desc: "Outil de reporting financier en temps réel pour le suivi des décaissements du PND-RCA, avec tableaux de bord à destination des bailleurs et du gouvernement.",
-    tag: "Gouvernance",
+/* ── Locale-keyed data ────────────────────────────────── */
+const PAGE_DATA = {
+  fr: {
+    siblings: [
+      { label: "Data & IA", sub: "Systèmes intelligents", href: "/x/data-ia" },
+      { label: "Digital Gov", sub: "e-Services publics", href: "/x/digital-gov" },
+      { label: "Infrastructure Tech", sub: "IoT & supervision", href: "/x/infrastructure" },
+    ],
+    points: [
+      "Reporting ESG automatisé pour investisseurs institutionnels et fonds d'impact",
+      "Plateformes de suivi et de traçabilité des investissements projet",
+      "Outils de mobilisation des bailleurs : prospectus numériques, fiches projets",
+      "Tableaux de bord financiers temps réel pour comités de pilotage",
+      "Modélisation de l'impact social et environnemental des projets",
+      "Conformité aux standards GRI, TCFD et cadres bailleurs (IDA, BAD, AFD)",
+    ],
+    usecases: [
+      {
+        titre: "Plateforme de suivi PND",
+        desc: "Outil de reporting financier en temps réel pour le suivi des décaissements du PND-RCA, avec tableaux de bord à destination des bailleurs et du gouvernement.",
+        tag: "Gouvernance",
+      },
+      {
+        titre: "Reporting ESG fonds d'impact",
+        desc: "Automatisation du rapport ESG annuel d'un fonds d'investissement africain : collecte des données, calcul des indicateurs, mise en forme conforme GRI.",
+        tag: "ESG",
+      },
+      {
+        titre: "Prospectus numérique investisseurs",
+        desc: "Plateforme de présentation des projets bancables pour la Table Ronde des Investisseurs de Marrakech, avec fiches projets interactives et système de manifestation d'intérêt.",
+        tag: "Financement",
+      },
+    ],
+    hero: {
+      breadcrumb: "Finance & Impact ESG",
+      domainLabel: "GIRA Dev · Domaine 04",
+      titleLine1: "Finance &",
+      titleEm: "Impact ESG",
+      subtitle:
+        "Reporting ESG automatisé, outils de suivi des investissements, plateformes de mobilisation des bailleurs. Nous donnons aux acteurs financiers la visibilité dont ils ont besoin.",
+      ctaPrimary: "Discutons de votre projet",
+      ctaSecondary: "Retour GIRA Dev",
+    },
+    sections: {
+      whatWeDo: "Ce que nous faisons",
+      concreteApps: "Applications concrètes",
+      usecasesTitle: "Cas d'usage en Afrique",
+      otherDomains: "Autres domaines GIRA Dev",
+    },
   },
-  {
-    titre: "Reporting ESG fonds d'impact",
-    desc: "Automatisation du rapport ESG annuel d'un fonds d'investissement africain : collecte des données, calcul des indicateurs, mise en forme conforme GRI.",
-    tag: "ESG",
+  en: {
+    siblings: [
+      { label: "Data & AI", sub: "Intelligent systems", href: "/x/data-ia" },
+      { label: "Digital Gov", sub: "Public e-services", href: "/x/digital-gov" },
+      { label: "Tech Infrastructure", sub: "IoT & supervision", href: "/x/infrastructure" },
+    ],
+    points: [
+      "Automated ESG reporting for institutional investors and impact funds",
+      "Project investment tracking and traceability platforms",
+      "Donor mobilization tools: digital prospectuses, project sheets",
+      "Real-time financial dashboards for steering committees",
+      "Social and environmental impact modelling for projects",
+      "Compliance with GRI, TCFD standards and donor frameworks (IDA, AfDB, AFD)",
+    ],
+    usecases: [
+      {
+        titre: "NDP monitoring platform",
+        desc: "Real-time financial reporting tool for tracking NDP-CAR disbursements, with dashboards for donors and the government.",
+        tag: "Governance",
+      },
+      {
+        titre: "ESG reporting for impact funds",
+        desc: "Automation of the annual ESG report for an African investment fund: data collection, indicator calculation, GRI-compliant formatting.",
+        tag: "ESG",
+      },
+      {
+        titre: "Digital investor prospectus",
+        desc: "Platform showcasing bankable projects for the Marrakech Investors' Round Table, with interactive project sheets and expression-of-interest system.",
+        tag: "Financing",
+      },
+    ],
+    hero: {
+      breadcrumb: "Finance & ESG Impact",
+      domainLabel: "GIRA Dev · Domain 04",
+      titleLine1: "Finance &",
+      titleEm: "ESG Impact",
+      subtitle:
+        "Automated ESG reporting, investment tracking tools, donor mobilization platforms. We give financial stakeholders the visibility they need.",
+      ctaPrimary: "Discuss your project",
+      ctaSecondary: "Back to GIRA Dev",
+    },
+    sections: {
+      whatWeDo: "What we do",
+      concreteApps: "Concrete applications",
+      usecasesTitle: "Use cases in Africa",
+      otherDomains: "Other GIRA Dev domains",
+    },
   },
-  {
-    titre: "Prospectus numérique investisseurs",
-    desc: "Plateforme de présentation des projets bancables pour la Table Ronde des Investisseurs de Marrakech, avec fiches projets interactives et système de manifestation d'intérêt.",
-    tag: "Financement",
-  },
-];
+} as const;
 
 export default function FinanceImpactPage() {
+  const locale = useLocale() as "fr" | "en";
+  const d = PAGE_DATA[locale];
+
   return (
     <div style={{ backgroundColor: "#0D0D0D", minHeight: "100vh" }}>
 
@@ -61,7 +132,7 @@ export default function FinanceImpactPage() {
             </Link>
             <ChevronRight size={12} style={{ color: "rgba(255,255,255,0.2)" }} />
             <span className="text-xs uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-inter)" }}>
-              Finance & Impact ESG
+              {d.hero.breadcrumb}
             </span>
           </motion.nav>
 
@@ -84,7 +155,7 @@ export default function FinanceImpactPage() {
                 className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-4"
                 style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
               >
-                GIRA Dev · Domaine 04
+                {d.hero.domainLabel}
               </motion.span>
 
               <motion.h1
@@ -94,7 +165,7 @@ export default function FinanceImpactPage() {
                 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white mb-6"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Finance &<br /><em style={{ color: "#C9A84C" }}>Impact ESG</em>
+                {d.hero.titleLine1}<br /><em style={{ color: "#C9A84C" }}>{d.hero.titleEm}</em>
               </motion.h1>
 
               <motion.p
@@ -104,7 +175,7 @@ export default function FinanceImpactPage() {
                 className="text-base md:text-lg leading-relaxed mb-10"
                 style={{ color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-inter)", maxWidth: "480px" }}
               >
-                Reporting ESG automatisé, outils de suivi des investissements, plateformes de mobilisation des bailleurs. Nous donnons aux acteurs financiers la visibilité dont ils ont besoin.
+                {d.hero.subtitle}
               </motion.p>
 
               <motion.div
@@ -117,14 +188,14 @@ export default function FinanceImpactPage() {
                   className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold rounded-full transition-all hover:opacity-90"
                   style={{ backgroundColor: "#C9A84C", color: "#0D0D0D", fontFamily: "var(--font-inter)" }}
                 >
-                  Discutons de votre projet
+                  {d.hero.ctaPrimary}
                   <ArrowRight size={15} />
                 </Link>
                 <Link href="/x"
                   className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full transition-all hover:opacity-70"
                   style={{ border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontFamily: "var(--font-inter)" }}
                 >
-                  Retour GIRA Dev
+                  {d.hero.ctaSecondary}
                 </Link>
               </motion.div>
             </div>
@@ -135,10 +206,10 @@ export default function FinanceImpactPage() {
               transition={{ duration: 0.7, delay: 0.15 }}
             >
               <p className="text-xs uppercase tracking-widest font-bold mb-6" style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-inter)" }}>
-                Ce que nous faisons
+                {d.sections.whatWeDo}
               </p>
               <ul className="space-y-4">
-                {POINTS.map((pt, i) => (
+                {d.points.map((pt, i) => (
                   <motion.li key={i} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.07 }}
                     className="flex items-start gap-3 text-sm leading-relaxed"
                     style={{ color: "rgba(255,255,255,0.65)", fontFamily: "var(--font-inter)" }}>
@@ -156,11 +227,15 @@ export default function FinanceImpactPage() {
       <section className="py-20 md:py-28" style={{ backgroundColor: "#111111" }}>
         <div className="max-w-screen-xl mx-auto px-8 md:px-16 lg:px-24">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-14">
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-3" style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}>Applications concrètes</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>Cas d'usage en Afrique</h2>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] block mb-3" style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}>
+              {d.sections.concreteApps}
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>
+              {d.sections.usecasesTitle}
+            </h2>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-6">
-            {USECASES.map((u, i) => (
+            {d.usecases.map((u, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="p-8 rounded-2xl" style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
                 <span className="inline-block px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md mb-5"
@@ -176,9 +251,11 @@ export default function FinanceImpactPage() {
       {/* ── NAVIGATION SIBLINGS ──────────────────────────── */}
       <section className="py-16 md:py-20" style={{ backgroundColor: "#0D0D0D", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         <div className="max-w-screen-xl mx-auto px-8 md:px-16 lg:px-24">
-          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "var(--font-inter)" }}>Autres domaines GIRA Dev</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "var(--font-inter)" }}>
+            {d.sections.otherDomains}
+          </p>
           <div className="grid sm:grid-cols-3 gap-4">
-            {SIBLINGS.map((s) => (
+            {d.siblings.map((s) => (
               <Link key={s.href} href={s.href}
                 className="group flex items-center justify-between p-5 rounded-2xl transition-all duration-200 hover:border-[rgba(201,168,76,0.3)]"
                 style={{ border: "1px solid rgba(255,255,255,0.06)", backgroundColor: "rgba(255,255,255,0.02)" }}>

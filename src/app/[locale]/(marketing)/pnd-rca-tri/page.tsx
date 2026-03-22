@@ -4,67 +4,181 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
+import { useLocale } from "next-intl";
 
-/* ─── Data ─── */
+/* ─── i18n Data ─── */
 
-const heroStats = [
-  { value: "9 Mds USD", label: "Mobilisés" },
-  { value: "500+", label: "Participants" },
-  { value: "18", label: "Accords signés" },
-  { value: "Sept. 2025", label: "Casablanca" },
-];
-
-const axesPND = [
-  "Gouvernance & État de droit",
-  "Capital humain & développement social",
-  "Relance économique & diversification du secteur privé",
-  "Protection de l'environnement & résilience climatique",
-  "Infrastructure & désenclavement du territoire",
-];
-
-const timelineSteps = [
-  {
-    num: "01",
-    titre: "Diagnostic & cartographie",
-    texte:
-      "Analyse de l'écosystème de financement international et cartographie exhaustive des bailleurs potentiels. Banque Mondiale, BAD, AFD, fonds souverains, investisseurs privés qualifiés.",
+const PND_DATA = {
+  fr: {
+    hero: {
+      badge: "Partenaire officiel \u00b7 Plan National de D\u00e9veloppement",
+      title: "PND RCA 2024-2028",
+      subtitle: "Sceller la confiance entre l\u2019\u00c9tat et la finance internationale",
+      stats: [
+        { value: "9 Mds USD", label: "Mobilis\u00e9s" },
+        { value: "500+",      label: "Participants" },
+        { value: "18",        label: "Accords sign\u00e9s" },
+        { value: "Sept. 2025", label: "Casablanca" },
+      ],
+    },
+    contexte: {
+      label: "Contexte",
+      title: "Un moment charni\u00e8re pour la R\u00e9publique Centrafricaine",
+      paragraphs: [
+        "La R\u00e9publique Centrafricaine traverse une phase d\u00e9cisive de son histoire. Apr\u00e8s des ann\u00e9es de fragilit\u00e9 institutionnelle, le gouvernement a lanc\u00e9 en 2024 un Plan National de D\u00e9veloppement ambitieux couvrant la p\u00e9riode 2024\u20132028, avec pour objectif de poser les fondations d\u2019un \u00c9tat stable, inclusif et \u00e9conomiquement diversifi\u00e9.",
+        "Ce plan incarne une volont\u00e9 politique forte de rompre avec les cycles d\u2019instabilit\u00e9. Pour y parvenir, la RCA doit mobiliser des financements massifs aupr\u00e8s d\u2019acteurs internationaux exigeants, qui conditionnent leurs engagements \u00e0 des garanties de gouvernance et d\u2019ex\u00e9cution rigoureuses.",
+        "C\u2019est dans ce contexte que GIRA a \u00e9t\u00e9 mandat\u00e9 en tant que partenaire officiel du PND RCA, avec pour mission de structurer l\u2019interface entre l\u2019\u00c9tat centrafricain et la communaut\u00e9 financi\u00e8re internationale.",
+      ],
+      axesCard: {
+        title: "Les 5 axes strat\u00e9giques du PND",
+        periodeLabel: "P\u00e9riode d\u2019ex\u00e9cution",
+        axes: [
+          "Gouvernance & \u00c9tat de droit",
+          "Capital humain & d\u00e9veloppement social",
+          "Relance \u00e9conomique & diversification du secteur priv\u00e9",
+          "Protection de l\u2019environnement & r\u00e9silience climatique",
+          "Infrastructure & d\u00e9senclavement du territoire",
+        ],
+      },
+    },
+    role: {
+      label: "Partenaire d\u2019ex\u00e9cution",
+      title: "Le r\u00f4le de GIRA",
+      steps: [
+        {
+          num: "01",
+          titre: "Diagnostic & cartographie",
+          texte: "Analyse de l\u2019\u00e9cosyst\u00e8me de financement international et cartographie exhaustive des bailleurs potentiels. Banque Mondiale, BAD, AFD, fonds souverains, investisseurs priv\u00e9s qualifi\u00e9s.",
+        },
+        {
+          num: "02",
+          titre: "Structuration des dossiers",
+          texte: "Pr\u00e9paration de dossiers d\u2019investissement conformes aux exigences des institutions multilat\u00e9rales\u00a0: \u00e9tudes de faisabilit\u00e9, mod\u00e8les financiers, cadres de gouvernance et matrices de risques.",
+        },
+        {
+          num: "03",
+          titre: "Organisation de la TRI Casablanca",
+          texte: "Co-organisation de la Table Ronde des Investisseurs \u00e0 Casablanca en septembre 2025 \u2014 \u00e9v\u00e9nement de deux jours r\u00e9unissant 500+ participants issus de 47 pays autour du PND RCA 2024-2028.",
+        },
+        {
+          num: "04",
+          titre: "Facilitation des accords",
+          texte: "Facilitation active des n\u00e9gociations ayant abouti \u00e0 la signature de 18 accords d\u2019investissement repr\u00e9sentant 9 milliards USD d\u2019engagements financiers fermes pour le d\u00e9veloppement de la RCA.",
+        },
+        {
+          num: "05",
+          titre: "Suivi post-TRI",
+          texte: "Accompagnement continu dans la mise en \u0153uvre des accords sign\u00e9s\u00a0: coordination inter-institutionnelle, reporting aux bailleurs, suivi des jalons d\u2019ex\u00e9cution et ajustement des plans d\u2019action.",
+        },
+      ],
+    },
+    resultats: {
+      label: "R\u00e9sultats \u00b7 Septembre 2025 \u00b7 Casablanca",
+      title: "Table Ronde des Investisseurs. Casablanca 2025",
+      stats: [
+        { value: "9 Mds", suffix: "USD", label: "Engagements financiers mobilis\u00e9s" },
+        { value: "500+",  suffix: "",    label: "Participants (gouvernements, bailleurs, investisseurs priv\u00e9s)" },
+        { value: "18",    suffix: "",    label: "Accords de financement sign\u00e9s" },
+        { value: "47",    suffix: "",    label: "Pays repr\u00e9sent\u00e9s" },
+      ],
+      body: "Organis\u00e9e les 14 et 15 septembre 2025 \u00e0 Casablanca, la Table Ronde des Investisseurs du PND RCA a constitu\u00e9 un jalon historique dans la mobilisation de financements pour l\u2019Afrique centrale. R\u00e9unissant gouvernements, institutions financi\u00e8res internationales et investisseurs priv\u00e9s de 47 pays, cet \u00e9v\u00e9nement a permis de concr\u00e9tiser des engagements \u00e0 hauteur de 9 milliards de dollars am\u00e9ricains en faveur du d\u00e9veloppement de la R\u00e9publique Centrafricaine.",
+      imageCaption: "Table Ronde des Investisseurs du PND RCA. Casablanca, 14\u201315 septembre 2025",
+    },
+    cta: {
+      title: "Vous pilotez un projet de d\u00e9veloppement national\u00a0?",
+      body: "Notre \u00e9quipe est disponible pour vous pr\u00e9senter notre approche et discuter d\u2019une \u00e9ventuelle collaboration.",
+      cta: "D\u00e9couvrir nos expertises",
+    },
   },
-  {
-    num: "02",
-    titre: "Structuration des dossiers",
-    texte:
-      "Préparation de dossiers d'investissement conformes aux exigences des institutions multilatérales : études de faisabilité, modèles financiers, cadres de gouvernance et matrices de risques.",
+  en: {
+    hero: {
+      badge: "Official NDP RCA 2024-2028 Partner",
+      title: "NDP CAR 2024-2028",
+      subtitle: "Sealing trust between the State and international finance",
+      stats: [
+        { value: "9B USD",     label: "Mobilized" },
+        { value: "500+",       label: "Participants" },
+        { value: "18",         label: "Agreements signed" },
+        { value: "Sept. 2025", label: "Casablanca" },
+      ],
+    },
+    contexte: {
+      label: "Context",
+      title: "A pivotal moment for the Central African Republic",
+      paragraphs: [
+        "The Central African Republic is going through a decisive phase in its history. After years of institutional fragility, the government launched in 2024 an ambitious National Development Plan covering the period 2024\u20132028, with the aim of laying the foundations of a stable, inclusive and economically diversified State.",
+        "This plan embodies a strong political will to break with cycles of instability. To achieve this, the CAR must mobilize massive financing from demanding international actors, who condition their commitments on guarantees of governance and rigorous execution.",
+        "It is in this context that GIRA was mandated as official partner of the NDP CAR, with the mission of structuring the interface between the Central African State and the international financial community.",
+      ],
+      axesCard: {
+        title: "The 5 strategic axes of the NDP",
+        periodeLabel: "Execution period",
+        axes: [
+          "Governance & Rule of Law",
+          "Human capital & social development",
+          "Economic recovery & private sector diversification",
+          "Environmental protection & climate resilience",
+          "Infrastructure & territorial connectivity",
+        ],
+      },
+    },
+    role: {
+      label: "Execution partner",
+      title: "GIRA\u2019s role",
+      steps: [
+        {
+          num: "01",
+          titre: "Diagnosis & Mapping",
+          texte: "Analysis of the international financing ecosystem and comprehensive mapping of potential donors. World Bank, AfDB, AFD, sovereign funds, qualified private investors.",
+        },
+        {
+          num: "02",
+          titre: "File Structuring",
+          texte: "Preparation of investment files compliant with multilateral institution requirements: feasibility studies, financial models, governance frameworks and risk matrices.",
+        },
+        {
+          num: "03",
+          titre: "Organization of the Casablanca IRT",
+          texte: "Co-organization of the Investor Roundtable in Casablanca in September 2025 \u2014 a two-day event bringing together 500+ participants from 47 countries around the NDP RCA 2024-2028.",
+        },
+        {
+          num: "04",
+          titre: "Facilitation of Agreements",
+          texte: "Active facilitation of negotiations leading to the signing of 18 investment agreements representing 9 billion USD in firm financial commitments for the development of the CAR.",
+        },
+        {
+          num: "05",
+          titre: "Post-IRT Follow-up",
+          texte: "Continuous support in implementing signed agreements: inter-institutional coordination, donor reporting, execution milestone monitoring and action plan adjustment.",
+        },
+      ],
+    },
+    resultats: {
+      label: "Results \u00b7 September 2025 \u00b7 Casablanca",
+      title: "Investor Roundtable. Casablanca 2025",
+      stats: [
+        { value: "9B",   suffix: "USD", label: "Financial commitments mobilized" },
+        { value: "500+", suffix: "",    label: "Participants (governments, donors, private investors)" },
+        { value: "18",   suffix: "",    label: "Financing agreements signed" },
+        { value: "47",   suffix: "",    label: "Countries represented" },
+      ],
+      body: "Held on September 14 and 15, 2025 in Casablanca, the Investor Roundtable of the NDP CAR marked a historic milestone in mobilizing financing for Central Africa. Bringing together governments, international financial institutions and private investors from 47 countries, this event resulted in commitments totaling 9 billion US dollars for the development of the Central African Republic.",
+      imageCaption: "Investor Roundtable of the NDP CAR. Casablanca, September 14\u201315, 2025",
+    },
+    cta: {
+      title: "Are you managing a national development project?",
+      body: "Our team is available to present our approach and discuss a potential collaboration.",
+      cta: "Discover our expertise",
+    },
   },
-  {
-    num: "03",
-    titre: "Organisation de la TRI Casablanca",
-    texte:
-      "Co-organisation de la Table Ronde des Investisseurs à Casablanca en septembre 2025 — événement de deux jours réunissant 500+ participants issus de 47 pays autour du PND RCA 2024-2028.",
-  },
-  {
-    num: "04",
-    titre: "Facilitation des accords",
-    texte:
-      "Facilitation active des négociations ayant abouti à la signature de 18 accords d'investissement représentant 9 milliards USD d'engagements financiers fermes pour le développement de la RCA.",
-  },
-  {
-    num: "05",
-    titre: "Suivi post-TRI",
-    texte:
-      "Accompagnement continu dans la mise en œuvre des accords signés : coordination inter-institutionnelle, reporting aux bailleurs, suivi des jalons d'exécution et ajustement des plans d'action.",
-  },
-];
-
-const resultatsStats = [
-  { value: "9 Mds", suffix: "USD", label: "Engagements financiers mobilisés" },
-  { value: "500+", suffix: "", label: "Participants (gouvernements, bailleurs, investisseurs privés)" },
-  { value: "18", suffix: "", label: "Accords de financement signés" },
-  { value: "47", suffix: "", label: "Pays représentés" },
-];
+} as const;
 
 /* ─── Page ─── */
 
 export default function PNDPage() {
+  const locale = useLocale() as "fr" | "en";
+  const t = PND_DATA[locale];
+
   return (
     <>
       {/* ══════════════════════════════════════════════
@@ -119,7 +233,7 @@ export default function PNDPage() {
               className="text-xs tracking-widest uppercase"
               style={{ color: "#E8D5A3", fontFamily: "var(--font-inter)" }}
             >
-              Partenaire officiel · Plan National de Développement
+              {t.hero.badge}
             </span>
           </motion.div>
 
@@ -131,7 +245,7 @@ export default function PNDPage() {
             className="text-4xl md:text-5xl lg:text-7xl font-black text-white leading-[1.08] max-w-3xl mb-5"
             style={{ fontFamily: "var(--font-montserrat)" }}
           >
-            PND RCA 2024-2028
+            {t.hero.title}
           </motion.h1>
 
           {/* Subtitle */}
@@ -142,7 +256,7 @@ export default function PNDPage() {
             className="text-lg md:text-xl max-w-2xl leading-relaxed mb-10"
             style={{ color: "#E8D5A3", fontFamily: "var(--font-inter)" }}
           >
-            Sceller la confiance entre l'État et la finance internationale
+            {t.hero.subtitle}
           </motion.p>
 
           {/* Stats chips */}
@@ -152,7 +266,7 @@ export default function PNDPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-wrap gap-3"
           >
-            {heroStats.map((stat) => (
+            {t.hero.stats.map((stat) => (
               <div
                 key={stat.label}
                 className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md"
@@ -200,45 +314,24 @@ export default function PNDPage() {
                 className="text-xs uppercase tracking-widest mb-3 font-medium"
                 style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
               >
-                Contexte
+                {t.contexte.label}
               </p>
               <h2
                 className="text-3xl md:text-4xl font-bold leading-tight mb-8"
                 style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
               >
-                Un moment charnière pour la République Centrafricaine
+                {t.contexte.title}
               </h2>
               <div className="space-y-5">
-                <p
-                  className="text-base leading-relaxed"
-                  style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
-                >
-                  La République Centrafricaine traverse une phase décisive de son
-                  histoire. Après des années de fragilité institutionnelle, le
-                  gouvernement a lancé en 2024 un Plan National de Développement
-                  ambitieux couvrant la période 2024–2028, avec pour objectif de
-                  poser les fondations d'un État stable, inclusif et économiquement
-                  diversifié.
-                </p>
-                <p
-                  className="text-base leading-relaxed"
-                  style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
-                >
-                  Ce plan incarne une volonté politique forte de rompre avec les
-                  cycles d'instabilité. Pour y parvenir, la RCA doit mobiliser des
-                  financements massifs auprès d'acteurs internationaux exigeants,
-                  qui conditionnent leurs engagements à des garanties de gouvernance
-                  et d'exécution rigoureuses.
-                </p>
-                <p
-                  className="text-base leading-relaxed"
-                  style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
-                >
-                  C'est dans ce contexte que GIRA a été mandaté en tant que
-                  partenaire officiel du PND RCA, avec pour mission de structurer
-                  l'interface entre l'État centrafricain et la communauté financière
-                  internationale.
-                </p>
+                {t.contexte.paragraphs.map((para, i) => (
+                  <p
+                    key={i}
+                    className="text-base leading-relaxed"
+                    style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
+                  >
+                    {para}
+                  </p>
+                ))}
               </div>
             </motion.div>
 
@@ -255,10 +348,10 @@ export default function PNDPage() {
                 className="text-lg font-bold mb-6"
                 style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
               >
-                Les 5 axes stratégiques du PND
+                {t.contexte.axesCard.title}
               </h3>
               <ol className="space-y-4">
-                {axesPND.map((axe, i) => (
+                {t.contexte.axesCard.axes.map((axe, i) => (
                   <li key={i} className="flex items-start gap-4">
                     <span
                       className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold"
@@ -284,7 +377,7 @@ export default function PNDPage() {
                   className="text-xs uppercase tracking-wide"
                   style={{ color: "#999999", fontFamily: "var(--font-inter)" }}
                 >
-                  Période d'exécution
+                  {t.contexte.axesCard.periodeLabel}
                 </p>
                 <p
                   className="text-3xl font-black mt-1"
@@ -318,13 +411,13 @@ export default function PNDPage() {
               className="text-xs uppercase tracking-widest mb-3 font-medium"
               style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
             >
-              Partenaire d'exécution
+              {t.role.label}
             </p>
             <h2
               className="text-3xl md:text-4xl font-bold text-white leading-tight"
               style={{ fontFamily: "var(--font-montserrat)" }}
             >
-              Le rôle de GIRA
+              {t.role.title}
             </h2>
           </motion.div>
 
@@ -337,7 +430,7 @@ export default function PNDPage() {
             />
 
             <div className="space-y-6">
-              {timelineSteps.map((step, i) => (
+              {t.role.steps.map((step, i) => (
                 <motion.div
                   key={step.num}
                   initial={{ opacity: 0, y: 20 }}
@@ -404,19 +497,19 @@ export default function PNDPage() {
               className="text-xs uppercase tracking-widest mb-3 font-medium"
               style={{ color: "#C9A84C", fontFamily: "var(--font-inter)" }}
             >
-              Résultats · Septembre 2025 · Casablanca
+              {t.resultats.label}
             </p>
             <h2
               className="text-3xl md:text-4xl font-bold leading-tight max-w-2xl"
               style={{ color: "#0D0D0D", fontFamily: "var(--font-montserrat)" }}
             >
-              Table Ronde des Investisseurs. Casablanca 2025
+              {t.resultats.title}
             </h2>
           </motion.div>
 
           {/* Stats grid 2x2 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
-            {resultatsStats.map((stat, i) => (
+            {t.resultats.stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
@@ -463,14 +556,7 @@ export default function PNDPage() {
                 className="text-base leading-relaxed"
                 style={{ color: "#444444", fontFamily: "var(--font-inter)" }}
               >
-                Organisée les 14 et 15 septembre 2025 à Casablanca, la Table
-                Ronde des Investisseurs du PND RCA a constitué un jalon
-                historique dans la mobilisation de financements pour l'Afrique
-                centrale. Réunissant gouvernements, institutions financières
-                internationales et investisseurs privés de 47 pays, cet événement
-                a permis de concrétiser des engagements à hauteur de 9 milliards
-                de dollars américains en faveur du développement de la République
-                Centrafricaine.
+                {t.resultats.body}
               </p>
             </motion.div>
 
@@ -505,8 +591,7 @@ export default function PNDPage() {
                 className="mt-3 text-xs italic"
                 style={{ color: "#888888", fontFamily: "var(--font-inter)" }}
               >
-                Table Ronde des Investisseurs du PND RCA. Casablanca,
-                14–15 septembre 2025
+                {t.resultats.imageCaption}
               </p>
             </motion.div>
           </div>
@@ -533,14 +618,13 @@ export default function PNDPage() {
                 className="text-2xl md:text-3xl font-bold text-white mb-4"
                 style={{ fontFamily: "var(--font-montserrat)" }}
               >
-                Vous pilotez un projet de développement national ?
+                {t.cta.title}
               </h2>
               <p
                 className="text-sm leading-relaxed"
                 style={{ color: "rgba(255,255,255,0.45)", fontFamily: "var(--font-inter)" }}
               >
-                Notre équipe est disponible pour vous présenter notre approche et
-                discuter d'une éventuelle collaboration.
+                {t.cta.body}
               </p>
             </motion.div>
 
@@ -559,7 +643,7 @@ export default function PNDPage() {
                   fontFamily: "var(--font-montserrat)",
                 }}
               >
-                Découvrir nos expertises
+                {t.cta.cta}
                 <ArrowRight
                   size={16}
                   className="transition-transform duration-200 group-hover:translate-x-1"
