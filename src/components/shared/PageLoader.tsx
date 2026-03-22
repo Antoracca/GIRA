@@ -7,15 +7,13 @@ import Image from "next/image";
 const GOLD = "#C9A84C";
 
 export default function PageLoader() {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Already seen this session? Skip splash
-    if (sessionStorage.getItem("gira-splash-done")) {
-      setVisible(false);
-      return;
-    }
+    // Only show on first visit this session
+    if (sessionStorage.getItem("gira-splash-done")) return;
 
+    setVisible(true);
     const timer = setTimeout(() => {
       setVisible(false);
       sessionStorage.setItem("gira-splash-done", "1");
