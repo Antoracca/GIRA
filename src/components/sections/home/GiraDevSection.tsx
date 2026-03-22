@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
@@ -30,17 +30,9 @@ const SECTION_DATA = {
 
 export default function GiraDevSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoFailed, setVideoFailed] = useState(false);
   const router = useRouter();
   const locale = useLocale() as "fr" | "en";
   const d = SECTION_DATA[locale];
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.play().catch(() => setVideoFailed(true));
-  }, []);
 
   function handleNavigate() {
     // Force scroll to absolute top before navigating
@@ -68,32 +60,19 @@ export default function GiraDevSection() {
         className="absolute inset-0 w-full h-full"
         style={{ y: videoY, scale: videoScale }}
       >
-        {videoFailed ? (
-          /* Fallback gradient for browsers blocking autoplay */
-          <div
-            className="absolute inset-0 w-full h-full"
-            style={{
-              background:
-                "radial-gradient(ellipse at 30% 60%, rgba(201,168,76,0.15) 0%, transparent 60%), linear-gradient(135deg, #1A1A2E 0%, #0D0D0D 100%)",
-              zIndex: 0,
-            }}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ zIndex: 0 }}
+        >
+          <source
+            src="https://media-publications.bcg.com/flash/BCGX/bcg_x_launch_film-15s_loop.mp4"
+            type="video/mp4"
           />
-        ) : (
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ zIndex: 0 }}
-          >
-            <source
-              src="https://media-publications.bcg.com/flash/BCGX/bcg_x_launch_film-15s_loop.mp4"
-              type="video/mp4"
-            />
-          </video>
-        )}
+        </video>
       </motion.div>
 
       {/* ── Gradient overlays ── */}

@@ -338,6 +338,24 @@ function mobileSlideVariants(dir: number) {
   };
 }
 
+/* ─── Text stagger variants ──────────────────────────── */
+const textContainerVariants = {
+  enter: {},
+  center: {
+    transition: { staggerChildren: 0.08, delayChildren: 0.15 },
+  },
+};
+
+const TEXT_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
+
+const textItemVariants = {
+  enter: { opacity: 0, y: 12 },
+  center: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: TEXT_EASE },
+  },
+};
 
 /* ════════════════════════════════════════════════════════
    MAIN COMPONENT
@@ -434,16 +452,17 @@ export default function MobilePiliersCarousel({
               <MobilePilierViz index={active} />
             </div>
 
-            {/* Text zone */}
+            {/* Text zone with stagger */}
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+              variants={textContainerVariants}
+              initial="enter"
+              animate="center"
               className="mt-6 pl-5 relative"
               style={{ borderLeft: `3px solid ${G}` }}
             >
               {/* Label */}
-              <span
+              <motion.span
+                variants={textItemVariants}
                 className="block mb-1.5 relative"
                 style={{
                   fontSize: 10,
@@ -456,10 +475,11 @@ export default function MobilePiliersCarousel({
                 }}
               >
                 {p.label}
-              </span>
+              </motion.span>
 
               {/* Title */}
-              <h3
+              <motion.h3
+                variants={textItemVariants}
                 className="mb-2 relative"
                 style={{
                   fontSize: 20,
@@ -471,10 +491,11 @@ export default function MobilePiliersCarousel({
                 }}
               >
                 {p.titre}
-              </h3>
+              </motion.h3>
 
               {/* Description */}
-              <p
+              <motion.p
+                variants={textItemVariants}
                 className="relative"
                 style={{
                   fontSize: 13,
@@ -485,7 +506,7 @@ export default function MobilePiliersCarousel({
                 }}
               >
                 {p.texte}
-              </p>
+              </motion.p>
             </motion.div>
           </motion.div>
         </AnimatePresence>
