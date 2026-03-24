@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
@@ -30,9 +30,32 @@ const SECTION_DATA = {
 
 export default function GiraDevSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoReady, setVideoReady] = useState(false);
   const router = useRouter();
   const locale = useLocale() as "fr" | "en";
   const d = SECTION_DATA[locale];
+
+  /* Force autoplay on mobile — iOS Safari blocks autoPlay attribute */
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const attemptPlay = () => {
+      video.play()
+        .then(() => setVideoReady(true))
+        .catch(() => {
+          /* Browser blocked autoplay — gradient fallback stays visible */
+        });
+    };
+
+    /* Try immediately */
+    attemptPlay();
+
+    /* Also retry on canplay event (for slow network loads) */
+    video.addEventListener("canplay", attemptPlay, { once: true });
+    return () => video.removeEventListener("canplay", attemptPlay);
+  }, []);
 
   function handleNavigate() {
     // Force scroll to absolute top before navigating
@@ -55,18 +78,36 @@ export default function GiraDevSection() {
       className="relative w-full overflow-hidden"
       style={{ height: "clamp(500px, 75vh, 800px)" }}
     >
+      {/* ── Gradient fallback (always rendered, hidden once video plays) ── */}
+      <div
+        className="absolute inset-0 w-full h-full"
+        style={{
+          background:
+            "radial-gradient(ellipse at 30% 60%, rgba(201,168,76,0.12) 0%, transparent 55%), linear-gradient(135deg, #1A1A2E 0%, #0D0D0D 100%)",
+          zIndex: 0,
+          opacity: videoReady ? 0 : 1,
+          transition: "opacity 0.6s ease",
+        }}
+      />
+
       {/* ── Video background with parallax ── */}
       <motion.div
         className="absolute inset-0 w-full h-full"
         style={{ y: videoY, scale: videoScale }}
       >
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
+          preload="auto"
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ zIndex: 0 }}
+          style={{
+            zIndex: 0,
+            opacity: videoReady ? 1 : 0,
+            transition: "opacity 0.6s ease",
+          }}
         >
           <source
             src="https://media-publications.bcg.com/flash/BCGX/bcg_x_launch_film-15s_loop.mp4"

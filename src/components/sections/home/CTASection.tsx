@@ -9,7 +9,7 @@ export default function CTASection() {
 
   return (
     <section
-      className="py-20 md:py-32"
+      className="py-20 md:py-32 overflow-hidden"
       style={{ backgroundColor: "#F5F5F0" }}
     >
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-24 text-center">

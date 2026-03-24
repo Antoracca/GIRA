@@ -660,7 +660,7 @@ export default function PiliersSection() {
   return (
     <>
       {/* BLOC 1 — Section interactive */}
-      <section className="py-20 md:py-32" style={{ backgroundColor: "#F5F5F0" }}>
+      <section className="py-20 md:py-32 overflow-hidden" style={{ backgroundColor: "#F5F5F0" }}>
         <div className="max-w-screen-xl mx-auto px-6 md:px-12 lg:px-20">
           {/* Title */}
           <motion.div
@@ -677,14 +677,14 @@ export default function PiliersSection() {
               {locale === "en" ? "Our difference" : "Notre différence"}
             </p>
             <h2
-              className="text-4xl md:text-5xl lg:text-[52px] font-black leading-tight"
+              className="text-[28px] sm:text-4xl md:text-5xl lg:text-[52px] font-black leading-tight"
               style={{ fontFamily: "var(--font-montserrat)", color: TXT_DARK }}
             >
               {locale === "en" ? (
                 <>
                   We change the narrative
                   <br className="hidden md:block" />
-                  by moving to{" "}
+                  {" "}by moving to{" "}
                   <span style={{ background: "linear-gradient(transparent 54%, rgba(201,168,76,0.45) 54%)" }}>
                     execution
                   </span>
@@ -693,7 +693,7 @@ export default function PiliersSection() {
                 <>
                   Nous changeons le narratif
                   <br className="hidden md:block" />
-                  en passant à{" "}
+                  {" "}en passant à{" "}
                   <span style={{ background: "linear-gradient(transparent 54%, rgba(201,168,76,0.45) 54%)" }}>
                     l&apos;exécution
                   </span>
@@ -874,7 +874,7 @@ function NousConnaitreSection() {
       jamais la section et ne fait pas trembler les sections voisines.
       Sur tablet/desktop (md:) la hauteur est auto — le conteneur fixe gère.
     */
-    <section style={{ backgroundColor: "#FFFFFF" }} className="min-h-[940px] md:min-h-0">
+    <section style={{ backgroundColor: "#FFFFFF" }} className="overflow-hidden">
       <div className="max-w-screen-xl mx-auto">
 
         {/* ── Section header ── */}

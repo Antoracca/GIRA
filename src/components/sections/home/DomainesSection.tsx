@@ -457,7 +457,7 @@ export default function DomainesSection() {
   );
 
   return (
-    <section className="py-20 md:py-32" style={{ backgroundColor: "#F5F5F0" }}>
+    <section className="py-20 md:py-32 overflow-hidden" style={{ backgroundColor: "#F5F5F0" }}>
       <div className="max-w-screen-xl mx-auto px-6 md:px-12 lg:px-20">
 
         {/* Header */}
