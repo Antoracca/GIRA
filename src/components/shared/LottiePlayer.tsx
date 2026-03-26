@@ -39,9 +39,16 @@ export default function LottiePlayer({ src, style, className }: LottiePlayerProp
         return;
       }
 
+      // Convert relative paths to absolute URLs so DotLottie always fetches
+      // from the origin root — not relative to the current locale path (/fr/)
+      const resolvedSrc =
+        src.startsWith("/")
+          ? `${window.location.origin}${src}`
+          : src;
+
       const instance = new DotLottie({
         canvas: canvasRef.current,
-        src,
+        src: resolvedSrc,
         loop: true,
         autoplay: true,
       });
