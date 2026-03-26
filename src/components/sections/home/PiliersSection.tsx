@@ -874,7 +874,7 @@ function NousConnaitreSection() {
       jamais la section et ne fait pas trembler les sections voisines.
       Sur tablet/desktop (md:) la hauteur est auto — le conteneur fixe gère.
     */
-    <section style={{ backgroundColor: "#FFFFFF" }} className="overflow-hidden">
+    <section style={{ backgroundColor: "#FFFFFF" }} className="overflow-hidden min-h-[600px] md:min-h-0">
       <div className="max-w-screen-xl mx-auto">
 
         {/* ── Section header ── */}

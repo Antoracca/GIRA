@@ -135,7 +135,7 @@ export default function GiraDevSection() {
 
       {/* ── Content ── */}
       <div
-        className="relative z-10 h-full flex flex-col justify-start pt-16 sm:pt-20 md:justify-end md:pt-0 px-6 sm:px-10 md:px-16 lg:px-24 pb-6 md:pb-20"
+        className="relative z-10 h-full flex flex-col justify-center md:justify-end px-6 sm:px-10 md:px-16 lg:px-24 pb-6 md:pb-20"
       >
         {/* Badge */}
         <motion.div
@@ -146,11 +146,11 @@ export default function GiraDevSection() {
           className="mb-5 md:mb-6"
         >
           <span
-            className="inline-block text-[10px] sm:text-[11px] uppercase tracking-[0.35em] font-bold px-4 py-2 rounded-full"
+            className="inline-block text-[10px] sm:text-[11px] uppercase tracking-[0.35em] font-bold md:px-4 md:py-2 md:rounded-full"
             style={{
               color: "#C9A84C",
-              backgroundColor: "rgba(201,168,76,0.12)",
-              border: "1px solid rgba(201,168,76,0.25)",
+              backgroundColor: "transparent",
+              border: "none",
               fontFamily: "var(--font-inter)",
             }}
           >
