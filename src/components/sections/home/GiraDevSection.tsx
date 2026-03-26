@@ -82,8 +82,7 @@ export default function GiraDevSection() {
       <div
         className="absolute inset-0 w-full h-full"
         style={{
-          background:
-            "radial-gradient(ellipse at 30% 60%, rgba(201,168,76,0.12) 0%, transparent 55%), linear-gradient(135deg, #1A1A2E 0%, #0D0D0D 100%)",
+          background: "linear-gradient(135deg, #1A1A2E 0%, #0D0D0D 100%)",
           zIndex: 0,
           opacity: videoReady ? 0 : 1,
           transition: "opacity 0.6s ease",
@@ -136,7 +135,7 @@ export default function GiraDevSection() {
 
       {/* ── Content ── */}
       <div
-        className="relative z-10 h-full flex flex-col justify-end px-6 sm:px-10 md:px-16 lg:px-24 pb-14 sm:pb-16 md:pb-20"
+        className="relative z-10 h-full flex flex-col justify-start pt-16 sm:pt-20 md:justify-end md:pt-0 px-6 sm:px-10 md:px-16 lg:px-24 pb-6 md:pb-20"
       >
         {/* Badge */}
         <motion.div
