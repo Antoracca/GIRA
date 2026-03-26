@@ -1,15 +1,22 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
+import { NextRequest, NextResponse } from "next/server";
 
-export default createMiddleware(routing);
+const intlMiddleware = createMiddleware(routing);
+
+const STATIC_FILE_REGEX = /\.(?:lottie|wasm|mp4|webm|ogg|mp3|wav|json|svg|png|jpg|jpeg|gif|webp|ico|css|js|txt|xml|pdf|zip)$/i;
+
+export default function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Bypass locale routing for all static assets — prevents /fr/file.lottie 404s
+  if (STATIC_FILE_REGEX.test(pathname)) {
+    return NextResponse.next();
+  }
+
+  return intlMiddleware(request);
+}
 
 export const config = {
-  // Match all pathnames except:
-  // - api routes
-  // - _next/static (Next.js build files)
-  // - _next/image (image optimization)
-  // - favicon, images, and other public files
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|lottie|wasm|mp4|json)).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon\\.ico).*)"],
 };
