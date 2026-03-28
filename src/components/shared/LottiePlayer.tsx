@@ -2,9 +2,12 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
-// Serve WASM from CDN — removes the 1.4 MB dotlottie-player.wasm from the build
-const WASM_CDN =
-  "https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web@0.66.2/dist/dotlottie-player.wasm";
+// WASM served from same origin — avoids Chrome CORS/CORP blocks on CDN URLs
+const WASM_PATH = "/dotlottie-player.wasm";
+
+// Module-level flag: setWasmUrl must only be called once.
+// Re-calling it after WASM is already loaded can corrupt Chrome's WASM state.
+let wasmConfigured = false;
 
 interface LottiePlayerProps {
   src: string;
@@ -14,10 +17,10 @@ interface LottiePlayerProps {
 
 /**
  * Client-only Lottie wrapper using @lottiefiles/dotlottie-web directly.
- * - WASM loaded from CDN (no local 1.4 MB file)
- * - Initializes immediately on mount (IntersectionObserver skipped — causes
- *   silent failures inside AnimatePresence transitions where opacity/transform
- *   prevent the observer threshold from being reached on mobile)
+ * - WASM served from /public (same-origin, no Chrome CORS issues)
+ * - setWasmUrl called exactly once (module-level flag)
+ * - Initializes via requestAnimationFrame — works inside AnimatePresence
+ *   transitions where IntersectionObserver threshold was never reached
  */
 export default function LottiePlayer({ src, style, className }: LottiePlayerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -32,8 +35,11 @@ export default function LottiePlayer({ src, style, className }: LottiePlayerProp
     try {
       const { DotLottie } = await import("@lottiefiles/dotlottie-web");
 
-      // Point WASM to CDN — skips the local 1.4 MB file
-      DotLottie.setWasmUrl(WASM_CDN);
+      // Configure WASM exactly once — re-calling corrupts Chrome's WASM state
+      if (!wasmConfigured) {
+        DotLottie.setWasmUrl(WASM_PATH);
+        wasmConfigured = true;
+      }
 
       if (!canvasRef.current) {
         initRef.current = false;
@@ -64,8 +70,7 @@ export default function LottiePlayer({ src, style, className }: LottiePlayerProp
   }, [src]);
 
   useEffect(() => {
-    // Small rAF delay so the canvas has its final dimensions before DotLottie
-    // reads them — avoids a 0×0 canvas in the first render frame
+    // rAF ensures canvas has final dimensions before DotLottie reads them
     const raf = requestAnimationFrame(() => {
       initLottie();
     });
