@@ -15,8 +15,9 @@ interface LottiePlayerProps {
 /**
  * Client-only Lottie wrapper using @lottiefiles/dotlottie-web directly.
  * - WASM loaded from CDN (no local 1.4 MB file)
- * - IntersectionObserver: animation only initializes when visible in viewport
- * - Guards against StrictMode double-init and suppresses non-fatal load errors
+ * - Initializes immediately on mount (IntersectionObserver skipped — causes
+ *   silent failures inside AnimatePresence transitions where opacity/transform
+ *   prevent the observer threshold from being reached on mobile)
  */
 export default function LottiePlayer({ src, style, className }: LottiePlayerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -63,24 +64,14 @@ export default function LottiePlayer({ src, style, className }: LottiePlayerProp
   }, [src]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    // Only initialize when the canvas enters the viewport
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          observer.disconnect();
-          initLottie();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(canvas);
+    // Small rAF delay so the canvas has its final dimensions before DotLottie
+    // reads them — avoids a 0×0 canvas in the first render frame
+    const raf = requestAnimationFrame(() => {
+      initLottie();
+    });
 
     return () => {
-      observer.disconnect();
+      cancelAnimationFrame(raf);
       if (dotLottieRef.current) {
         dotLottieRef.current.destroy();
         dotLottieRef.current = null;
