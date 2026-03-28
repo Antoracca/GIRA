@@ -6,11 +6,11 @@ const intlMiddleware = createMiddleware(routing);
 
 const STATIC_FILE_REGEX = /\.(?:lottie|wasm|mp4|webm|ogg|mp3|wav|json|svg|png|jpg|jpeg|gif|webp|ico|css|js|txt|xml|pdf|zip)$/i;
 
-export default function proxy(request: NextRequest) {
+export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Case 1 — /fr/file.lottie or /en/file.lottie
-  // next-intl internally rewrites /file.lottie → /[locale]/file.lottie
+  // next-intl redirects /file.lottie → /[locale]/file.lottie
   // We intercept and rewrite back to the actual public file path
   const localeFileMatch = pathname.match(/^\/(?:fr|en)(\/[^/]+)$/);
   if (localeFileMatch && STATIC_FILE_REGEX.test(localeFileMatch[1])) {
