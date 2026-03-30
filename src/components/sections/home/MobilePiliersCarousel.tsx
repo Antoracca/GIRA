@@ -125,7 +125,7 @@ function MobilePilierViz({ index }: { index: number }) {
     case 3:
       return <LottiePlayer src="/Gouvernance.lottie" style={{ width: "100%", height: "100%" }} />;
     case 4:
-      return <LottiePlayer src="/viabilite.lottie" style={{ width: "100%", height: "100%" }} />;
+      return <LottiePlayer src="/impact.lottie" style={{ width: "100%", height: "100%" }} />;
     default:
       return null;
   }
