@@ -34,7 +34,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.gira-cf.com"),
   title: {
-    default: "GIRA — Cabinet d'exécution des projets structurants en Afrique",
+    default: "GIRA — Cabinet d'exécution de projets en Afrique",
     template: "%s | GIRA",
   },
   description:
@@ -42,6 +42,18 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "GIRA",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "GIRA — Structurer. Financer. Exécuter des projets en Afrique.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/opengraph-image"],
   },
 };
 
