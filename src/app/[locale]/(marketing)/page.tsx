@@ -16,7 +16,6 @@ export const metadata: Metadata = {
     title: "GIRA — Cabinet d'exécution des projets structurants en Afrique",
     description:
       "GIRA accompagne gouvernements, institutions et investisseurs dans la conception, structuration et exécution de projets à fort impact en Afrique.",
-    images: ["/og-image.jpg"],
     type: "website",
   },
 };
@@ -27,7 +26,7 @@ const organizationSchema = {
   name: "GIRA",
   alternateName: "Cabinet d'exécution des projets structurants",
   url: "https://www.gira-cf.com",
-  logo: "https://www.gira-cf.com/og-image.jpg",
+  logo: "https://www.gira-cf.com/logoGIRA.png",
   description:
     "GIRA accompagne gouvernements, institutions et investisseurs dans la conception, structuration et exécution de projets à fort impact en Afrique.",
   address: {
