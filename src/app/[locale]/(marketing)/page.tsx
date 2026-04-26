@@ -9,11 +9,11 @@ import CTASection from "@/components/sections/home/CTASection";
 import GiraDevSection from "@/components/sections/home/GiraDevSection";
 
 export const metadata: Metadata = {
-  title: "GIRA — Cabinet d'exécution des projets structurants en Afrique",
+  title: "GIRA — Cabinet d'exécution de projets en Afrique",
   description:
     "GIRA accompagne gouvernements, institutions et investisseurs dans la conception, structuration et exécution de projets à fort impact en Afrique.",
   openGraph: {
-    title: "GIRA — Cabinet d'exécution des projets structurants en Afrique",
+    title: "GIRA — Cabinet d'exécution de projets en Afrique",
     description:
       "GIRA accompagne gouvernements, institutions et investisseurs dans la conception, structuration et exécution de projets à fort impact en Afrique.",
     type: "website",
